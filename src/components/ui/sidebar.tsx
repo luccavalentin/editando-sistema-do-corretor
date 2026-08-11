@@ -120,11 +120,7 @@ function Sidebar() {
       <div className="flex-1 overflow-y-auto py-6 space-y-8 px-3">
         {menuGroups.map((group, idx) => (
           <div key={idx} className="space-y-2">
-            {expanded && (
-              <h4 className="px-3 text-[10px] uppercase font-bold tracking-widest text-white/30">
-                {group.label}
-              </h4>
-            )}
+            {expanded && React.createElement('h4', { className: 'px-3 text-[10px] uppercase font-bold tracking-widest text-white/30' }, group.label)}
             <div className="space-y-1">
               {group.items.map((item) => (
                 <Link
