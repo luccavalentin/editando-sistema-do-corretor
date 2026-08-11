@@ -14,6 +14,44 @@ export type Database = {
   }
   public: {
     Tables: {
+      agenda_servicos: {
+        Row: {
+          criado_em: string | null
+          data_prevista: string
+          especialidade: Database["public"]["Enums"]["agenda_especialidade"]
+          id: string
+          mecanico_id: string | null
+          os_id: string
+          status: Database["public"]["Enums"]["agenda_status"] | null
+        }
+        Insert: {
+          criado_em?: string | null
+          data_prevista: string
+          especialidade: Database["public"]["Enums"]["agenda_especialidade"]
+          id?: string
+          mecanico_id?: string | null
+          os_id: string
+          status?: Database["public"]["Enums"]["agenda_status"] | null
+        }
+        Update: {
+          criado_em?: string | null
+          data_prevista?: string
+          especialidade?: Database["public"]["Enums"]["agenda_especialidade"]
+          id?: string
+          mecanico_id?: string | null
+          os_id?: string
+          status?: Database["public"]["Enums"]["agenda_status"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agenda_servicos_os_id_fkey"
+            columns: ["os_id"]
+            isOneToOne: false
+            referencedRelation: "ordens_servico"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_logs: {
         Row: {
           action: string
@@ -210,6 +248,39 @@ export type Database = {
         }
         Relationships: []
       }
+      notificacoes: {
+        Row: {
+          criado_em: string | null
+          id: string
+          lida: boolean | null
+          mensagem: string
+          referencia_id: string | null
+          referencia_tabela: string | null
+          tipo: string
+          usuario_id_destino: string
+        }
+        Insert: {
+          criado_em?: string | null
+          id?: string
+          lida?: boolean | null
+          mensagem: string
+          referencia_id?: string | null
+          referencia_tabela?: string | null
+          tipo: string
+          usuario_id_destino: string
+        }
+        Update: {
+          criado_em?: string | null
+          id?: string
+          lida?: boolean | null
+          mensagem?: string
+          referencia_id?: string | null
+          referencia_tabela?: string | null
+          tipo?: string
+          usuario_id_destino?: string
+        }
+        Relationships: []
+      }
       ordens_servico: {
         Row: {
           box: string | null
@@ -402,6 +473,69 @@ export type Database = {
           },
         ]
       }
+      pecas_teste: {
+        Row: {
+          cliente_id: string
+          criado_em: string | null
+          data_entrada: string | null
+          descricao_peca: string
+          etiqueta_codigo: string | null
+          etiqueta_removida_em: string | null
+          id: string
+          mecanico_id: string | null
+          os_id: string | null
+          prazo_horas: number | null
+          status: Database["public"]["Enums"]["peca_teste_status"] | null
+          vencimento_em: string | null
+          vendedor_id: string
+        }
+        Insert: {
+          cliente_id: string
+          criado_em?: string | null
+          data_entrada?: string | null
+          descricao_peca: string
+          etiqueta_codigo?: string | null
+          etiqueta_removida_em?: string | null
+          id?: string
+          mecanico_id?: string | null
+          os_id?: string | null
+          prazo_horas?: number | null
+          status?: Database["public"]["Enums"]["peca_teste_status"] | null
+          vencimento_em?: string | null
+          vendedor_id: string
+        }
+        Update: {
+          cliente_id?: string
+          criado_em?: string | null
+          data_entrada?: string | null
+          descricao_peca?: string
+          etiqueta_codigo?: string | null
+          etiqueta_removida_em?: string | null
+          id?: string
+          mecanico_id?: string | null
+          os_id?: string | null
+          prazo_horas?: number | null
+          status?: Database["public"]["Enums"]["peca_teste_status"] | null
+          vencimento_em?: string | null
+          vendedor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pecas_teste_cliente_id_fkey"
+            columns: ["cliente_id"]
+            isOneToOne: false
+            referencedRelation: "clientes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pecas_teste_os_id_fkey"
+            columns: ["os_id"]
+            isOneToOne: false
+            referencedRelation: "ordens_servico"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sla_fases: {
         Row: {
           criado_em: string | null
@@ -544,6 +678,14 @@ export type Database = {
       }
     }
     Enums: {
+      agenda_especialidade:
+        | "eletrica"
+        | "socorro"
+        | "troca_cuicas_aparelho_diag"
+        | "teste_valvulas"
+        | "troca_valvulas"
+        | "vazamentos_ar"
+      agenda_status: "pendente" | "em_andamento" | "concluido"
       app_role:
         | "superadmin"
         | "admin_adm"
@@ -558,6 +700,14 @@ export type Database = {
         | "estado_caminhao"
         | "operacional_lider"
         | "processo_setor"
+      peca_teste_status:
+        | "recebida"
+        | "em_teste"
+        | "testada_aprovada"
+        | "testada_reprovada"
+        | "aguardando_retirada"
+        | "entregue"
+        | "perdida"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -685,6 +835,15 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      agenda_especialidade: [
+        "eletrica",
+        "socorro",
+        "troca_cuicas_aparelho_diag",
+        "teste_valvulas",
+        "troca_valvulas",
+        "vazamentos_ar",
+      ],
+      agenda_status: ["pendente", "em_andamento", "concluido"],
       app_role: [
         "superadmin",
         "admin_adm",
@@ -700,6 +859,15 @@ export const Constants = {
         "estado_caminhao",
         "operacional_lider",
         "processo_setor",
+      ],
+      peca_teste_status: [
+        "recebida",
+        "em_teste",
+        "testada_aprovada",
+        "testada_reprovada",
+        "aguardando_retirada",
+        "entregue",
+        "perdida",
       ],
     },
   },

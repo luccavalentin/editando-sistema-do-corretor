@@ -10,13 +10,19 @@ export const getOSStats = createServerFn({ method: "GET" })
     
     if (error) throw new Error(error.message);
     
+    const { data: pecas } = await supabase
+      .from("pecas_teste")
+      .select("id, status, vencimento_em");
+    
     const today = new Date().toISOString().split('T')[0];
+    const now = new Date();
     
     return {
       noPatio: os.filter(o => o.status !== 'concluida' && o.status !== 'cancelada').length,
       entraramHoje: os.filter(o => o.criado_em.startsWith(today)).length,
       concluidasHoje: os.filter(o => o.finalizado_em?.startsWith(today)).length,
-      atrasadas: 0, // Mock até implementar lógica de SLA
+      atrasadas: 0,
+      pecasVencendo: pecas?.filter(p => p.status === 'em_teste' && new Date(p.vencimento_em) < now).length || 0,
     };
   });
 
@@ -123,4 +129,3 @@ export const openOS = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return os;
   });
-

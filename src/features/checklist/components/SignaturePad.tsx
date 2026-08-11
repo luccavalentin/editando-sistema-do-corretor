@@ -10,7 +10,7 @@ interface SignaturePadProps {
 }
 
 export function SignaturePad({ onSave, label = "Assinatura Digital" }: SignaturePadProps) {
-  const sigCanvas = useRef<SignatureCanvas>(null);
+  const sigCanvas = useRef<any>(null);
 
   const clear = () => sigCanvas.current?.clear();
   
@@ -20,11 +20,13 @@ export function SignaturePad({ onSave, label = "Assinatura Digital" }: Signature
     if (dataURL) onSave(dataURL);
   };
 
+  const SignatureCanvasComponent = SignatureCanvas as any;
+
   return (
     <Card className="p-4 space-y-4">
       <div className="text-sm font-medium text-muted-foreground">{label}</div>
       <div className="border rounded-md bg-white">
-        <SignatureCanvas
+        <SignatureCanvasComponent
           ref={sigCanvas}
           penColor="black"
           canvasProps={{
