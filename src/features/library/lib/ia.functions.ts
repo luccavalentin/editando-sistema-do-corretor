@@ -60,11 +60,11 @@ export const iaChat = createServerFn({ method: "POST" })
   .inputValidator((data: any) => z.object({
     conversa_id: z.string().optional(),
     mensagem: z.string(),
-    anexos: z.array(z.any()).optional()
+    anexos: z.array(z.any()).optional(),
+    is_suggestion: z.boolean().optional()
   }).parse(data))
   .handler(async ({ data, context }) => {
-    // A implementação completa virá no ia-chat.server.ts
-    // Aqui apenas chamamos o helper interno
     const { chatHandler } = await import("./ia-chat.server");
     return chatHandler(data, context);
   });
+

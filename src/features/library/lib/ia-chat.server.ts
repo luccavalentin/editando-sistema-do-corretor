@@ -65,8 +65,15 @@ export async function chatHandler(data: any, context: any) {
     escalado_para_humano: !contexto
   }).select().single();
 
+  // 6. Registrar sugestão no checklist se for o caso
+  if (data.is_suggestion && contexto) {
+    // Lógica para sugestão rápida
+  }
+
   return {
     conversa_id: conversaId,
-    mensagem: msgIA
+    mensagem: msgIA,
+    contexto_encontrado: !!contexto
   };
 }
+
