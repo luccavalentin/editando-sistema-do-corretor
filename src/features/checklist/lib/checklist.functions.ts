@@ -50,6 +50,25 @@ export const saveChecklist = createServerFn({ method: "POST" })
         novoStatus = temNaoOk ? 'aguardando_peca' : 'em_execucao';
       } else if (data.tipo === 'estado_caminhao') {
         novoStatus = 'aguardando_retirada';
+      } else if (data.tipo === 'conferencia_final') {
+        novoStatus = 'aguardando_retirada';
+        // Lógica de Ranking: Checklist Final sem retrabalho
+        const temRetrabalho = data.respostas.some((r: any) => r.status === 'nao_ok');
+        if (!temRetrabalho) {
+          const { data: os } = await context.supabase
+            .from('ordens_servico')
+            .select('tecnico_id')
+            .eq('id', data.os_id)
+            .single();
+          
+          if (os?.tecnico_id) {
+            await context.supabase.rpc('apply_ranking_points', {
+              _usuario_id: os.tecnico_id,
+              _tipo_evento: 'checklist_sem_retrabalho',
+              _os_id: data.os_id
+            });
+          }
+        }
       }
       
       const { error: rpcError } = await context.supabase.rpc('transicionar_status_os', {

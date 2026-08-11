@@ -661,6 +661,75 @@ export type Database = {
           },
         ]
       }
+      ranking_config: {
+        Row: {
+          atualizado_em: string | null
+          criado_em: string | null
+          id: string
+          pontos: number
+          tipo_evento: string
+        }
+        Insert: {
+          atualizado_em?: string | null
+          criado_em?: string | null
+          id?: string
+          pontos: number
+          tipo_evento: string
+        }
+        Update: {
+          atualizado_em?: string | null
+          criado_em?: string | null
+          id?: string
+          pontos?: number
+          tipo_evento?: string
+        }
+        Relationships: []
+      }
+      ranking_eventos: {
+        Row: {
+          criado_em: string | null
+          criado_por: string | null
+          id: string
+          os_id: string | null
+          pontos_aplicados: number
+          tipo_evento: string
+          usuario_id: string
+        }
+        Insert: {
+          criado_em?: string | null
+          criado_por?: string | null
+          id?: string
+          os_id?: string | null
+          pontos_aplicados: number
+          tipo_evento: string
+          usuario_id: string
+        }
+        Update: {
+          criado_em?: string | null
+          criado_por?: string | null
+          id?: string
+          os_id?: string | null
+          pontos_aplicados?: number
+          tipo_evento?: string
+          usuario_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ranking_eventos_os_id_fkey"
+            columns: ["os_id"]
+            isOneToOne: false
+            referencedRelation: "ordens_servico"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ranking_eventos_tipo_evento_fkey"
+            columns: ["tipo_evento"]
+            isOneToOne: false
+            referencedRelation: "ranking_config"
+            referencedColumns: ["tipo_evento"]
+          },
+        ]
+      }
       sla_fases: {
         Row: {
           criado_em: string | null
@@ -790,6 +859,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      apply_ranking_points: {
+        Args: { _os_id?: string; _tipo_evento: string; _usuario_id: string }
+        Returns: undefined
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
