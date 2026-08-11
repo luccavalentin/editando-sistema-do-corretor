@@ -195,7 +195,10 @@ function Dashboard() {
                           onClick={() => {
                             const nextIndex = STATUS_FLOW.indexOf(status) + 1;
                             if (nextIndex < STATUS_FLOW.length) {
-                              mutation.mutate({ os_id: os.id, novo_status: STATUS_FLOW[nextIndex] });
+                              const nextStatus = STATUS_FLOW[nextIndex];
+                              if (nextStatus) {
+                                mutation.mutate({ os_id: os.id, novo_status: nextStatus });
+                              }
                             }
                           }}
                         >
