@@ -44,6 +44,223 @@ export type Database = {
         }
         Relationships: []
       }
+      clientes: {
+        Row: {
+          ativo: boolean | null
+          contato_nome: string | null
+          criado_em: string | null
+          documento: string | null
+          email: string | null
+          endereco_bairro: string | null
+          endereco_cep: string | null
+          endereco_cidade: string | null
+          endereco_rua: string | null
+          endereco_uf: string | null
+          id: string
+          inscricao_estadual: string | null
+          inscricao_municipal: string | null
+          nome: string
+          omie_codigo_cliente: string | null
+          telefone: string | null
+          ultima_interacao_em: string | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          contato_nome?: string | null
+          criado_em?: string | null
+          documento?: string | null
+          email?: string | null
+          endereco_bairro?: string | null
+          endereco_cep?: string | null
+          endereco_cidade?: string | null
+          endereco_rua?: string | null
+          endereco_uf?: string | null
+          id?: string
+          inscricao_estadual?: string | null
+          inscricao_municipal?: string | null
+          nome: string
+          omie_codigo_cliente?: string | null
+          telefone?: string | null
+          ultima_interacao_em?: string | null
+        }
+        Update: {
+          ativo?: boolean | null
+          contato_nome?: string | null
+          criado_em?: string | null
+          documento?: string | null
+          email?: string | null
+          endereco_bairro?: string | null
+          endereco_cep?: string | null
+          endereco_cidade?: string | null
+          endereco_rua?: string | null
+          endereco_uf?: string | null
+          id?: string
+          inscricao_estadual?: string | null
+          inscricao_municipal?: string | null
+          nome?: string
+          omie_codigo_cliente?: string | null
+          telefone?: string | null
+          ultima_interacao_em?: string | null
+        }
+        Relationships: []
+      }
+      ordens_servico: {
+        Row: {
+          box: string | null
+          cliente_id: string
+          criado_em: string | null
+          finalizado_em: string | null
+          foto_os_original_url: string | null
+          fotos_entrada: string[] | null
+          id: string
+          km_entrada: number | null
+          motorista_cliente: string | null
+          numero: number
+          observacoes_gerais: string | null
+          omie_codigo_os: string | null
+          protocolo: string
+          responsavel_abertura_id: string
+          status: string | null
+          tecnico_id: string | null
+          valor_pecas: number | null
+          valor_servico: number | null
+          veiculo_id: string
+        }
+        Insert: {
+          box?: string | null
+          cliente_id: string
+          criado_em?: string | null
+          finalizado_em?: string | null
+          foto_os_original_url?: string | null
+          fotos_entrada?: string[] | null
+          id?: string
+          km_entrada?: number | null
+          motorista_cliente?: string | null
+          numero?: number
+          observacoes_gerais?: string | null
+          omie_codigo_os?: string | null
+          protocolo: string
+          responsavel_abertura_id: string
+          status?: string | null
+          tecnico_id?: string | null
+          valor_pecas?: number | null
+          valor_servico?: number | null
+          veiculo_id: string
+        }
+        Update: {
+          box?: string | null
+          cliente_id?: string
+          criado_em?: string | null
+          finalizado_em?: string | null
+          foto_os_original_url?: string | null
+          fotos_entrada?: string[] | null
+          id?: string
+          km_entrada?: number | null
+          motorista_cliente?: string | null
+          numero?: number
+          observacoes_gerais?: string | null
+          omie_codigo_os?: string | null
+          protocolo?: string
+          responsavel_abertura_id?: string
+          status?: string | null
+          tecnico_id?: string | null
+          valor_pecas?: number | null
+          valor_servico?: number | null
+          veiculo_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ordens_servico_cliente_id_fkey"
+            columns: ["cliente_id"]
+            isOneToOne: false
+            referencedRelation: "clientes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ordens_servico_veiculo_id_fkey"
+            columns: ["veiculo_id"]
+            isOneToOne: false
+            referencedRelation: "veiculos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      os_itens_peca: {
+        Row: {
+          descricao: string
+          id: string
+          omie_codigo_produto: string | null
+          os_id: string
+          quantidade: number
+          unidade: string | null
+          valor_total: number | null
+          valor_unitario: number
+        }
+        Insert: {
+          descricao: string
+          id?: string
+          omie_codigo_produto?: string | null
+          os_id: string
+          quantidade?: number
+          unidade?: string | null
+          valor_total?: number | null
+          valor_unitario?: number
+        }
+        Update: {
+          descricao?: string
+          id?: string
+          omie_codigo_produto?: string | null
+          os_id?: string
+          quantidade?: number
+          unidade?: string | null
+          valor_total?: number | null
+          valor_unitario?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "os_itens_peca_os_id_fkey"
+            columns: ["os_id"]
+            isOneToOne: false
+            referencedRelation: "ordens_servico"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      os_itens_servico: {
+        Row: {
+          descricao: string
+          id: string
+          os_id: string
+          quantidade: number
+          valor_total: number | null
+          valor_unitario: number
+        }
+        Insert: {
+          descricao: string
+          id?: string
+          os_id: string
+          quantidade?: number
+          valor_total?: number | null
+          valor_unitario?: number
+        }
+        Update: {
+          descricao?: string
+          id?: string
+          os_id?: string
+          quantidade?: number
+          valor_total?: number | null
+          valor_unitario?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "os_itens_servico_os_id_fkey"
+            columns: ["os_id"]
+            isOneToOne: false
+            referencedRelation: "ordens_servico"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string
@@ -61,6 +278,47 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      veiculos: {
+        Row: {
+          cliente_id: string
+          criado_em: string | null
+          id: string
+          km_atual: number | null
+          modelo_carreta: string | null
+          modelo_cavalo: string | null
+          placa_carreta: string | null
+          placa_cavalo: string
+        }
+        Insert: {
+          cliente_id: string
+          criado_em?: string | null
+          id?: string
+          km_atual?: number | null
+          modelo_carreta?: string | null
+          modelo_cavalo?: string | null
+          placa_carreta?: string | null
+          placa_cavalo: string
+        }
+        Update: {
+          cliente_id?: string
+          criado_em?: string | null
+          id?: string
+          km_atual?: number | null
+          modelo_carreta?: string | null
+          modelo_cavalo?: string | null
+          placa_carreta?: string | null
+          placa_cavalo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "veiculos_cliente_id_fkey"
+            columns: ["cliente_id"]
+            isOneToOne: false
+            referencedRelation: "clientes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
