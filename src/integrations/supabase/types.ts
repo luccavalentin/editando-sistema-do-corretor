@@ -248,6 +248,39 @@ export type Database = {
         }
         Relationships: []
       }
+      mcp_servers: {
+        Row: {
+          capabilities: string[] | null
+          created_at: string | null
+          created_by: string | null
+          id: string
+          name: string
+          status: string
+          type: string
+          url: string
+        }
+        Insert: {
+          capabilities?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          name: string
+          status?: string
+          type: string
+          url: string
+        }
+        Update: {
+          capabilities?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          name?: string
+          status?: string
+          type?: string
+          url?: string
+        }
+        Relationships: []
+      }
       notificacoes: {
         Row: {
           criado_em: string | null
