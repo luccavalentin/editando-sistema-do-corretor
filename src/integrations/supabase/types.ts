@@ -248,6 +248,47 @@ export type Database = {
         }
         Relationships: []
       }
+      clientes_follow_up: {
+        Row: {
+          cliente_id: string | null
+          criado_em: string | null
+          dias_inativo: number | null
+          id: string
+          status_follow_up:
+            | Database["public"]["Enums"]["follow_up_status"]
+            | null
+          ultima_os_em: string | null
+        }
+        Insert: {
+          cliente_id?: string | null
+          criado_em?: string | null
+          dias_inativo?: number | null
+          id?: string
+          status_follow_up?:
+            | Database["public"]["Enums"]["follow_up_status"]
+            | null
+          ultima_os_em?: string | null
+        }
+        Update: {
+          cliente_id?: string | null
+          criado_em?: string | null
+          dias_inativo?: number | null
+          id?: string
+          status_follow_up?:
+            | Database["public"]["Enums"]["follow_up_status"]
+            | null
+          ultima_os_em?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clientes_follow_up_cliente_id_fkey"
+            columns: ["cliente_id"]
+            isOneToOne: false
+            referencedRelation: "clientes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mcp_servers: {
         Row: {
           capabilities: string[] | null
@@ -311,6 +352,33 @@ export type Database = {
           referencia_tabela?: string | null
           tipo?: string
           usuario_id_destino?: string
+        }
+        Relationships: []
+      }
+      omie_sync_log: {
+        Row: {
+          criado_em: string | null
+          entidade: string
+          id: string
+          mensagem: string | null
+          payload: Json | null
+          status: string
+        }
+        Insert: {
+          criado_em?: string | null
+          entidade: string
+          id?: string
+          mensagem?: string | null
+          payload?: Json | null
+          status: string
+        }
+        Update: {
+          criado_em?: string | null
+          entidade?: string
+          id?: string
+          mensagem?: string | null
+          payload?: Json | null
+          status?: string
         }
         Relationships: []
       }
@@ -505,6 +573,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      pecas_estoque_cache: {
+        Row: {
+          atualizado_em: string | null
+          descricao: string
+          id: string
+          omie_codigo_produto: number
+          saldo: number | null
+        }
+        Insert: {
+          atualizado_em?: string | null
+          descricao: string
+          id?: string
+          omie_codigo_produto: number
+          saldo?: number | null
+        }
+        Update: {
+          atualizado_em?: string | null
+          descricao?: string
+          id?: string
+          omie_codigo_produto?: number
+          saldo?: number | null
+        }
+        Relationships: []
       }
       pecas_teste: {
         Row: {
@@ -733,6 +825,7 @@ export type Database = {
         | "estado_caminhao"
         | "operacional_lider"
         | "processo_setor"
+      follow_up_status: "pendente" | "contatado" | "agendado" | "recusado"
       peca_teste_status:
         | "recebida"
         | "em_teste"
@@ -893,6 +986,7 @@ export const Constants = {
         "operacional_lider",
         "processo_setor",
       ],
+      follow_up_status: ["pendente", "contatado", "agendado", "recusado"],
       peca_teste_status: [
         "recebida",
         "em_teste",
