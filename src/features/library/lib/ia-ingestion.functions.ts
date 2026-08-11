@@ -45,15 +45,14 @@ export const ingestContent = createServerFn({ method: "POST" })
         conteudo: chunk,
         marca: (data.marca || classification.marca) as any,
         categoria: (data.categoria || classification.categoria) as any,
-
-
         tags: data.tags || [],
-        embedding,
+        embedding: embedding as any,
         origem: data.origem,
         documento_origem: data.titulo,
         ordem_fragmento: i
       });
     }
+
 
     return { success: true, fragments: chunked.length };
   });
