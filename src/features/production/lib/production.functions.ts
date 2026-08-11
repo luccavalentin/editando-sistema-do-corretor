@@ -4,6 +4,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 export const getPecasTeste = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
+  .inputValidator((data) => z.any().optional().parse(data))
   .handler(async ({ context }) => {
     const { data, error } = await context.supabase
       .from('pecas_teste')
@@ -44,6 +45,7 @@ export const updatePecaStatus = createServerFn({ method: "POST" })
 
 export const getAgendaServicos = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
+  .inputValidator((data) => z.any().optional().parse(data))
   .handler(async ({ context }) => {
     const { data, error } = await context.supabase
       .from('agenda_servicos')
@@ -59,6 +61,7 @@ export const getAgendaServicos = createServerFn({ method: "GET" })
 
 export const getNotificacoes = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
+  .inputValidator((data) => z.any().optional().parse(data))
   .handler(async ({ context }) => {
     const { data, error } = await context.supabase
       .from('notificacoes')
