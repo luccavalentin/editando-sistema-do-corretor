@@ -32,7 +32,7 @@ export const getGarantias = createServerFn({ method: "GET" })
 
     if (data.search) {
       // Simplificado para busca básica
-      query = query.or(\`item_descricao.ilike.%\${data.search}%,tipo.ilike.%\${data.search}%\`);
+      query = query.or(`item_descricao.ilike.%${data.search}%,tipo.ilike.%${data.search}%`);
     }
 
     const { data: result, error } = await query;
