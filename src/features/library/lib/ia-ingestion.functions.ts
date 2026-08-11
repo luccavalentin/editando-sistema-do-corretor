@@ -43,8 +43,9 @@ export const ingestContent = createServerFn({ method: "POST" })
       await supabase.from('ia_base_conhecimento').insert({
         titulo: `${data.titulo} (Part ${i + 1})`,
         conteudo: chunk,
-        marca: data.marca || classification.marca,
-        categoria: data.categoria || classification.categoria,
+        marca: data.marca || (classification.marca as any),
+        categoria: data.categoria || (classification.categoria as any),
+
         tags: data.tags || [],
         embedding,
         origem: data.origem,
