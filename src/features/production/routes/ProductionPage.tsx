@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Package, Calendar, Clock, Bell, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Package, Calendar, Clock, CheckCircle2 } from 'lucide-react';
 import { format, differenceInHours } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useServerFn } from '@tanstack/react-start';
@@ -16,12 +16,12 @@ export function ProductionPage() {
   
   const { data: pecas } = useSuspenseQuery({
     queryKey: ['pecas-teste'],
-    queryFn: () => getPecasTeste()
+    queryFn: () => getPecasTeste({ data: {} })
   });
 
   const { data: agenda } = useSuspenseQuery({
     queryKey: ['agenda-servicos'],
-    queryFn: () => getAgendaServicos()
+    queryFn: () => getAgendaServicos({ data: {} })
   });
 
   const updateStatusFn = useServerFn(updatePecaStatus);
