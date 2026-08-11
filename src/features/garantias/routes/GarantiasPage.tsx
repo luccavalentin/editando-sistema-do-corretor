@@ -16,7 +16,7 @@ export const getGarantias = createServerFn({ method: "GET" })
   .handler(async ({ data, context }) => {
     let query = context.supabase
       .from('checklist_garantias')
-      .select(\`
+      .select(`
         *,
         checklists!inner (
           id,
