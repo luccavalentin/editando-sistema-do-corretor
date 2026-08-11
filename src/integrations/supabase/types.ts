@@ -289,6 +289,155 @@ export type Database = {
           },
         ]
       }
+      ia_base_conhecimento: {
+        Row: {
+          categoria: string | null
+          conteudo: string
+          criado_em: string | null
+          documento_origem: string | null
+          embedding: string | null
+          id: string
+          marca: string | null
+          ordem_fragmento: number | null
+          origem: string
+          tags: string[] | null
+          titulo: string
+        }
+        Insert: {
+          categoria?: string | null
+          conteudo: string
+          criado_em?: string | null
+          documento_origem?: string | null
+          embedding?: string | null
+          id?: string
+          marca?: string | null
+          ordem_fragmento?: number | null
+          origem: string
+          tags?: string[] | null
+          titulo: string
+        }
+        Update: {
+          categoria?: string | null
+          conteudo?: string
+          criado_em?: string | null
+          documento_origem?: string | null
+          embedding?: string | null
+          id?: string
+          marca?: string | null
+          ordem_fragmento?: number | null
+          origem?: string
+          tags?: string[] | null
+          titulo?: string
+        }
+        Relationships: []
+      }
+      ia_config: {
+        Row: {
+          atualizado_em: string | null
+          id: string
+          provider_ativo: string
+        }
+        Insert: {
+          atualizado_em?: string | null
+          id?: string
+          provider_ativo?: string
+        }
+        Update: {
+          atualizado_em?: string | null
+          id?: string
+          provider_ativo?: string
+        }
+        Relationships: []
+      }
+      ia_conversas: {
+        Row: {
+          criado_em: string | null
+          id: string
+          titulo: string | null
+          usuario_id: string
+        }
+        Insert: {
+          criado_em?: string | null
+          id?: string
+          titulo?: string | null
+          usuario_id: string
+        }
+        Update: {
+          criado_em?: string | null
+          id?: string
+          titulo?: string | null
+          usuario_id?: string
+        }
+        Relationships: []
+      }
+      ia_faqs: {
+        Row: {
+          aprovado_por_humano: string | null
+          criado_em: string | null
+          id: string
+          pergunta: string
+          resposta: string
+        }
+        Insert: {
+          aprovado_por_humano?: string | null
+          criado_em?: string | null
+          id?: string
+          pergunta: string
+          resposta: string
+        }
+        Update: {
+          aprovado_por_humano?: string | null
+          criado_em?: string | null
+          id?: string
+          pergunta?: string
+          resposta?: string
+        }
+        Relationships: []
+      }
+      ia_mensagens: {
+        Row: {
+          anexos: Json | null
+          autor: string
+          confianca_resposta: number | null
+          conteudo: string
+          conversa_id: string
+          criado_em: string | null
+          escalado_para_humano: boolean | null
+          id: string
+          provider_usado: string | null
+        }
+        Insert: {
+          anexos?: Json | null
+          autor: string
+          confianca_resposta?: number | null
+          conteudo: string
+          conversa_id: string
+          criado_em?: string | null
+          escalado_para_humano?: boolean | null
+          id?: string
+          provider_usado?: string | null
+        }
+        Update: {
+          anexos?: Json | null
+          autor?: string
+          confianca_resposta?: number | null
+          conteudo?: string
+          conversa_id?: string
+          criado_em?: string | null
+          escalado_para_humano?: boolean | null
+          id?: string
+          provider_usado?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ia_mensagens_conversa_id_fkey"
+            columns: ["conversa_id"]
+            isOneToOne: false
+            referencedRelation: "ia_conversas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mcp_servers: {
         Row: {
           capabilities: string[] | null
