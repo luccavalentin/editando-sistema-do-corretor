@@ -21,6 +21,9 @@ import {
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Link, useLocation } from "@tanstack/react-router"
+import { useEffect, useState } from "react"
+import { getCurrentUserRole } from "@/core/auth"
+import { canAccessRoute, AppRole } from "@/core/access-matrix"
 
 const SidebarContext = React.createContext<{
   expanded: boolean
@@ -58,6 +61,11 @@ function Sidebar() {
   if (!context) return null
   const { expanded, setExpanded } = context
   const location = useLocation()
+  const [userRole, setUserRole] = useState<AppRole | null>(null)
+
+  useEffect(() => {
+    getCurrentUserRole().then(setUserRole)
+  }, [])
 
   const menuGroups = [
     {
@@ -68,7 +76,7 @@ function Sidebar() {
         { icon: ClipboardCheck, label: "Checklist", href: "/checklist" },
         { icon: BarChart3, label: "Tarefas", href: "/tasks" },
         { icon: ShieldCheck, label: "Ranking", href: "/ranking" },
-      ]
+      ].filter(item => canAccessRoute(item.href, userRole))
     },
     {
       label: "Operacional",
@@ -80,8 +88,7 @@ function Sidebar() {
         { icon: Bot, label: "IA Técnico", href: "/ia" },
         { icon: BarChart3, label: "Relatórios", href: "/reports" },
         { icon: Settings, label: "Configurações", href: "/settings" },
-
-      ]
+      ].filter(item => canAccessRoute(item.href, userRole))
     }
   ]
 
@@ -113,11 +120,7 @@ function Sidebar() {
       <div className="flex-1 overflow-y-auto py-6 space-y-8 px-3">
         {menuGroups.map((group, idx) => (
           <div key={idx} className="space-y-2">
-            {expanded && (
-              <h4 className="px-3 text-[10px] uppercase font-bold tracking-widest text-white/30">
-                {group.label}
-              </h4>
-            )}
+            {expanded && React.createElement('h4', { className: 'px-3 text-[10px] uppercase font-bold tracking-widest text-white/30' }, group.label)}
             <div className="space-y-1">
               {group.items.map((item) => (
                 <Link

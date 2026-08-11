@@ -962,6 +962,33 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles_historico: {
+        Row: {
+          alterado_por: string
+          criado_em: string | null
+          id: string
+          role_anterior: Database["public"]["Enums"]["app_role"] | null
+          role_novo: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          alterado_por: string
+          criado_em?: string | null
+          id?: string
+          role_anterior?: Database["public"]["Enums"]["app_role"] | null
+          role_novo: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          alterado_por?: string
+          criado_em?: string | null
+          id?: string
+          role_anterior?: Database["public"]["Enums"]["app_role"] | null
+          role_novo?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       veiculos: {
         Row: {
           cliente_id: string
@@ -1034,6 +1061,14 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      transicionar_role_usuario: {
+        Args: {
+          _alterado_por: string
+          _novo_role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: undefined
       }
       transicionar_status_os: {
         Args: { _novo_status: string; _os_id: string; _usuario_id: string }
