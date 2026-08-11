@@ -160,26 +160,25 @@ export const getRanking = createServerFn({ method: "GET" })
     period: z.enum(['daily', 'weekly', 'monthly', 'all']).default('all')
   }).parse(data))
   .handler(async ({ data }) => {
-    let query = supabase
+    // We use a broader query to avoid complex join issues in types
+    const { data: events, error } = await supabase
       .from("ranking_eventos")
       .select(`
         usuario_id,
         pontos_aplicados,
-        criado_em,
-        usuario:auth.users!usuario_id(email)
+        criado_em
       `);
 
-    const { data: events, error } = await query;
     if (error) throw new Error(error.message);
 
-    // Manual aggregation because complex grouping in PostgREST is limited
+    // Manual aggregation
     const aggregation: Record<string, { email: string, points: number }> = {};
     
     events?.forEach(event => {
       const userId = event.usuario_id;
       if (!aggregation[userId]) {
         aggregation[userId] = { 
-          email: (event.usuario as any)?.email || 'Usuário', 
+          email: 'Usuário', 
           points: 0 
         };
       }
