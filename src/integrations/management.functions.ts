@@ -2,6 +2,58 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabase } from "./supabase/client";
 
+export const getOSStats = createServerFn({ method: "GET" })
+  .handler(async () => {
+    const { data: os, error } = await supabase
+      .from("ordens_servico")
+      .select("status, criado_em, finalizado_em");
+    
+    if (error) throw new Error(error.message);
+    
+    const today = new Date().toISOString().split('T')[0];
+    
+    return {
+      noPatio: os.filter(o => o.status !== 'concluida' && o.status !== 'cancelada').length,
+      entraramHoje: os.filter(o => o.criado_em.startsWith(today)).length,
+      concluidasHoje: os.filter(o => o.finalizado_em?.startsWith(today)).length,
+      atrasadas: 0, // Mock até implementar lógica de SLA
+    };
+  });
+
+export const getOSList = createServerFn({ method: "GET" })
+  .handler(async () => {
+    const { data, error } = await supabase
+      .from("ordens_servico")
+      .select(`
+        *,
+        cliente:clientes(nome),
+        veiculo:veiculos(placa_cavalo, modelo_cavalo)
+      `)
+      .order('criado_em', { ascending: false });
+      
+    if (error) throw new Error(error.message);
+    return data;
+  });
+
+export const updateOSStatus = createServerFn({ method: "POST" })
+  .inputValidator((data) => z.object({
+    os_id: z.string(),
+    novo_status: z.string()
+  }).parse(data))
+  .handler(async ({ data }) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) throw new Error("Unauthorized");
+
+    const { error } = await supabase.rpc('transicionar_status_os', {
+      _os_id: data.os_id,
+      _novo_status: data.novo_status,
+      _usuario_id: session.user.id
+    });
+
+    if (error) throw new Error(error.message);
+    return { success: true };
+  });
+
 // Busca cliente local por documento ou nome
 export const searchClienteLocal = createServerFn({ method: "GET" })
   .inputValidator((data) => z.object({ query: z.string() }).parse(data))
@@ -71,3 +123,4 @@ export const openOS = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return os;
   });
+
