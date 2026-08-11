@@ -119,7 +119,7 @@ function IAModule() {
               </div>
               <div className="text-right text-xs">
                 <p className="font-mono font-bold text-navy/40">11/08/2026 14:32</p>
-                <Badge variant="ghost" className="bg-green-100 text-green-700 mt-1">Validado</Badge>
+                <Badge variant="secondary" className="bg-green-100 text-green-700 mt-1 border-none">Validado</Badge>
               </div>
             </div>
           ))}
