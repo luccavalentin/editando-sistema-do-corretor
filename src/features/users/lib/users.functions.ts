@@ -4,15 +4,15 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 export const inviteUserFn = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .input(z.object({
+  .validator((data: any) => z.object({
     email: z.string().email(),
     nome: z.string(),
     cargo: z.string(),
     matricula: z.string(),
     role: z.enum(['superadmin', 'admin_adm', 'mecanico', 'montador', 'vendedor', 'financeiro', 'lider']),
     fotoUrl: z.string().optional(),
-  }))
+  }).parse(data))
+  .middleware([requireSupabaseAuth])
   .handler(async ({ data, context }) => {
     const { supabaseAdmin, userId } = context;
 
@@ -58,6 +58,7 @@ export const inviteUserFn = createServerFn({ method: "POST" })
 export const listUsersFn = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
+    const { supabaseAdmin } = context;
     // Listar usuários do Auth via Admin SDK
     const { data: { users }, error } = await supabaseAdmin.auth.admin.listUsers();
     if (error) throw error;
@@ -70,10 +71,10 @@ export const listUsersFn = createServerFn({ method: "GET" })
     return users.map(u => ({
       id: u.id,
       email: u.email,
-      nome: u.user_metadata.full_name,
-      cargo: u.user_metadata.cargo,
-      matricula: u.user_metadata.matricula,
-      foto: u.user_metadata.avatar_url,
+      nome: u.user_metadata['full_name'],
+      cargo: u.user_metadata['cargo'],
+      matricula: u.user_metadata['matricula'],
+      foto: u.user_metadata['avatar_url'],
       role: roles?.find(r => r.user_id === u.id)?.role,
       status: u.email_confirmed_at ? 'ativo' : 'convite pendente',
       ultimo_acesso: u.last_sign_in_at,
@@ -81,11 +82,11 @@ export const listUsersFn = createServerFn({ method: "GET" })
   });
 
 export const transitionUserRoleFn = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .input(z.object({
+  .validator((data: any) => z.object({
     targetUserId: z.string().uuid(),
     newRole: z.enum(['superadmin', 'admin_adm', 'mecanico', 'montador', 'vendedor', 'financeiro', 'lider']),
-  }))
+  }).parse(data))
+  .middleware([requireSupabaseAuth])
   .handler(async ({ data, context }) => {
     const { userId } = context;
     
@@ -101,11 +102,11 @@ export const transitionUserRoleFn = createServerFn({ method: "POST" })
   });
 
 export const toggleUserStatusFn = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .input(z.object({
+  .validator((data: any) => z.object({
     targetUserId: z.string().uuid(),
     active: z.boolean(),
-  }))
+  }).parse(data))
+  .middleware([requireSupabaseAuth])
   .handler(async ({ data, context }) => {
     const { supabaseAdmin, userId } = context;
 
@@ -122,7 +123,7 @@ export const toggleUserStatusFn = createServerFn({ method: "POST" })
 
     const { error } = await supabaseAdmin.auth.admin.updateUserById(
       data.targetUserId,
-      { ban_duration: data.active ? 'none' : '876000h' } // Gambiarra padrão Supabase para desativar
+      { ban_duration: data.active ? 'none' : '876000h' }
     );
 
     if (error) throw error;
