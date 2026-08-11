@@ -2,8 +2,8 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { getRanking } from '@/integrations/management.functions';
 import { useServerFn } from '@tanstack/react-start';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/components/ui/table';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Trophy, Medal, Star, TrendingUp } from 'lucide-react';
 import { motion } from 'framer-motion';
 
