@@ -16,7 +16,6 @@ import { Route as EstadoCaminhaoRouteImport } from './routes/estado-caminhao'
 import { Route as ExtrasRouteImport } from './routes/extras'
 import { Route as GarantiasRouteImport } from './routes/garantias'
 import { Route as IaRouteImport } from './routes/ia'
-import { Route as LibraryRouteImport } from './routes/library'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ManagementRouteImport } from './routes/management'
 import { Route as ProductionRouteImport } from './routes/production'
@@ -60,11 +59,6 @@ const GarantiasRoute = GarantiasRouteImport.update({
 const IaRoute = IaRouteImport.update({
   id: '/ia',
   path: '/ia',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LibraryRoute = LibraryRouteImport.update({
-  id: '/library',
-  path: '/library',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -121,7 +115,6 @@ export interface FileRoutesByFullPath {
   '/extras': typeof ExtrasRoute
   '/garantias': typeof GarantiasRoute
   '/ia': typeof IaRoute
-  '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/management': typeof ManagementRoute
   '/production': typeof ProductionRoute
@@ -140,7 +133,6 @@ export interface FileRoutesByTo {
   '/extras': typeof ExtrasRoute
   '/garantias': typeof GarantiasRoute
   '/ia': typeof IaRoute
-  '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/management': typeof ManagementRoute
   '/production': typeof ProductionRoute
@@ -160,7 +152,6 @@ export interface FileRoutesById {
   '/extras': typeof ExtrasRoute
   '/garantias': typeof GarantiasRoute
   '/ia': typeof IaRoute
-  '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/management': typeof ManagementRoute
   '/production': typeof ProductionRoute
@@ -181,7 +172,6 @@ export interface FileRouteTypes {
     | '/extras'
     | '/garantias'
     | '/ia'
-    | '/library'
     | '/login'
     | '/management'
     | '/production'
@@ -200,7 +190,6 @@ export interface FileRouteTypes {
     | '/extras'
     | '/garantias'
     | '/ia'
-    | '/library'
     | '/login'
     | '/management'
     | '/production'
@@ -219,7 +208,6 @@ export interface FileRouteTypes {
     | '/extras'
     | '/garantias'
     | '/ia'
-    | '/library'
     | '/login'
     | '/management'
     | '/production'
@@ -239,7 +227,6 @@ export interface RootRouteChildren {
   ExtrasRoute: typeof ExtrasRoute
   GarantiasRoute: typeof GarantiasRoute
   IaRoute: typeof IaRoute
-  LibraryRoute: typeof LibraryRoute
   LoginRoute: typeof LoginRoute
   ManagementRoute: typeof ManagementRoute
   ProductionRoute: typeof ProductionRoute
@@ -300,13 +287,6 @@ declare module '@tanstack/react-router' {
       path: '/ia'
       fullPath: '/ia'
       preLoaderRoute: typeof IaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/library': {
-      id: '/library'
-      path: '/library'
-      fullPath: '/library'
-      preLoaderRoute: typeof LibraryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -383,7 +363,6 @@ const rootRouteChildren: RootRouteChildren = {
   ExtrasRoute: ExtrasRoute,
   GarantiasRoute: GarantiasRoute,
   IaRoute: IaRoute,
-  LibraryRoute: LibraryRoute,
   LoginRoute: LoginRoute,
   ManagementRoute: ManagementRoute,
   ProductionRoute: ProductionRoute,
