@@ -117,7 +117,7 @@ function Dashboard() {
                 <div className="flex-1 bg-white/5 rounded-2xl p-2 border border-white/10 overflow-hidden relative">
                   {/* Feed simplificado */}
                   <div className="absolute inset-0 p-3 space-y-2 opacity-30 text-[10px] font-mono">
-                    {osList.filter((o: any) => o.status === status).map((o: any) => (
+                    {(osList as any[]).filter((o: any) => o.status === status).map((o: any) => (
                       <div key={o.id} className="border-b border-white/10 pb-1">{o.protocolo}</div>
                     ))}
                   </div>
@@ -168,9 +168,9 @@ function Dashboard() {
                 <span className="bg-navy/10 text-navy px-2 py-0.5 rounded-full text-[10px] font-bold">{items.length}</span>
               </div>
               
-              <div className="space-y-3 min-h-[200px]">
-                {items.map((os: any) => (
-                  <Card key={os.id} className="rounded-2xl border-none shadow-md shadow-navy/5 bg-white group hover:ring-2 hover:ring-orange/20 transition-all">
+                    <div className="space-y-3 min-h-[200px]">
+                      {(items as any[]).map((os: any) => (
+                        <Card key={os.id} className="rounded-2xl border-none shadow-md shadow-navy/5 bg-white group hover:ring-2 hover:ring-orange/20 transition-all">
                     <CardContent className="p-4 space-y-3">
                       <div className="flex justify-between items-start">
                         <span className="text-xs font-mono font-bold text-navy/40">{os.protocolo}</span>
