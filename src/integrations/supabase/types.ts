@@ -44,6 +44,112 @@ export type Database = {
         }
         Relationships: []
       }
+      checklist_garantias: {
+        Row: {
+          checklist_id: string
+          criado_em: string | null
+          id: string
+          item_descricao: string
+          meses_garantia: number | null
+          tipo: string | null
+          vencimento_em: string
+        }
+        Insert: {
+          checklist_id: string
+          criado_em?: string | null
+          id?: string
+          item_descricao: string
+          meses_garantia?: number | null
+          tipo?: string | null
+          vencimento_em: string
+        }
+        Update: {
+          checklist_id?: string
+          criado_em?: string | null
+          id?: string
+          item_descricao?: string
+          meses_garantia?: number | null
+          tipo?: string | null
+          vencimento_em?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "checklist_garantias_checklist_id_fkey"
+            columns: ["checklist_id"]
+            isOneToOne: false
+            referencedRelation: "checklists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      checklist_templates: {
+        Row: {
+          criado_em: string | null
+          id: string
+          itens: Json
+          ordem: number
+          secao: string
+          tipo: Database["public"]["Enums"]["checklist_type"]
+        }
+        Insert: {
+          criado_em?: string | null
+          id?: string
+          itens: Json
+          ordem: number
+          secao: string
+          tipo: Database["public"]["Enums"]["checklist_type"]
+        }
+        Update: {
+          criado_em?: string | null
+          id?: string
+          itens?: Json
+          ordem?: number
+          secao?: string
+          tipo?: Database["public"]["Enums"]["checklist_type"]
+        }
+        Relationships: []
+      }
+      checklists: {
+        Row: {
+          assinatura_url: string | null
+          criado_em: string | null
+          criado_por: string | null
+          finalizado_em: string | null
+          id: string
+          os_id: string
+          respostas: Json
+          tipo: Database["public"]["Enums"]["checklist_type"]
+        }
+        Insert: {
+          assinatura_url?: string | null
+          criado_em?: string | null
+          criado_por?: string | null
+          finalizado_em?: string | null
+          id?: string
+          os_id: string
+          respostas?: Json
+          tipo: Database["public"]["Enums"]["checklist_type"]
+        }
+        Update: {
+          assinatura_url?: string | null
+          criado_em?: string | null
+          criado_por?: string | null
+          finalizado_em?: string | null
+          id?: string
+          os_id?: string
+          respostas?: Json
+          tipo?: Database["public"]["Enums"]["checklist_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "checklists_os_id_fkey"
+            columns: ["os_id"]
+            isOneToOne: false
+            referencedRelation: "ordens_servico"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clientes: {
         Row: {
           ativo: boolean | null
@@ -320,6 +426,47 @@ export type Database = {
         }
         Relationships: []
       }
+      termos_responsabilidade: {
+        Row: {
+          assinatura_cliente_url: string
+          cliente_recusou_servico: boolean | null
+          criado_em: string | null
+          criado_por: string | null
+          dano_identificado: string
+          fotos: string[] | null
+          id: string
+          os_id: string
+        }
+        Insert: {
+          assinatura_cliente_url: string
+          cliente_recusou_servico?: boolean | null
+          criado_em?: string | null
+          criado_por?: string | null
+          dano_identificado: string
+          fotos?: string[] | null
+          id?: string
+          os_id: string
+        }
+        Update: {
+          assinatura_cliente_url?: string
+          cliente_recusou_servico?: boolean | null
+          criado_em?: string | null
+          criado_por?: string | null
+          dano_identificado?: string
+          fotos?: string[] | null
+          id?: string
+          os_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "termos_responsabilidade_os_id_fkey"
+            columns: ["os_id"]
+            isOneToOne: false
+            referencedRelation: "ordens_servico"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string
@@ -405,6 +552,12 @@ export type Database = {
         | "vendedor"
         | "financeiro"
         | "lider"
+      checklist_type:
+        | "diagnostico_defeitos"
+        | "conferencia_final"
+        | "estado_caminhao"
+        | "operacional_lider"
+        | "processo_setor"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -540,6 +693,13 @@ export const Constants = {
         "vendedor",
         "financeiro",
         "lider",
+      ],
+      checklist_type: [
+        "diagnostico_defeitos",
+        "conferencia_final",
+        "estado_caminhao",
+        "operacional_lider",
+        "processo_setor",
       ],
     },
   },
