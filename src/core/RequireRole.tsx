@@ -32,12 +32,10 @@ export function RequireRole({ children }: { children: React.ReactNode }) {
   }, [location.pathname, navigate]);
 
   if (loading) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-navy border-t-orange" />
-      </div>
+    return React.createElement('div', { className: 'flex h-screen w-full items-center justify-center' },
+      React.createElement('div', { className: 'h-8 w-8 animate-spin rounded-full border-4 border-navy border-t-orange' })
     );
   }
 
-  return <>{children}</>;
+  return React.createElement(React.Fragment, null, children);
 }
