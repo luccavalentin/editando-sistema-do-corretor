@@ -16,7 +16,8 @@ export const getOSStats = createServerFn({ method: "GET" })
       noPatio: os.filter(o => o.status !== 'concluida' && o.status !== 'cancelada').length,
       entraramHoje: os.filter(o => o.criado_em.startsWith(today)).length,
       concluidasHoje: os.filter(o => o.finalizado_em?.startsWith(today)).length,
-      atrasadas: 0, // Mock até implementar lógica de SLA
+      atrasadas: 0,
+      pecasVencendo: 0, 
     };
   });
 
