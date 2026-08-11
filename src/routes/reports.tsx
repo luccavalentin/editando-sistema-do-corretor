@@ -15,8 +15,9 @@ function ReportsPage() {
   const fetchReports = useServerFn(getReportsData);
   const { data: reports, isLoading } = useQuery({
     queryKey: ['reports'],
-    queryFn: () => fetchReports({ period: 'all' })
+    queryFn: () => fetchReports({ period: 'all' } as any)
   });
+
 
   const exportToCSV = () => {
     if (!reports || reports.length === 0) return;
