@@ -27,7 +27,7 @@ export const getGarantias = createServerFn({ method: "GET" })
             veiculos!inner (placa_cavalo)
           )
         )
-      \`)
+      `)
       .order('vencimento_em', { ascending: true });
 
     if (data.search) {
