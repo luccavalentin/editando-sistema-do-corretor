@@ -1,5 +1,5 @@
 
-import { getIAProvider, generateEmbedding } from "./services/ia-provider";
+import { getIAProvider, generateEmbedding } from "../services/ia-provider";
 
 export async function chatHandler(data: any, context: any) {
   const { supabase, userId } = context;

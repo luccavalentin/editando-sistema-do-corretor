@@ -8,11 +8,9 @@ async function withFallback<T>(
   fn: (provider: IAProvider) => Promise<T>
 ): Promise<T> {
   const activeIndex = providers.findIndex(p => p.name === activeProviderName);
-  const orderedProviders = [
-    providers[activeIndex],
-    ...providers.slice(0, activeIndex),
-    ...providers.slice(activeIndex + 1)
-  ].filter(Boolean);
+  const active = providers[activeIndex];
+  const others = providers.filter((_, i) => i !== activeIndex);
+  const orderedProviders = active ? [active, ...others] : others;
 
   let lastError: Error | null = null;
   for (const provider of orderedProviders) {
@@ -24,6 +22,7 @@ async function withFallback<T>(
       lastError = e as Error;
     }
   }
+
   throw lastError || new Error("Todos os provedores de IA falharam.");
 }
 
