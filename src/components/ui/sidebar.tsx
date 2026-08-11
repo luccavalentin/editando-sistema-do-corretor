@@ -77,9 +77,10 @@ function Sidebar() {
         { icon: ShieldCheck, label: "Garantias", href: "/garantias" },
         { icon: FileWarning, label: "Termos", href: "/termos-responsabilidade" },
         { icon: Truck, label: "Estado Caminhão", href: "/estado-caminhao" },
-        { icon: Bot, label: "IA / Agentes MCP", href: "/ia" },
+        { icon: Bot, label: "IA Técnico", href: "/ia" },
         { icon: BarChart3, label: "Relatórios", href: "/reports" },
         { icon: Settings, label: "Configurações", href: "/settings" },
+
       ]
     }
   ]
