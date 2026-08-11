@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApresentacaoRouteImport } from './routes/apresentacao'
 import { Route as ChecklistRouteImport } from './routes/checklist'
+import { Route as EstadoCaminhaoRouteImport } from './routes/estado-caminhao'
 import { Route as ExtrasRouteImport } from './routes/extras'
+import { Route as GarantiasRouteImport } from './routes/garantias'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ManagementRouteImport } from './routes/management'
@@ -22,6 +24,7 @@ import { Route as RankingRouteImport } from './routes/ranking'
 import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as TasksRouteImport } from './routes/tasks'
+import { Route as TermosResponsabilidadeRouteImport } from './routes/termos-responsabilidade'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -38,9 +41,19 @@ const ChecklistRoute = ChecklistRouteImport.update({
   path: '/checklist',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EstadoCaminhaoRoute = EstadoCaminhaoRouteImport.update({
+  id: '/estado-caminhao',
+  path: '/estado-caminhao',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ExtrasRoute = ExtrasRouteImport.update({
   id: '/extras',
   path: '/extras',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GarantiasRoute = GarantiasRouteImport.update({
+  id: '/garantias',
+  path: '/garantias',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LibraryRoute = LibraryRouteImport.update({
@@ -88,12 +101,19 @@ const TasksRoute = TasksRouteImport.update({
   path: '/tasks',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TermosResponsabilidadeRoute = TermosResponsabilidadeRouteImport.update({
+  id: '/termos-responsabilidade',
+  path: '/termos-responsabilidade',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/apresentacao': typeof ApresentacaoRoute
   '/checklist': typeof ChecklistRoute
+  '/estado-caminhao': typeof EstadoCaminhaoRoute
   '/extras': typeof ExtrasRoute
+  '/garantias': typeof GarantiasRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/management': typeof ManagementRoute
@@ -103,12 +123,15 @@ export interface FileRoutesByFullPath {
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
   '/tasks': typeof TasksRoute
+  '/termos-responsabilidade': typeof TermosResponsabilidadeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/apresentacao': typeof ApresentacaoRoute
   '/checklist': typeof ChecklistRoute
+  '/estado-caminhao': typeof EstadoCaminhaoRoute
   '/extras': typeof ExtrasRoute
+  '/garantias': typeof GarantiasRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/management': typeof ManagementRoute
@@ -118,13 +141,16 @@ export interface FileRoutesByTo {
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
   '/tasks': typeof TasksRoute
+  '/termos-responsabilidade': typeof TermosResponsabilidadeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/apresentacao': typeof ApresentacaoRoute
   '/checklist': typeof ChecklistRoute
+  '/estado-caminhao': typeof EstadoCaminhaoRoute
   '/extras': typeof ExtrasRoute
+  '/garantias': typeof GarantiasRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/management': typeof ManagementRoute
@@ -134,6 +160,7 @@ export interface FileRoutesById {
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
   '/tasks': typeof TasksRoute
+  '/termos-responsabilidade': typeof TermosResponsabilidadeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -141,7 +168,9 @@ export interface FileRouteTypes {
     | '/'
     | '/apresentacao'
     | '/checklist'
+    | '/estado-caminhao'
     | '/extras'
+    | '/garantias'
     | '/library'
     | '/login'
     | '/management'
@@ -151,12 +180,15 @@ export interface FileRouteTypes {
     | '/reports'
     | '/settings'
     | '/tasks'
+    | '/termos-responsabilidade'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/apresentacao'
     | '/checklist'
+    | '/estado-caminhao'
     | '/extras'
+    | '/garantias'
     | '/library'
     | '/login'
     | '/management'
@@ -166,12 +198,15 @@ export interface FileRouteTypes {
     | '/reports'
     | '/settings'
     | '/tasks'
+    | '/termos-responsabilidade'
   id:
     | '__root__'
     | '/'
     | '/apresentacao'
     | '/checklist'
+    | '/estado-caminhao'
     | '/extras'
+    | '/garantias'
     | '/library'
     | '/login'
     | '/management'
@@ -181,13 +216,16 @@ export interface FileRouteTypes {
     | '/reports'
     | '/settings'
     | '/tasks'
+    | '/termos-responsabilidade'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApresentacaoRoute: typeof ApresentacaoRoute
   ChecklistRoute: typeof ChecklistRoute
+  EstadoCaminhaoRoute: typeof EstadoCaminhaoRoute
   ExtrasRoute: typeof ExtrasRoute
+  GarantiasRoute: typeof GarantiasRoute
   LibraryRoute: typeof LibraryRoute
   LoginRoute: typeof LoginRoute
   ManagementRoute: typeof ManagementRoute
@@ -197,6 +235,7 @@ export interface RootRouteChildren {
   ReportsRoute: typeof ReportsRoute
   SettingsRoute: typeof SettingsRoute
   TasksRoute: typeof TasksRoute
+  TermosResponsabilidadeRoute: typeof TermosResponsabilidadeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -222,11 +261,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChecklistRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/estado-caminhao': {
+      id: '/estado-caminhao'
+      path: '/estado-caminhao'
+      fullPath: '/estado-caminhao'
+      preLoaderRoute: typeof EstadoCaminhaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/extras': {
       id: '/extras'
       path: '/extras'
       fullPath: '/extras'
       preLoaderRoute: typeof ExtrasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/garantias': {
+      id: '/garantias'
+      path: '/garantias'
+      fullPath: '/garantias'
+      preLoaderRoute: typeof GarantiasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/library': {
@@ -292,6 +345,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TasksRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/termos-responsabilidade': {
+      id: '/termos-responsabilidade'
+      path: '/termos-responsabilidade'
+      fullPath: '/termos-responsabilidade'
+      preLoaderRoute: typeof TermosResponsabilidadeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -299,7 +359,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApresentacaoRoute: ApresentacaoRoute,
   ChecklistRoute: ChecklistRoute,
+  EstadoCaminhaoRoute: EstadoCaminhaoRoute,
   ExtrasRoute: ExtrasRoute,
+  GarantiasRoute: GarantiasRoute,
   LibraryRoute: LibraryRoute,
   LoginRoute: LoginRoute,
   ManagementRoute: ManagementRoute,
@@ -309,6 +371,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReportsRoute: ReportsRoute,
   SettingsRoute: SettingsRoute,
   TasksRoute: TasksRoute,
+  TermosResponsabilidadeRoute: TermosResponsabilidadeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
