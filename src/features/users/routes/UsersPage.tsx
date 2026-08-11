@@ -1,27 +1,22 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
-import { listUsersFn, inviteUserFn, transitionUserRoleFn, toggleUserStatusFn } from '../lib/users.functions';
+import { listUsersFn, transitionUserRoleFn } from '../lib/users.functions';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Users, UserPlus, ShieldAlert, Power } from 'lucide-react';
 import { toast } from 'sonner';
-import { useState } from 'react';
 
-export const Route = createFileRoute('/settings')({
-  component: UsersPage,
-});
-
-function UsersPage() {
+export default function UsersPage() {
   const { data: users, refetch } = useQuery({
     queryKey: ['users'],
     queryFn: () => listUsersFn(),
   });
 
-  const handleRoleChange = async (userId: string, newRole: any) => {
+  const handleRoleChange = async (userId: string, newRole: 'superadmin' | 'admin_adm' | 'mecanico' | 'montador' | 'vendedor' | 'financeiro' | 'lider') => {
     try {
-      await transitionUserRoleFn({ targetUserId: userId, newRole });
+      await transitionUserRoleFn({ data: { targetUserId: userId, newRole } });
       toast.success('Role alterada com sucesso.');
       refetch();
     } catch (e: any) {
@@ -58,7 +53,7 @@ function UsersPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {users?.map((user) => (
+              {users?.map((user: any) => (
                 <TableRow key={user.id}>
                   <TableCell className="font-medium">{user.nome || user.email}</TableCell>
                   <TableCell>{user.cargo}</TableCell>
