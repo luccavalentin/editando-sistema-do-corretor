@@ -1012,6 +1012,22 @@ export type Database = {
         Args: { _os_id?: string; _tipo_evento: string; _usuario_id: string }
         Returns: undefined
       }
+      buscar_conhecimento: {
+        Args: {
+          match_count: number
+          match_threshold: number
+          query_embedding: string
+        }
+        Returns: {
+          categoria: string
+          conteudo: string
+          id: string
+          marca: string
+          similarity: number
+          tags: string[]
+          titulo: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
