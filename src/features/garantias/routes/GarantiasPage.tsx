@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireSupabaseAuth } from "@/integrations/supabase/auth.middleware";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -12,7 +12,7 @@ import { ptBR } from 'date-fns/locale';
 
 export const getGarantias = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .input(z.object({ search: z.string().optional() }))
+  .inputValidator((data) => z.object({ search: z.string().optional() }).parse(data))
   .handler(async ({ data, context }) => {
     let query = context.supabase
       .from('checklist_garantias')

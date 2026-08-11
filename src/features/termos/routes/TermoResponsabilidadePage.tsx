@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useSuspenseQuery, useMutation } from '@tanstack/react-query';
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireSupabaseAuth } from "@/integrations/supabase/auth.middleware";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { getOSList } from '@/integrations/management.functions';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,18 +12,18 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { SignaturePad } from '../../checklist/components/SignaturePad';
 import { toast } from 'sonner';
-import { FileText, Camera, Printer, ArrowLeft, Loader2 } from 'lucide-react';
+import { FileText, Camera, Printer, ArrowLeft, Loader2, AlertTriangle } from 'lucide-react';
 import { useServerFn } from '@tanstack/react-start';
 
 export const saveTermo = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .input(z.object({
+  .inputValidator((data) => z.object({
     os_id: z.string(),
     dano_identificado: z.string(),
     fotos: z.array(z.string()).optional(),
     cliente_recusou_servico: z.boolean(),
     assinatura_cliente_url: z.string()
-  }))
+  }).parse(data))
   .handler(async ({ data, context }) => {
     const { data: result, error } = await context.supabase
       .from('termos_responsabilidade')
