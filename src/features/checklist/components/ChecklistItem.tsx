@@ -7,8 +7,8 @@ import { cn } from '@/lib/utils';
 export interface ChecklistResponse {
   item_id: string;
   status: 'ok' | 'nao_ok' | 'nao_aplica';
-  observacao?: string;
-  evidencias?: string[];
+  observacao: string;
+  evidencias: string[];
 }
 
 interface ChecklistItemProps {
@@ -26,8 +26,8 @@ export function ChecklistItem({ label, itemId, value, onChange }: ChecklistItemP
     onChange({
       item_id: itemId,
       status: newStatus,
-      observacao: value?.observacao,
-      evidencias: value?.evidencias
+      observacao: value?.observacao || '',
+      evidencias: value?.evidencias || []
     });
   };
 

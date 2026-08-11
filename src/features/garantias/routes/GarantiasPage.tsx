@@ -44,7 +44,7 @@ export function GarantiasPage() {
   const [search, setSearch] = useState('');
   const { data: garantias } = useSuspenseQuery({
     queryKey: ['garantias', search],
-    queryFn: () => getGarantias({ search })
+    queryFn: () => getGarantias({ data: { search } })
   });
 
   return (

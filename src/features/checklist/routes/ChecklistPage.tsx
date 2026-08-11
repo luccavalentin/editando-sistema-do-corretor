@@ -24,7 +24,7 @@ export function ChecklistPage() {
   // Queries
   const { data: templates } = useSuspenseQuery({
     queryKey: ['checklist-templates', 'diagnostico_defeitos'],
-    queryFn: () => getChecklistTemplates({ tipo: 'diagnostico_defeitos' })
+    queryFn: () => getChecklistTemplates({ data: { tipo: 'diagnostico_defeitos' } })
   });
 
   const { data: osList } = useSuspenseQuery({
@@ -38,12 +38,12 @@ export function ChecklistPage() {
 
   const responsesMap = useMemo(() => {
     const map = new Map<string, ChecklistResponse>();
-    localResponses?.forEach(r => {
+    localResponses?.forEach((r: any) => {
       map.set(r.item_id, {
         item_id: r.item_id,
         status: r.status,
-        observacao: r.observacao,
-        evidencias: r.evidencias
+        observacao: r.observacao || '',
+        evidencias: r.evidencias || []
       });
     });
     return map;
@@ -90,8 +90,8 @@ export function ChecklistPage() {
       tipo: 'diagnostico_defeitos',
       item_id: res.item_id,
       status: res.status,
-      observacao: res.observacao,
-      evidencias: res.evidencias
+      observacao: res.observacao || '',
+      evidencias: res.evidencias || []
     });
   };
 
@@ -234,7 +234,7 @@ export function ChecklistPage() {
               <div className="text-left py-4">
                 <div className="flex justify-between text-sm mb-2">
                   <span>Itens Respondidos:</span>
-                  <span className="font-bold">{responsesMap.size} / {templates.reduce((acc, t) => acc + (t.itens as any[]).length, 0)}</span>
+                  <span className="font-bold">{responsesMap.size} / {templates.reduce((acc: number, t: any) => acc + (t.itens as any[]).length, 0)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span>Irregularidades:</span>
