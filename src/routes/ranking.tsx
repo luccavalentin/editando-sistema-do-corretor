@@ -15,8 +15,9 @@ function RankingPage() {
   const fetchRanking = useServerFn(getRanking);
   const { data: ranking, isLoading } = useQuery({
     queryKey: ['ranking'],
-    queryFn: () => fetchRanking({ period: 'all' })
+    queryFn: () => fetchRanking({ period: 'all' } as any)
   });
+
 
   if (isLoading) return <div className="p-8">Carregando ranking...</div>;
 

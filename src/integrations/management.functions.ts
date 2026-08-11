@@ -131,7 +131,7 @@ export const openOS = createServerFn({ method: "POST" })
   });
 
 export const getReportsData = createServerFn({ method: "GET" })
-  .inputValidator((data) => z.object({
+  .inputValidator((data: any) => z.object({
     period: z.enum(['day', 'week', 'month', 'year', 'all']).default('all'),
     tecnico_id: z.string().optional(),
     cliente_id: z.string().optional()
@@ -140,10 +140,13 @@ export const getReportsData = createServerFn({ method: "GET" })
     let query = supabase
       .from("ordens_servico")
       .select(`
-        *,
-        cliente:clientes(nome),
-        tecnico:auth.users!tecnico_id(email),
-        historico:os_historico_status(*)
+        id,
+        protocolo,
+        status,
+        valor_pecas,
+        valor_servico,
+        criado_em,
+        cliente:clientes(nome)
       `);
 
     if (data.tecnico_id) query = query.eq('tecnico_id', data.tecnico_id);
@@ -152,13 +155,17 @@ export const getReportsData = createServerFn({ method: "GET" })
     const { data: os, error } = await query;
     if (error) throw new Error(error.message);
 
-    return os;
+    return (os as any[]).map(item => ({
+      ...item,
+      cliente: item.cliente
+    }));
   });
 
 export const getRanking = createServerFn({ method: "GET" })
-  .inputValidator((data) => z.object({
+  .inputValidator((data: any) => z.object({
     period: z.enum(['daily', 'weekly', 'monthly', 'all']).default('all')
   }).parse(data))
+
   .handler(async ({ data }) => {
     // We use a broader query to avoid complex join issues in types
     const { data: events, error } = await supabase
