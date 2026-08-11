@@ -37,8 +37,9 @@ export const ingestContent = createServerFn({ method: "POST" })
     // 2. Classificação e Ingestão
     for (let i = 0; i < chunked.length; i++) {
       const chunk = chunked[i];
-      const classification = await provider.classifyContent(chunk);
-      const embedding = await generateEmbedding(chunk);
+      const classification = await (provider as any).classifyContent(chunk);
+      const embedding = await (generateEmbedding as any)(chunk);
+
 
       await supabase.from('ia_base_conhecimento').insert({
         titulo: `${data.titulo} (Part ${i + 1})`,
