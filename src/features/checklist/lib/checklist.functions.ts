@@ -30,7 +30,7 @@ export const saveChecklist = createServerFn({ method: "POST" })
       .from('checklists')
       .upsert({
         os_id: data.os_id,
-        tipo: data.tipo,
+        tipo: data.tipo as any,
         respostas: data.respostas,
         assinatura_url: data.assinatura_url,
         finalizado_em: data.finalizado ? new Date().toISOString() : null,
@@ -43,8 +43,14 @@ export const saveChecklist = createServerFn({ method: "POST" })
 
     // Se finalizado, transicionar status da OS via RPC
     if (data.finalizado) {
-      const temNaoOk = data.respostas.some((r: any) => r.status === 'nao_ok');
-      const novoStatus = temNaoOk ? 'aguardando_peca' : 'em_execucao';
+      let novoStatus = 'checklist_diagnostico';
+      
+      if (data.tipo === 'diagnostico_defeitos') {
+        const temNaoOk = data.respostas.some((r: any) => r.status === 'nao_ok');
+        novoStatus = temNaoOk ? 'aguardando_peca' : 'em_execucao';
+      } else if (data.tipo === 'estado_caminhao') {
+        novoStatus = 'aguardando_retirada';
+      }
       
       const { error: rpcError } = await context.supabase.rpc('transicionar_status_os', {
         _os_id: data.os_id,
