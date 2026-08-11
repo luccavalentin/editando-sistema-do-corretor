@@ -21,6 +21,9 @@ import {
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Link, useLocation } from "@tanstack/react-router"
+import { useEffect, useState } from "react"
+import { getCurrentUserRole } from "@/core/auth"
+import { canAccessRoute, AppRole } from "@/core/access-matrix"
 
 const SidebarContext = React.createContext<{
   expanded: boolean

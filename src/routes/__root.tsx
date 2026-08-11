@@ -6,10 +6,12 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  useLocation
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { Toaster } from "sonner";
 import { SidebarProvider, SidebarContainer } from "@/components/ui/sidebar";
+import { RequireRole } from "@/core/RequireRole";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";

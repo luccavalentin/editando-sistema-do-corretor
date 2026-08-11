@@ -1,9 +1,9 @@
-import { AppRole, ACCESS_MATRIX } from './access-matrix';
+import { AppRole } from './access-matrix';
 import { supabase } from '@/integrations/supabase/client';
+import React from 'react';
 
 /**
  * Hook para buscar o papel do usuário atual.
- * Em um cenário real, isso viria de um context ou do cache do TanStack Query.
  */
 export async function getCurrentUserRole(): Promise<AppRole | null> {
   const { data: { session } } = await supabase.auth.getSession();
@@ -20,7 +20,6 @@ export async function getCurrentUserRole(): Promise<AppRole | null> {
 
 /**
  * Componente de proteção de UI granular.
- * UX Only: a segurança real é RLS.
  */
 export function Authorize({ 
   roles, 
@@ -34,7 +33,7 @@ export function Authorize({
   userRole: AppRole | null
 }) {
   if (!userRole || !roles.includes(userRole)) {
-    return <>{fallback}</>;
+    return <React.Fragment>{fallback}</React.Fragment>;
   }
-  return <>{children}</>;
+  return <React.Fragment>{children}</React.Fragment>;
 }
