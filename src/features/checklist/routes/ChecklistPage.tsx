@@ -24,7 +24,7 @@ export function ChecklistPage() {
   // Queries
   const { data: templates } = useSuspenseQuery({
     queryKey: ['checklist-templates', 'diagnostico_defeitos'],
-    queryFn: () => getChecklistTemplates({ tipo: 'diagnostico_defeitos' })
+    queryFn: () => getChecklistTemplates({ data: { tipo: 'diagnostico_defeitos' } })
   });
 
   const { data: osList } = useSuspenseQuery({
@@ -38,12 +38,12 @@ export function ChecklistPage() {
 
   const responsesMap = useMemo(() => {
     const map = new Map<string, ChecklistResponse>();
-    localResponses?.forEach(r => {
+    localResponses?.forEach((r: any) => {
       map.set(r.item_id, {
         item_id: r.item_id,
         status: r.status,
-        observacao: r.observacao,
-        evidencias: r.evidencias
+        observacao: r.observacao || '',
+        evidencias: r.evidencias || []
       });
     });
     return map;
@@ -90,8 +90,8 @@ export function ChecklistPage() {
       tipo: 'diagnostico_defeitos',
       item_id: res.item_id,
       status: res.status,
-      observacao: res.observacao,
-      evidencias: res.evidencias
+      observacao: res.observacao || '',
+      evidencias: res.evidencias || []
     });
   };
 
@@ -201,16 +201,16 @@ export function ChecklistPage() {
             <TabsTrigger value="final" className="text-[10px] sm:text-xs py-2">Fim</TabsTrigger>
           </TabsList>
 
-          {templates.map((section, idx) => (
+          {templates.map((section: any, idx: number) => (
             <TabsContent key={section.id} value={idx.toString()} className="space-y-4 pt-4">
               <h2 className="text-xl font-bold font-space px-2">{section.secao}</h2>
               <div className="grid gap-3">
-                {(section.itens as any[]).map(item => (
+                {(section.itens as any[]).map((item: any) => (
                   <ChecklistItem
                     key={item.id}
                     label={item.label}
                     itemId={item.id}
-                    value={responsesMap.get(item.id)}
+                    value={responsesMap.get(item.id) || { item_id: item.id, status: 'nao_aplica', observacao: '', evidencias: [] }}
                     onChange={handleResponseChange}
                   />
                 ))}
@@ -234,7 +234,7 @@ export function ChecklistPage() {
               <div className="text-left py-4">
                 <div className="flex justify-between text-sm mb-2">
                   <span>Itens Respondidos:</span>
-                  <span className="font-bold">{responsesMap.size} / {templates.reduce((acc, t) => acc + (t.itens as any[]).length, 0)}</span>
+                  <span className="font-bold">{responsesMap.size} / {templates.reduce((acc: number, t: any) => acc + (t.itens as any[]).length, 0)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span>Irregularidades:</span>

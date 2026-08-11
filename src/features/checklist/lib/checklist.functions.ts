@@ -1,10 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireSupabaseAuth } from "@/integrations/supabase/auth.middleware";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 export const getChecklistTemplates = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .input(z.object({ tipo: z.string() }))
+  .inputValidator((data) => z.object({ tipo: z.string() }).parse(data))
   .handler(async ({ data, context }) => {
     const { data: templates, error } = await context.supabase
       .from('checklist_templates')
@@ -18,13 +18,13 @@ export const getChecklistTemplates = createServerFn({ method: "GET" })
 
 export const saveChecklist = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .input(z.object({
+  .inputValidator((data) => z.object({
     os_id: z.string(),
     tipo: z.string(),
     respostas: z.array(z.any()),
     assinatura_url: z.string().optional(),
     finalizado: z.boolean().default(false)
-  }))
+  }).parse(data))
   .handler(async ({ data, context }) => {
     const { data: result, error } = await context.supabase
       .from('checklists')
