@@ -14,7 +14,8 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
-  BookOpen
+  BookOpen,
+  Bot
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -76,7 +77,7 @@ function Sidebar() {
         { icon: ShieldCheck, label: "Garantias", href: "/garantias" },
         { icon: FileWarning, label: "Termos", href: "/termos-responsabilidade" },
         { icon: Truck, label: "Estado Caminhão", href: "/estado-caminhao" },
-        { icon: BookOpen, label: "IA / Biblioteca", href: "/library" },
+        { icon: Bot, label: "IA / Agentes MCP", href: "/ia" },
         { icon: BarChart3, label: "Relatórios", href: "/reports" },
         { icon: Settings, label: "Configurações", href: "/settings" },
       ]

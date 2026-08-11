@@ -15,6 +15,7 @@ import { Route as ChecklistRouteImport } from './routes/checklist'
 import { Route as EstadoCaminhaoRouteImport } from './routes/estado-caminhao'
 import { Route as ExtrasRouteImport } from './routes/extras'
 import { Route as GarantiasRouteImport } from './routes/garantias'
+import { Route as IaRouteImport } from './routes/ia'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ManagementRouteImport } from './routes/management'
@@ -54,6 +55,11 @@ const ExtrasRoute = ExtrasRouteImport.update({
 const GarantiasRoute = GarantiasRouteImport.update({
   id: '/garantias',
   path: '/garantias',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IaRoute = IaRouteImport.update({
+  id: '/ia',
+  path: '/ia',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LibraryRoute = LibraryRouteImport.update({
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/estado-caminhao': typeof EstadoCaminhaoRoute
   '/extras': typeof ExtrasRoute
   '/garantias': typeof GarantiasRoute
+  '/ia': typeof IaRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/management': typeof ManagementRoute
@@ -132,6 +139,7 @@ export interface FileRoutesByTo {
   '/estado-caminhao': typeof EstadoCaminhaoRoute
   '/extras': typeof ExtrasRoute
   '/garantias': typeof GarantiasRoute
+  '/ia': typeof IaRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/management': typeof ManagementRoute
@@ -151,6 +159,7 @@ export interface FileRoutesById {
   '/estado-caminhao': typeof EstadoCaminhaoRoute
   '/extras': typeof ExtrasRoute
   '/garantias': typeof GarantiasRoute
+  '/ia': typeof IaRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/management': typeof ManagementRoute
@@ -171,6 +180,7 @@ export interface FileRouteTypes {
     | '/estado-caminhao'
     | '/extras'
     | '/garantias'
+    | '/ia'
     | '/library'
     | '/login'
     | '/management'
@@ -189,6 +199,7 @@ export interface FileRouteTypes {
     | '/estado-caminhao'
     | '/extras'
     | '/garantias'
+    | '/ia'
     | '/library'
     | '/login'
     | '/management'
@@ -207,6 +218,7 @@ export interface FileRouteTypes {
     | '/estado-caminhao'
     | '/extras'
     | '/garantias'
+    | '/ia'
     | '/library'
     | '/login'
     | '/management'
@@ -226,6 +238,7 @@ export interface RootRouteChildren {
   EstadoCaminhaoRoute: typeof EstadoCaminhaoRoute
   ExtrasRoute: typeof ExtrasRoute
   GarantiasRoute: typeof GarantiasRoute
+  IaRoute: typeof IaRoute
   LibraryRoute: typeof LibraryRoute
   LoginRoute: typeof LoginRoute
   ManagementRoute: typeof ManagementRoute
@@ -280,6 +293,13 @@ declare module '@tanstack/react-router' {
       path: '/garantias'
       fullPath: '/garantias'
       preLoaderRoute: typeof GarantiasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ia': {
+      id: '/ia'
+      path: '/ia'
+      fullPath: '/ia'
+      preLoaderRoute: typeof IaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/library': {
@@ -362,6 +382,7 @@ const rootRouteChildren: RootRouteChildren = {
   EstadoCaminhaoRoute: EstadoCaminhaoRoute,
   ExtrasRoute: ExtrasRoute,
   GarantiasRoute: GarantiasRoute,
+  IaRoute: IaRoute,
   LibraryRoute: LibraryRoute,
   LoginRoute: LoginRoute,
   ManagementRoute: ManagementRoute,
