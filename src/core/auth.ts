@@ -2,9 +2,6 @@ import { AppRole } from './access-matrix';
 import { supabase } from '@/integrations/supabase/client';
 import React from 'react';
 
-/**
- * Hook para buscar o papel do usuário atual.
- */
 export async function getCurrentUserRole(): Promise<AppRole | null> {
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) return null;
@@ -15,12 +12,9 @@ export async function getCurrentUserRole(): Promise<AppRole | null> {
     .eq('user_id', session.user.id)
     .single();
 
-  return data?.role as AppRole || null;
+  return (data?.role as AppRole) || null;
 }
 
-/**
- * Componente de proteção de UI granular.
- */
 export function Authorize({ 
   roles, 
   children, 
@@ -33,7 +27,7 @@ export function Authorize({
   userRole: AppRole | null
 }) {
   if (!userRole || !roles.includes(userRole)) {
-    return <React.Fragment>{fallback}</React.Fragment>;
+    return React.createElement(React.Fragment, null, fallback);
   }
-  return <React.Fragment>{children}</React.Fragment>;
+  return React.createElement(React.Fragment, null, children);
 }
