@@ -117,13 +117,21 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const location = useLocation();
+  const isLoginPage = location.pathname === '/login';
 
   return (
     <QueryClientProvider client={queryClient}>
       <SidebarProvider>
-        <SidebarContainer>
+        {isLoginPage ? (
           <Outlet />
-        </SidebarContainer>
+        ) : (
+          <RequireRole>
+            <SidebarContainer>
+              <Outlet />
+            </SidebarContainer>
+          </RequireRole>
+        )}
       </SidebarProvider>
       <Toaster position="top-right" closeButton richColors />
     </QueryClientProvider>

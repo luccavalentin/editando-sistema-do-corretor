@@ -58,6 +58,11 @@ function Sidebar() {
   if (!context) return null
   const { expanded, setExpanded } = context
   const location = useLocation()
+  const [userRole, setUserRole] = useState<AppRole | null>(null)
+
+  useEffect(() => {
+    getCurrentUserRole().then(setUserRole)
+  }, [])
 
   const menuGroups = [
     {
@@ -68,7 +73,7 @@ function Sidebar() {
         { icon: ClipboardCheck, label: "Checklist", href: "/checklist" },
         { icon: BarChart3, label: "Tarefas", href: "/tasks" },
         { icon: ShieldCheck, label: "Ranking", href: "/ranking" },
-      ]
+      ].filter(item => canAccessRoute(item.href, userRole))
     },
     {
       label: "Operacional",
@@ -80,8 +85,7 @@ function Sidebar() {
         { icon: Bot, label: "IA Técnico", href: "/ia" },
         { icon: BarChart3, label: "Relatórios", href: "/reports" },
         { icon: Settings, label: "Configurações", href: "/settings" },
-
-      ]
+      ].filter(item => canAccessRoute(item.href, userRole))
     }
   ]
 
