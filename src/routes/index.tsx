@@ -14,7 +14,9 @@ import {
   User, 
   ArrowRight,
   Maximize2,
-  Filter
+  Filter,
+  PlusCircle,
+  Package
 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -22,6 +24,22 @@ import { toast } from 'sonner';
 export const Route = createFileRoute('/')({
   component: Dashboard,
 });
+
+function StatCard({ title, value, icon: Icon, color }: any) {
+  return (
+    <Card className="rounded-2xl border-none shadow-md shadow-navy/5 overflow-hidden group hover:shadow-lg transition-all">
+      <CardContent className="p-6">
+        <div className="flex justify-between items-start">
+          <div className={`p-3 rounded-2xl bg-muted group-hover:bg-white transition-colors ${color.replace('text-', 'bg-')}/10`}>
+            <Icon className={`w-6 h-6 ${color}`} />
+          </div>
+          <span className={`text-2xl font-black font-heading ${color}`}>{value}</span>
+        </div>
+        <p className="mt-4 text-xs font-bold uppercase tracking-widest text-muted-foreground">{title}</p>
+      </CardContent>
+    </Card>
+  );
+}
 
 const STATUS_FLOW = [
   'aberta',
@@ -153,6 +171,15 @@ function Dashboard() {
             Modo TV
           </Button>
         </div>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <StatCard title="No pátio agora" value={stats?.noPatio || 0} icon={Truck} color="text-cyan-600" />
+        <StatCard title="Entraram hoje" value={stats?.entraramHoje || 0} icon={PlusCircle} color="text-orange-500" />
+        <StatCard title="Concluídas hoje" value={stats?.concluidasHoje || 0} icon={CheckCircle2} color="text-green-500" />
+        <StatCard title="Tempo Médio" value="4.2h" icon={Clock} color="text-blue-500" />
+        <StatCard title="Em Atraso" value={stats?.atrasadas || 0} icon={AlertCircle} color="text-red-500" />
+        <StatCard title="Peças Vencendo" value={stats?.pecasVencendo || 0} icon={Package} color="text-orange-600" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
