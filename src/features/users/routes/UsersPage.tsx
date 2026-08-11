@@ -24,59 +24,52 @@ export default function UsersPage() {
     }
   };
 
-  return (
-    <div className='p-8 space-y-8'>
-      <div className="flex justify-between items-center">
-        <h1 className='text-3xl font-bold text-navy flex items-center gap-3'>
-          <Users className="w-8 h-8 text-orange" />
-          Gestão de Usuários
-        </h1>
-        <Button className="bg-navy rounded-xl gap-2">
-          <UserPlus className="w-4 h-4" />
-          Convidar Usuário
-        </Button>
-      </div>
-
-      <Card className="rounded-2xl border-none shadow-md shadow-navy/5 bg-white">
-        <CardHeader>
-          <CardTitle>Usuários Cadastrados</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Nome</TableHead>
-                <TableHead>Cargo</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Ações</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {users?.map((user: any) => (
-                <TableRow key={user.id}>
-                  <TableCell className="font-medium">{user.nome || user.email}</TableCell>
-                  <TableCell>{user.cargo}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline">{user.role}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={user.status === 'ativo' ? 'default' : 'secondary'}>{user.status}</Badge>
-                  </TableCell>
-                  <TableCell className="flex gap-2">
-                    <Button variant="ghost" size="sm" onClick={() => handleRoleChange(user.id, 'admin_adm')}>
-                      <ShieldAlert className="w-4 h-4" />
-                    </Button>
-                    <Button variant="ghost" size="sm">
-                      <Power className="w-4 h-4" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-    </div>
+  return React.createElement('div', { className: 'p-8 space-y-8' },
+    React.createElement('div', { className: 'flex justify-between items-center' },
+      React.createElement('h1', { className: 'text-3xl font-bold text-navy flex items-center gap-3' },
+        React.createElement(Users, { className: 'w-8 h-8 text-orange' }),
+        'Gestão de Usuários'
+      ),
+      React.createElement(Button, { className: 'bg-navy rounded-xl gap-2' },
+        React.createElement(UserPlus, { className: 'w-4 h-4' }),
+        'Convidar Usuário'
+      )
+    ),
+    React.createElement(Card, { className: 'rounded-2xl border-none shadow-md shadow-navy/5 bg-white' },
+      React.createElement(CardHeader, null,
+        React.createElement(CardTitle, null, 'Usuários Cadastrados')
+      ),
+      React.createElement(CardContent, null,
+        React.createElement(Table, null,
+          React.createElement(TableHeader, null,
+            React.createElement(TableRow, null,
+              React.createElement(TableHead, null, 'Nome'),
+              React.createElement(TableHead, null, 'Cargo'),
+              React.createElement(TableHead, null, 'Role'),
+              React.createElement(TableHead, null, 'Status'),
+              React.createElement(TableHead, null, 'Ações')
+            )
+          ),
+          React.createElement(TableBody, null,
+            users?.map((user: any) => 
+              React.createElement(TableRow, { key: user.id },
+                React.createElement(TableCell, { className: 'font-medium' }, user.nome || user.email),
+                React.createElement(TableCell, null, user.cargo),
+                React.createElement(TableCell, null, React.createElement(Badge, { variant: 'outline' }, user.role)),
+                React.createElement(TableCell, null, React.createElement(Badge, { variant: user.status === 'ativo' ? 'default' : 'secondary' }, user.status)),
+                React.createElement(TableCell, { className: 'flex gap-2' },
+                  React.createElement(Button, { variant: 'ghost', size: 'sm', onClick: () => handleRoleChange(user.id, 'admin_adm') },
+                    React.createElement(ShieldAlert, { className: 'w-4 h-4' })
+                  ),
+                  React.createElement(Button, { variant: 'ghost', size: 'sm' },
+                    React.createElement(Power, { className: 'w-4 h-4' })
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
   );
 }
