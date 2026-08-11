@@ -201,16 +201,16 @@ export function ChecklistPage() {
             <TabsTrigger value="final" className="text-[10px] sm:text-xs py-2">Fim</TabsTrigger>
           </TabsList>
 
-          {templates.map((section, idx) => (
+          {templates.map((section: any, idx: number) => (
             <TabsContent key={section.id} value={idx.toString()} className="space-y-4 pt-4">
               <h2 className="text-xl font-bold font-space px-2">{section.secao}</h2>
               <div className="grid gap-3">
-                {(section.itens as any[]).map(item => (
+                {(section.itens as any[]).map((item: any) => (
                   <ChecklistItem
                     key={item.id}
                     label={item.label}
                     itemId={item.id}
-                    value={responsesMap.get(item.id)}
+                    value={responsesMap.get(item.id) || { item_id: item.id, status: 'nao_aplica', observacao: '', evidencias: [] }}
                     onChange={handleResponseChange}
                   />
                 ))}
