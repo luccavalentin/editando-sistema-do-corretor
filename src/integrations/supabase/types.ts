@@ -185,6 +185,41 @@ export type Database = {
           },
         ]
       }
+      os_historico_status: {
+        Row: {
+          criado_em: string | null
+          id: string
+          os_id: string
+          status_anterior: string | null
+          status_novo: string
+          usuario_id: string
+        }
+        Insert: {
+          criado_em?: string | null
+          id?: string
+          os_id: string
+          status_anterior?: string | null
+          status_novo: string
+          usuario_id: string
+        }
+        Update: {
+          criado_em?: string | null
+          id?: string
+          os_id?: string
+          status_anterior?: string | null
+          status_novo?: string
+          usuario_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "os_historico_status_os_id_fkey"
+            columns: ["os_id"]
+            isOneToOne: false
+            referencedRelation: "ordens_servico"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       os_itens_peca: {
         Row: {
           descricao: string
@@ -261,6 +296,30 @@ export type Database = {
           },
         ]
       }
+      sla_fases: {
+        Row: {
+          criado_em: string | null
+          limite_horas_amarelo: number
+          limite_horas_vermelho: number
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          criado_em?: string | null
+          limite_horas_amarelo?: number
+          limite_horas_vermelho?: number
+          status: string
+          updated_at?: string | null
+        }
+        Update: {
+          criado_em?: string | null
+          limite_horas_amarelo?: number
+          limite_horas_vermelho?: number
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -331,6 +390,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      transicionar_status_os: {
+        Args: { _novo_status: string; _os_id: string; _usuario_id: string }
+        Returns: undefined
       }
     }
     Enums: {
