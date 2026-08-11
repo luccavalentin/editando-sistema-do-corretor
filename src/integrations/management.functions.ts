@@ -129,3 +129,64 @@ export const openOS = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return os;
   });
+
+export const getReportsData = createServerFn({ method: "GET" })
+  .inputValidator((data) => z.object({
+    period: z.enum(['day', 'week', 'month', 'year', 'all']).default('all'),
+    tecnico_id: z.string().optional(),
+    cliente_id: z.string().optional()
+  }).parse(data))
+  .handler(async ({ data }) => {
+    let query = supabase
+      .from("ordens_servico")
+      .select(`
+        *,
+        cliente:clientes(nome),
+        tecnico:auth.users!tecnico_id(email),
+        historico:os_historico_status(*)
+      `);
+
+    if (data.tecnico_id) query = query.eq('tecnico_id', data.tecnico_id);
+    if (data.cliente_id) query = query.eq('cliente_id', data.cliente_id);
+
+    const { data: os, error } = await query;
+    if (error) throw new Error(error.message);
+
+    return os;
+  });
+
+export const getRanking = createServerFn({ method: "GET" })
+  .inputValidator((data) => z.object({
+    period: z.enum(['daily', 'weekly', 'monthly', 'all']).default('all')
+  }).parse(data))
+  .handler(async ({ data }) => {
+    let query = supabase
+      .from("ranking_eventos")
+      .select(`
+        usuario_id,
+        pontos_aplicados,
+        criado_em,
+        usuario:auth.users!usuario_id(email)
+      `);
+
+    const { data: events, error } = await query;
+    if (error) throw new Error(error.message);
+
+    // Manual aggregation because complex grouping in PostgREST is limited
+    const aggregation: Record<string, { email: string, points: number }> = {};
+    
+    events?.forEach(event => {
+      const userId = event.usuario_id;
+      if (!aggregation[userId]) {
+        aggregation[userId] = { 
+          email: (event.usuario as any)?.email || 'Usuário', 
+          points: 0 
+        };
+      }
+      aggregation[userId].points += event.pontos_aplicados;
+    });
+
+    return Object.entries(aggregation)
+      .map(([id, val]) => ({ id, ...val }))
+      .sort((a, b) => b.points - a.points);
+  });
