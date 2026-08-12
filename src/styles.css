@@ -251,15 +251,23 @@
   }
   
   .table-system {
-    @apply w-full text-left;
+    width: 100%;
+    text-align: left;
   }
   
   .table-system thead th {
-    @apply sticky top-0 z-10 bg-muted/80 backdrop-blur-md;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: color-mix(in oklch, var(--color-muted), transparent 20%);
+    backdrop-filter: blur(8px);
   }
   
   .table-system tbody tr {
-    @apply transition-colors hover:bg-muted/30;
+    transition: background-color 0.2s;
+  }
+  .table-system tbody tr:hover {
+    background-color: color-mix(in oklch, var(--color-muted), transparent 70%);
   }
   
   .table-system tbody td.number {
