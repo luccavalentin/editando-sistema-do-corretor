@@ -35,11 +35,21 @@ function LoginPage() {
         return;
       }
 
-      // Explicitly refresh session to ensure RequireRole gets the new state
-      await supabase.auth.refreshSession();
+      // Force an immediate session refresh to ensure all hooks see the new state
+      const { data: sessionData, error: sessionError } = await supabase.auth.refreshSession();
       
+      if (sessionError || !sessionData.session) {
+        console.error("Session refresh failed after login:", sessionError);
+        toast.error("Erro ao estabelecer sessão segura");
+        return;
+      }
+
       toast.success("Acesso autorizado");
-      navigate({ to: '/' });
+      
+      // Use a small delay to allow session persistence to finish before redirect
+      setTimeout(() => {
+        navigate({ to: '/' });
+      }, 100);
     } catch (err) {
       toast.error("Erro inesperado ao realizar login");
     } finally {
