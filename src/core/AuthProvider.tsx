@@ -45,7 +45,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .map(r => r.role as AppRole)
         .sort((a, b) => roleOrder.indexOf(a) - roleOrder.indexOf(b));
       
-      return sortedRoles[0];
+      return sortedRoles[0] || null;
     } catch (err) {
       console.error("AuthContext: Critical error fetching role:", err);
       return null;
