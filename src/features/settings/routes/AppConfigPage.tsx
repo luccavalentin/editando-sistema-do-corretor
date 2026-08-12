@@ -69,7 +69,7 @@ export default function AppConfigPage() {
   });
 
   const mutationEstoque = useMutation({
-    mutationFn: () => syncEstoque(),
+    mutationFn: () => syncEstoque({ data: undefined }),
     onSuccess: () => {
       toast.success('Sincronização de estoque iniciada com sucesso');
       queryClient.invalidateQueries({ queryKey: ['omie_sync_logs'] });
