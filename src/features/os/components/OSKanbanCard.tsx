@@ -6,7 +6,7 @@ import { OrdemServico, OSStatus } from "../types/os.types";
 interface OSKanbanCardProps {
   os: OrdemServico;
   onNextStatus: (osId: string, nextStatus: OSStatus) => void;
-  nextStatus?: OSStatus;
+  nextStatus?: OSStatus | undefined;
 }
 
 export function OSKanbanCard({ os, onNextStatus, nextStatus }: OSKanbanCardProps) {
