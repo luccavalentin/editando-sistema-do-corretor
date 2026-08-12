@@ -94,45 +94,57 @@ function Sidebar() {
 
   return (
     <aside className={cn(
-      "fixed left-0 top-0 h-full bg-navy text-white transition-all duration-200 ease-in-out z-40 flex flex-col border-r border-white/5",
+      "fixed left-0 top-0 h-full bg-navy text-white transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] z-40 flex flex-col border-r border-white/5 shadow-2xl shadow-navy/50",
       expanded ? "w-64" : "w-20"
     )}>
       {/* Header / Logo */}
-      <div className="h-20 flex items-center px-6 border-b border-white/10 overflow-hidden">
+      <div className="h-24 flex items-center px-6 border-b border-white/5 overflow-hidden">
         {expanded ? (
-          <div className="flex items-center gap-3">
-             <div className="w-8 h-8 bg-white rounded-sm flex items-center justify-center shrink-0">
-               <span className="text-navy font-black text-xs">TF</span>
+          <div className="flex items-center gap-4 animate-in fade-in slide-in-from-left-4 duration-500">
+             <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shrink-0 shadow-lg shadow-white/10 group-hover:scale-105 transition-transform">
+               <span className="text-navy font-black text-sm">TF</span>
              </div>
              <div className="flex flex-col">
-               <span className="font-heading font-bold leading-none text-orange text-sm tracking-tight">TECNOAR</span>
-               <span className="text-[9px] font-bold text-cyan tracking-widest uppercase">FREIOS</span>
+               <span className="font-heading font-black leading-none text-orange text-lg tracking-tighter">TECNOAR</span>
+               <span className="text-[10px] font-black text-cyan tracking-[0.3em] uppercase opacity-80">FREIOS</span>
              </div>
           </div>
         ) : (
-          <div className="w-8 h-8 bg-white rounded-sm flex items-center justify-center mx-auto shrink-0">
-            <span className="text-navy font-black text-[10px]">TF</span>
+          <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center mx-auto shrink-0 shadow-lg shadow-white/10 active:scale-95 transition-transform">
+            <span className="text-navy font-black text-xs">TF</span>
           </div>
         )}
       </div>
 
       {/* Navigation */}
-      <div className="flex-1 overflow-y-auto py-4 space-y-6 px-3">
+      <div className="flex-1 overflow-y-auto py-8 px-3 scrollbar-none">
         {menuGroups.map((group, idx) => (
-          <div key={idx} className="space-y-1">
-            {expanded && <h4 className="px-3 text-[9px] uppercase font-bold tracking-[0.2em] text-white/20 mb-2">{group.label}</h4>}
-            <div className="space-y-0.5">
+          <div key={idx} className="mb-8 last:mb-0">
+            {expanded && (
+              <h4 className="px-4 text-[10px] uppercase font-black tracking-[0.3em] text-white/10 mb-4 select-none">
+                {group.label}
+              </h4>
+            )}
+            <div className="space-y-1">
               {group.items.map((item) => (
                 <Link
                   key={item.href}
                   to={item.href}
                   className={cn(
-                    "flex items-center gap-3 px-3 py-2 rounded-sm transition-all hover:bg-white/5",
-                    location.pathname === item.href ? "bg-white/10 text-orange border-l-2 border-orange font-semibold" : "text-white/60"
+                    "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 group relative",
+                    location.pathname === item.href 
+                      ? "bg-white/5 text-orange font-black shadow-inner" 
+                      : "text-white/50 hover:bg-white/5 hover:text-white/80"
                   )}
                 >
-                  <item.icon className="w-4 h-4 shrink-0" />
-                  {expanded && <span className="text-[13px]">{item.label}</span>}
+                  <item.icon className={cn(
+                    "w-5 h-5 shrink-0 transition-transform duration-300 group-hover:scale-110",
+                    location.pathname === item.href ? "text-orange" : "group-hover:text-cyan"
+                  )} />
+                  {expanded && <span className="text-[13px] tracking-wide">{item.label}</span>}
+                  {location.pathname === item.href && (
+                    <div className="absolute left-0 top-2 bottom-2 w-1 bg-orange rounded-full shadow-[0_0_10px_rgba(240,96,0,0.6)]" />
+                  )}
                 </Link>
               ))}
             </div>
@@ -141,17 +153,17 @@ function Sidebar() {
       </div>
 
       {/* Footer / Toggle */}
-      <div className="p-2 border-t border-white/5 space-y-1">
+      <div className="p-3 border-t border-white/5 space-y-1.5 bg-white/[0.02]">
         <button
           onClick={() => setExpanded(!expanded)}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-sm text-white/40 hover:bg-white/5 transition-all"
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-white/20 hover:bg-white/5 hover:text-white/60 transition-all active:scale-95"
         >
-          {expanded ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4 mx-auto" />}
-          {expanded && <span className="text-[12px] font-medium uppercase tracking-wider">Recolher</span>}
+          {expanded ? <ChevronLeft className="w-5 h-5" /> : <ChevronRight className="w-5 h-5 mx-auto" />}
+          {expanded && <span className="text-[11px] font-black uppercase tracking-[0.2em]">Recolher</span>}
         </button>
-        <button className="w-full flex items-center gap-3 px-3 py-2 rounded-sm text-red-400/60 hover:bg-red-400/5 transition-all">
-          <LogOut className="w-4 h-4 shrink-0" />
-          {expanded && <span className="text-[12px] font-medium uppercase tracking-wider">Sair</span>}
+        <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-400/30 hover:bg-red-500/10 hover:text-red-400 transition-all active:scale-95">
+          <LogOut className="w-5 h-5 shrink-0" />
+          {expanded && <span className="text-[11px] font-black uppercase tracking-[0.2em]">Encerrar</span>}
         </button>
       </div>
     </aside>

@@ -41,16 +41,20 @@ function RankingPage() {
   };
 
   return (
-    <div className="p-6 space-y-6 bg-background min-h-screen">
-      <div className="flex justify-between items-end border-b border-border pb-4">
+    <div className="p-8 space-y-8 bg-background min-h-screen">
+      <div className="flex justify-between items-center border-b border-border/50 pb-8">
         <div>
-          <h1 className="text-lg font-bold font-heading text-navy uppercase tracking-tight text-primary">RANKING DE PERFORMANCE</h1>
-          <p className="text-[11px] text-muted-foreground mt-0.5 font-medium uppercase tracking-wider">Indicadores de excelência e produtividade técnica</p>
+          <h1 className="text-2xl font-black font-heading text-navy uppercase tracking-tighter text-primary">
+            ELITE TECNOAR
+          </h1>
+          <p className="text-xs text-muted-foreground mt-2 font-bold uppercase tracking-[0.2em] opacity-70">
+            Performance Técnica e Reconhecimento Profissional
+          </p>
         </div>
-        <div className="flex bg-muted/50 p-1 border border-border rounded-sm h-10">
-          <button className="px-4 py-1.5 rounded-xs bg-card shadow-xs text-[10px] font-bold text-navy uppercase tracking-wider border border-border">Geral</button>
-          <button className="px-4 py-1.5 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Mensal</button>
-          <button className="px-4 py-1.5 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Semanal</button>
+        <div className="flex bg-primary/5 p-1 border border-primary/10 rounded-lg h-12">
+          <button className="px-6 py-1.5 rounded-md bg-white shadow-md text-[10px] font-black text-navy uppercase tracking-widest border border-primary/5 transition-all">Geral</button>
+          <button className="px-6 py-1.5 text-[10px] font-black text-white/30 hover:text-white/60 uppercase tracking-widest transition-all">Mensal</button>
+          <button className="px-6 py-1.5 text-[10px] font-black text-white/30 hover:text-white/60 uppercase tracking-widest transition-all">Semanal</button>
         </div>
       </div>
 

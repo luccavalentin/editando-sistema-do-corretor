@@ -149,27 +149,27 @@ function Dashboard() {
   }
 
   return (
-    <div className="p-6 space-y-6 bg-background min-h-screen">
-      <div className="flex justify-between items-end border-b border-border pb-4">
+    <div className="p-8 space-y-8 bg-background min-h-screen">
+      <div className="flex justify-between items-center border-b border-border/50 pb-6">
         <div>
-          <h1 className="text-lg font-bold font-heading text-navy flex items-center gap-2">
-            <LayoutDashboard className="w-5 h-5 text-primary" />
-            PAINEL OPERACIONAL
+          <h1 className="text-2xl font-black font-heading text-navy flex items-center gap-3 uppercase tracking-tighter">
+            <LayoutDashboard className="w-6 h-6 text-orange" />
+            CENTRAL DE OPERAÇÕES
           </h1>
-          <p className="text-[11px] text-muted-foreground mt-0.5 font-medium uppercase tracking-wider">Monitoramento de fluxo de oficina em tempo real</p>
+          <p className="text-xs text-muted-foreground mt-2 font-bold uppercase tracking-[0.2em] opacity-70">Monitoramento Dinâmico de Pátio • Fluxo em Tempo Real</p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="rounded-sm h-8 text-[11px] font-bold uppercase tracking-wider border-border hover:bg-muted/50">
-            <Filter className="w-3.5 h-3.5" />
-            Filtros
+        <div className="flex gap-3">
+          <Button variant="outline" size="sm" className="rounded-md border-primary/10 hover:border-primary/30">
+            <Filter className="w-4 h-4" />
+            FILTRAR VISÃO
           </Button>
           <Button 
             onClick={() => setViewMode('tv')} 
             size="sm"
-            className="bg-navy text-white hover:bg-navy/90 rounded-sm h-8 text-[11px] font-bold uppercase tracking-wider gap-2 px-4"
+            className="bg-navy hover:bg-navy/80 rounded-md gap-3 px-6 shadow-md"
           >
-            <Tv className="w-3.5 h-3.5 text-cyan" />
-            MODO TV
+            <Tv className="w-4 h-4 text-cyan" />
+            EXIBIÇÃO TV
           </Button>
         </div>
       </div>
