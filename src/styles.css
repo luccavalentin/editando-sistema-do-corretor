@@ -11,6 +11,11 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-heading: "Space Grotesk", sans-serif;
 
+  /* Brand Colors */
+  --color-navy: #001830;
+  --color-orange: #f06000;
+  --color-cyan: #00a8f0;
+
   /* Spacing Scale - Multiples of 4px (Strict Scale) */
   --spacing-1: 0.25rem;  /* 4px */
   --spacing-2: 0.5rem;   /* 8px */
