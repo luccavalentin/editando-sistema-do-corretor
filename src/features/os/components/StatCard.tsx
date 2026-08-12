@@ -10,14 +10,14 @@ interface StatCardProps {
 
 export function StatCard({ title, value, icon: Icon, color }: StatCardProps) {
   return (
-    <Card className="rounded-md elevation-1 bg-card overflow-hidden group hover:elevation-2 transition-all">
+    <Card className="card-system">
       <CardContent className="p-4">
         <div className="flex justify-between items-start mb-4">
-          <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{title}</p>
+          <p className="label-premium">{title}</p>
           <Icon className={`w-4 h-4 ${color} opacity-80`} />
         </div>
         <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-semibold tracking-tight text-primary tabular-nums">{value}</span>
+          <span className="text-kpi">{value}</span>
         </div>
       </CardContent>
     </Card>
