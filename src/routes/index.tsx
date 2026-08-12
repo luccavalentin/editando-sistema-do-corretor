@@ -109,29 +109,29 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-        <StatCard title="No pátio agora" value={stats?.noPatio || 0} icon={Truck} color="text-cyan-600" />
-        <StatCard title="Entraram hoje" value={stats?.entraramHoje || 0} icon={PlusCircle} color="text-orange-500" />
-        <StatCard title="Concluídas hoje" value={stats?.concluidasHoje || 0} icon={CheckCircle2} color="text-green-500" />
-        <StatCard title="Tempo Médio" value="4.2h" icon={Clock} color="text-blue-500" />
-        <StatCard title="Em Atraso" value={stats?.atrasadas || 0} icon={AlertCircle} color="text-red-500" />
-        <StatCard title="Peças Vencendo" value={stats?.pecasVencendo || 0} icon={Package} color="text-orange-600" />
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+        <StatCard title="No pátio agora" value={stats?.noPatio || 0} icon={Truck} color="text-cyan" />
+        <StatCard title="Entraram hoje" value={stats?.entraramHoje || 0} icon={PlusCircle} color="text-orange" />
+        <StatCard title="Concluídas hoje" value={stats?.concluidasHoje || 0} icon={CheckCircle2} color="text-emerald-500" />
+        <StatCard title="Tempo Médio" value="4.2h" icon={Clock} color="text-primary" />
+        <StatCard title="Em Atraso" value={stats?.atrasadas || 0} icon={AlertCircle} color="text-destructive" />
+        <StatCard title="Peças Vencendo" value={stats?.pecasVencendo || 0} icon={Package} color="text-orange" />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-4 xl:grid-cols-5 gap-6">
         {STATUS_FLOW.map(status => {
           const items = osList.filter((o: any) => o.status === status);
           return (
-            <div key={status} className="flex flex-col gap-2 bg-muted/20 p-2 rounded-sm border border-border/50">
-              <div className="flex justify-between items-center px-1 mb-1">
-                <h3 className="font-bold text-navy text-[10px] uppercase tracking-widest flex items-center gap-1.5">
-                  <div className={`w-1.5 h-1.5 rounded-full ${items.length > 0 ? 'bg-orange shadow-[0_0_5px_rgba(240,96,0,0.5)]' : 'bg-muted-foreground/30'}`} />
+            <div key={status} className="flex flex-col gap-4 bg-muted/10 p-3 rounded-md border border-border">
+              <div className="flex justify-between items-center px-1">
+                <h3 className="font-semibold text-primary text-[11px] uppercase tracking-widest flex items-center gap-2">
+                  <div className={`w-1.5 h-1.5 rounded-full ${items.length > 0 ? 'bg-orange shadow-[0_0_8px_rgba(240,96,0,0.3)]' : 'bg-muted-foreground/30'}`} />
                   {STATUS_LABELS[status]}
                 </h3>
-                <span className="bg-navy/5 text-navy px-1.5 py-0.5 rounded-xs text-[9px] font-bold tabular-nums border border-navy/10">{items.length}</span>
+                <span className="bg-primary/5 text-primary px-2 py-0.5 rounded text-[10px] font-semibold tabular-nums border border-border">{items.length}</span>
               </div>
               
-              <div className="space-y-2 flex-1">
+              <div className="space-y-3 flex-1">
                 {(items as any[]).map((os: any) => (
                   <OSKanbanCard 
                     key={os.id} 
@@ -141,8 +141,8 @@ function Dashboard() {
                   />
                 ))}
                 {items.length === 0 && (
-                  <div className="h-12 border border-dashed border-border/40 rounded-sm flex items-center justify-center">
-                    <span className="text-[9px] uppercase font-bold text-muted-foreground/30 tracking-widest italic">Vazio</span>
+                  <div className="h-20 border border-dashed border-border/60 rounded-md flex items-center justify-center bg-muted/5">
+                    <span className="text-[10px] uppercase font-medium text-muted-foreground/40 tracking-widest italic">Sem Atividade</span>
                   </div>
                 )}
               </div>
