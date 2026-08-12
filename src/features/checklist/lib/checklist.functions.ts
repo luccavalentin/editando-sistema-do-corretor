@@ -21,23 +21,33 @@ export const getChecklistTemplates = createServerFn({ method: "GET" })
 export const saveChecklist = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => z.object({
-    os_id: z.string(),
+    os_id: z.string().nullable(),
+    setor: z.string().nullable().optional(),
+    data: z.string().nullable().optional(),
     tipo: z.string(),
     respostas: z.array(z.any()),
     assinatura_url: z.string().optional(),
     finalizado: z.boolean().default(false)
   }).parse(data))
   .handler(async ({ data, context }) => {
+    const upsertData: any = {
+      tipo: data.tipo as any,
+      respostas: data.respostas,
+      assinatura_url: data.assinatura_url,
+      finalizado_em: data.finalizado ? new Date().toISOString() : null,
+      criado_por: context.userId
+    };
+
+    if (data.os_id) {
+      upsertData.os_id = data.os_id;
+    } else {
+      upsertData.setor = data.setor;
+      upsertData.data = data.data || new Date().toISOString().split('T')[0];
+    }
+
     const { data: result, error } = await context.supabase
       .from('checklists')
-      .upsert({
-        os_id: data.os_id,
-        tipo: data.tipo as any,
-        respostas: data.respostas,
-        assinatura_url: data.assinatura_url,
-        finalizado_em: data.finalizado ? new Date().toISOString() : null,
-        criado_por: context.userId
-      })
+      .upsert(upsertData)
       .select()
       .single();
 
