@@ -22,6 +22,7 @@ export function StatCard({ title, value, icon: Icon, color }: StatCardProps) {
       setPrevValue(value);
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [value, prevValue]);
 
   return (

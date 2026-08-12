@@ -180,6 +180,7 @@ function TVStatCard({ label, value, icon, color, pulse }: any) {
       setPrevValue(value);
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [value, prevValue]);
 
   return (
