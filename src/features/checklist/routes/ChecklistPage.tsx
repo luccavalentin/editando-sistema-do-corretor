@@ -329,7 +329,7 @@ export function ChecklistPage() {
 
       <div className="p-4 max-w-4xl mx-auto space-y-4">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="w-full grid grid-cols-3 sm:grid-cols-7 h-auto p-1 bg-muted/50 border border-border rounded-sm mb-6">
+          <TabsList className="w-full grid grid-cols-3 sm:grid-cols-7 h-auto p-1 bg-muted/50 border border-border/50 rounded-lg mb-6 shadow-sm">
             {templates.map((t, idx) => (
               <TabsTrigger key={t.id} value={idx.toString()} className="text-[10px] font-bold uppercase tracking-tighter py-2 rounded-xs px-1 overflow-hidden text-ellipsis whitespace-nowrap">
                 {t.secao.split(' ')[0]}

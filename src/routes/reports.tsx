@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
-import { getReportsData } from '@/integrations/management.functions';
+import { getReportsData } from '@/features/os/services/os.functions';
 import { useServerFn } from '@tanstack/react-start';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
