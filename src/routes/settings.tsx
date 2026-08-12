@@ -1,9 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import UsersPage from '@/features/users/routes/UsersPage';
+import AppConfigPage from '@/features/settings/routes/AppConfigPage';
+import ProcessosPage from '@/features/checklist/routes/ProcessosPage';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { RefreshCw, Database, Send, AlertTriangle } from 'lucide-react';
+import { RefreshCw, Database, Send, AlertTriangle, Settings, Users, Briefcase } from 'lucide-react';
 import { useServerFn } from '@tanstack/react-start';
 import { syncClientesOmie, syncEstoqueOmie } from '@/integrations/omie.functions';
 import { toast } from 'sonner';
