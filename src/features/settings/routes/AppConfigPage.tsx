@@ -89,6 +89,7 @@ export default function AppConfigPage() {
           <TabsTrigger value="sla" className="rounded-xs text-[11px] font-bold uppercase tracking-wider px-4">SLA & PRAZOS</TabsTrigger>
           <TabsTrigger value="whatsapp" className="rounded-xs text-[11px] font-bold uppercase tracking-wider px-4">WHATSAPP</TabsTrigger>
           <TabsTrigger value="omie" className="rounded-xs text-[11px] font-bold uppercase tracking-wider px-4">INTEGRAÇÃO OMIE</TabsTrigger>
+          <TabsTrigger value="secrets" className="rounded-xs text-[11px] font-bold uppercase tracking-wider px-4">SEGREDOS & CHAVES</TabsTrigger>
         </TabsList>
 
         <TabsContent value="sla" className="space-y-4">
