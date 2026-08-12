@@ -59,29 +59,32 @@ export function ProductionPage() {
               const isUrgent = horasRestantes < 12;
 
               return (
-                <Card key={peca.id} className="rounded-sm border border-border shadow-xs bg-card p-4 flex flex-col justify-between border-l-2 border-l-primary/30">
-                  <div className="space-y-3">
+                <Card key={peca.id} className="elevation-1 bg-card p-5 flex flex-col justify-between border-l-4 border-l-primary/40 group hover:elevation-2 transition-all">
+                  <div className="space-y-4">
                     <div className="flex justify-between items-start">
-                      <span className="bg-muted text-muted-foreground px-1.5 py-0.5 rounded-xs text-[9px] font-bold uppercase border border-border tracking-wider">
+                      <span className="bg-muted text-muted-foreground px-2 py-0.5 rounded text-[10px] font-semibold uppercase border border-border tracking-wider">
                         {peca.status.replace('_', ' ')}
                       </span>
                       {isUrgent && peca.status === 'em_teste' && (
-                        <span className="bg-orange/10 text-orange border border-orange/20 px-1.5 py-0.5 rounded-xs text-[9px] font-bold uppercase animate-pulse">URGENTE</span>
+                        <span className="bg-orange/10 text-orange border border-orange/20 px-2 py-0.5 rounded text-[10px] font-semibold uppercase animate-pulse">Urgente</span>
                       )}
                     </div>
                     
-                    <div>
-                      <h3 className="font-bold text-navy text-sm leading-tight">{peca.descricao_peca}</h3>
-                      <p className="text-[11px] text-muted-foreground font-medium uppercase mt-1">{peca.cliente?.nome}</p>
+                    <div className="space-y-1">
+                      <h3 className="font-semibold text-primary text-sm leading-tight group-hover:text-orange transition-colors">{peca.descricao_peca}</h3>
+                      <p className="text-[11px] text-muted-foreground font-medium uppercase tracking-wide">{peca.cliente?.nome}</p>
                     </div>
 
-                    <div className="text-xs space-y-1">
-                      <div className="flex items-center text-muted-foreground">
-                        <Clock className="w-3 h-3 mr-1" />
+                    <div className="space-y-2">
+                      <div className="flex items-center text-[11px] text-muted-foreground font-medium uppercase tracking-tight">
+                        <Clock className="w-3.5 h-3.5 mr-1.5 opacity-60" />
                         Vence: {format(new Date(peca.vencimento_em), "dd/MM HH:mm", { locale: ptBR })}
                       </div>
                       {peca.os && (
-                        <div className="font-medium text-cyan-600">OS: {peca.os.protocolo}</div>
+                        <div className="text-[11px] font-semibold text-cyan uppercase tracking-wider flex items-center gap-1.5">
+                          <Package className="w-3.5 h-3.5 opacity-70" />
+                          OS: {peca.os.protocolo}
+                        </div>
                       )}
                     </div>
                   </div>
@@ -123,22 +126,24 @@ export function ProductionPage() {
                 </div>
                 <div className="space-y-2">
                   {agenda.filter((a: any) => a.especialidade === esp).map((item: any) => (
-                    <div key={item.id} className="p-3 bg-card border border-border rounded-sm shadow-xs">
-                      <div className="flex justify-between items-start mb-1">
-                        <div className="font-bold text-xs text-navy font-mono">{item.os.protocolo}</div>
-                        <span className="text-[9px] font-bold text-muted-foreground uppercase">{item.status}</span>
+                    <div key={item.id} className="p-4 bg-card elevation-1 rounded-md interactive-item space-y-3">
+                      <div className="flex justify-between items-start">
+                        <div className="font-mono text-[11px] font-semibold text-primary">{item.os.protocolo}</div>
+                        <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest">{item.status}</span>
                       </div>
-                      <div className="text-[10px] font-bold text-muted-foreground uppercase">{item.os.clientes.nome}</div>
-                      <div className="text-[10px] font-medium text-muted-foreground">{item.os.veiculos.placa_cavalo}</div>
-                      <div className="mt-2 text-[9px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-                        <Clock className="w-3 h-3" />
+                      <div className="space-y-0.5">
+                        <div className="text-[11px] font-semibold text-primary uppercase tracking-tight line-clamp-1">{item.os.clientes.nome}</div>
+                        <div className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">{item.os.veiculos.placa_cavalo}</div>
+                      </div>
+                      <div className="pt-2 border-t border-border text-[10px] font-semibold text-primary uppercase tracking-widest flex items-center gap-2">
+                        <Clock className="w-3.5 h-3.5 opacity-60" />
                         {format(new Date(item.data_prevista), "dd/MM HH:mm", { locale: ptBR })}
                       </div>
                     </div>
                   ))}
                   {agenda.filter((a: any) => a.especialidade === esp).length === 0 && (
-                    <div className="text-[9px] uppercase font-bold text-muted-foreground/40 py-4 text-center italic border border-dashed border-border rounded-sm">
-                      Nenhum serviço
+                    <div className="text-[10px] uppercase font-medium text-muted-foreground/30 py-8 text-center italic border border-dashed border-border rounded-md bg-muted/5">
+                      Sem Agendamentos
                     </div>
                   )}
                 </div>
