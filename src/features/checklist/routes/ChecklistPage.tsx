@@ -183,38 +183,38 @@ export function ChecklistPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <Card 
-            className="p-10 border-2 border-border/50 hover:border-primary/40 hover:bg-primary/[0.02] cursor-pointer transition-all duration-300 group relative overflow-hidden flex flex-col items-center text-center space-y-6 shadow-md hover:shadow-xl"
+            className="p-12 elevation-1 hover:elevation-3 cursor-pointer transition-all duration-300 group relative overflow-hidden flex flex-col items-center text-center space-y-8 bg-card"
             onClick={() => setMode('tecnico')}
           >
-            <div className="w-20 h-20 rounded-xl bg-navy/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors shadow-inner">
-              <ClipboardList className="w-10 h-10 text-navy group-hover:text-primary transition-all duration-300 group-hover:scale-110" />
+            <div className="w-24 h-24 rounded-2xl bg-muted/30 flex items-center justify-center group-hover:bg-primary/5 transition-colors shadow-inner">
+              <ClipboardList className="w-12 h-12 text-primary group-hover:scale-110 transition-all duration-300 opacity-60 group-hover:opacity-100" />
             </div>
-            <div className="space-y-3">
-              <h2 className="text-lg font-black text-navy uppercase tracking-[0.15em]">INSPEÇÃO TÉCNICA</h2>
-              <p className="text-[11px] text-muted-foreground uppercase font-bold tracking-widest opacity-80 max-w-[240px]">
-                Diagnóstico detalhado de OS, defeitos e conferência final
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold text-primary uppercase tracking-widest">Inspeção Técnica</h2>
+              <p className="text-[11px] text-muted-foreground uppercase font-medium tracking-widest opacity-80 max-w-[280px] leading-relaxed">
+                Diagnóstico detalhado de OS, defeitos e conferência final de qualidade
               </p>
             </div>
-            <div className="flex items-center gap-2 text-primary font-black text-[10px] uppercase tracking-[0.2em] pt-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-              Iniciar Checklist <ArrowRight className="w-3 h-3" />
+            <div className="flex items-center gap-2 text-primary font-semibold text-[11px] uppercase tracking-widest pt-4 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
+              Iniciar Checklist <ArrowRight className="w-4 h-4" />
             </div>
           </Card>
 
           <Card 
-            className="p-10 border-2 border-border/50 hover:border-primary/40 hover:bg-primary/[0.02] cursor-pointer transition-all duration-300 group relative overflow-hidden flex flex-col items-center text-center space-y-6 shadow-md hover:shadow-xl"
+            className="p-12 elevation-1 hover:elevation-3 cursor-pointer transition-all duration-300 group relative overflow-hidden flex flex-col items-center text-center space-y-8 bg-card"
             onClick={() => setMode('diario')}
           >
-            <div className="w-20 h-20 rounded-xl bg-navy/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors shadow-inner">
-              <CheckCircle2 className="w-10 h-10 text-navy group-hover:text-primary transition-all duration-300 group-hover:scale-110" />
+            <div className="w-24 h-24 rounded-2xl bg-muted/30 flex items-center justify-center group-hover:bg-primary/5 transition-colors shadow-inner">
+              <CheckCircle2 className="w-12 h-12 text-primary group-hover:scale-110 transition-all duration-300 opacity-60 group-hover:opacity-100" />
             </div>
-            <div className="space-y-3">
-              <h2 className="text-lg font-black text-navy uppercase tracking-[0.15em]">PROGRAMA 5S</h2>
-              <p className="text-[11px] text-muted-foreground uppercase font-bold tracking-widest opacity-80 max-w-[240px]">
-                Abertura e fechamento operacional dos setores da unidade
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold text-primary uppercase tracking-widest">Programa 5S</h2>
+              <p className="text-[11px] text-muted-foreground uppercase font-medium tracking-widest opacity-80 max-w-[280px] leading-relaxed">
+                Abertura e fechamento operacional dos setores da unidade técnica
               </p>
             </div>
-            <div className="flex items-center gap-2 text-primary font-black text-[10px] uppercase tracking-[0.2em] pt-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-              Realizar Rotina <ArrowRight className="w-3 h-3" />
+            <div className="flex items-center gap-2 text-primary font-semibold text-[11px] uppercase tracking-widest pt-4 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
+              Realizar Rotina <ArrowRight className="w-4 h-4" />
             </div>
           </Card>
         </div>
