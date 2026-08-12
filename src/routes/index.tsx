@@ -1,9 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useState, useEffect } from 'react';
-import { useServerFn } from '@tanstack/react-start';
-import { getOSStats, getOSList, updateOSStatus } from '@/integrations/management.functions';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { 
   LayoutDashboard, 
   Tv, 
@@ -11,87 +8,25 @@ import {
   AlertCircle, 
   CheckCircle2, 
   Truck, 
-  User, 
   ArrowRight,
   Maximize2,
   Filter,
   PlusCircle,
   Package
 } from 'lucide-react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
+import { StatCard } from '@/features/os/components/StatCard';
+import { OSKanbanCard } from '@/features/os/components/OSKanbanCard';
+import { useOSDashboard } from '@/features/os/hooks/useOSDashboard';
+import { STATUS_FLOW, STATUS_LABELS } from '@/features/os/types/status.constants';
 
 export const Route = createFileRoute('/')({
   component: Dashboard,
 });
 
-function StatCard({ title, value, icon: Icon, color }: any) {
-  return (
-    <Card className="rounded-sm border border-border shadow-xs bg-card overflow-hidden group hover:border-border/80 transition-all">
-      <CardContent className="p-4">
-        <div className="flex justify-between items-start mb-4">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{title}</p>
-          <Icon className={`w-4 h-4 ${color} opacity-70`} />
-        </div>
-        <div className="flex items-baseline gap-2">
-          <span className="text-2xl font-semibold font-sans tracking-tight text-foreground">{value}</span>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-const STATUS_FLOW = [
-  'aberta',
-  'aguardando_mecanico',
-  'checklist_diagnostico',
-  'aguardando_peca',
-  'em_execucao',
-  'checklist_final',
-  'aguardando_retirada',
-  'enviado_financeiro',
-  'concluida'
-];
-
-const STATUS_LABELS: Record<string, string> = {
-  aberta: 'Aberta',
-  aguardando_mecanico: 'Aguard. Mecânico',
-  checklist_diagnostico: 'Checklist Diag.',
-  aguardando_peca: 'Aguard. Peça',
-  em_execucao: 'Em Execução',
-  checklist_final: 'Checklist Final',
-  aguardando_retirada: 'Aguard. Retirada',
-  enviado_financeiro: 'Financeiro',
-  concluida: 'Concluída'
-};
 
 function Dashboard() {
   const [viewMode, setViewMode] = useState<'operacional' | 'tv'>('operacional');
-  const queryClient = useQueryClient();
-  const getStatsFn = useServerFn(getOSStats);
-  const getListFn = useServerFn(getOSList);
-  const updateStatusFn = useServerFn(updateOSStatus);
-
-  const { data: stats } = useQuery({
-    queryKey: ['os-stats'],
-    queryFn: () => getStatsFn()
-  });
-
-  const { data: osList = [] } = useQuery({
-    queryKey: ['os-list'],
-    queryFn: () => getListFn()
-  });
-
-  const mutation = useMutation({
-    mutationFn: (vars: { os_id: string, novo_status: string }) => 
-      updateStatusFn({ data: vars }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['os-list'] });
-      queryClient.invalidateQueries({ queryKey: ['os-stats'] });
-      toast.success("Status atualizado");
-    },
-    onError: (error: any) => toast.error(error.message)
-  });
+  const { stats, osList, updateStatus } = useOSDashboard();
 
   if (viewMode === 'tv') {
     return (
@@ -198,45 +133,12 @@ function Dashboard() {
               
               <div className="space-y-2 flex-1">
                 {(items as any[]).map((os: any) => (
-                  <Card key={os.id} className="rounded-sm border border-border shadow-xs bg-card group hover:border-primary/30 transition-colors">
-                    <CardContent className="p-3 space-y-2">
-                      <div className="flex justify-between items-start">
-                        <span className="text-xs font-mono font-bold text-navy/60">{os.protocolo}</span>
-                        <Clock className="w-3 h-3 text-muted-foreground" />
-                      </div>
-                      
-                      <div>
-                        <p className="text-sm font-bold text-navy line-clamp-1">{os.cliente?.nome}</p>
-                        <p className="text-[10px] text-muted-foreground font-medium uppercase">{os.veiculo?.placa_cavalo} • {os.veiculo?.modelo_cavalo}</p>
-                      </div>
-
-                      <div className="flex justify-between items-center pt-2 border-t border-border/50">
-                        <div className="flex items-center gap-1.5">
-                          <div className="w-5 h-5 rounded-sm bg-muted flex items-center justify-center border border-border">
-                            <User className="w-2.5 h-2.5 text-muted-foreground" />
-                          </div>
-                          <span className="text-[9px] font-bold text-muted-foreground uppercase">{os.tecnico?.nome?.split(' ')[0] || 'S/T'}</span>
-                        </div>
-                        <Button 
-                          size="sm" 
-                          variant="ghost"
-                          className="h-6 px-2 rounded-xs text-[9px] font-bold uppercase text-primary hover:bg-primary/5 gap-1 border border-transparent hover:border-primary/20"
-                          onClick={() => {
-                            const nextIndex = STATUS_FLOW.indexOf(status) + 1;
-                            if (nextIndex < STATUS_FLOW.length) {
-                              const nextStatus = STATUS_FLOW[nextIndex];
-                              if (nextStatus) {
-                                mutation.mutate({ os_id: os.id, novo_status: nextStatus });
-                              }
-                            }
-                          }}
-                        >
-                          PRÓXIMA
-                          <ArrowRight className="w-2.5 h-2.5" />
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <OSKanbanCard 
+                    key={os.id} 
+                    os={os} 
+                    onNextStatus={updateStatus}
+                    nextStatus={STATUS_FLOW[STATUS_FLOW.indexOf(status as any) + 1]}
+                  />
                 ))}
                 {items.length === 0 && (
                   <div className="h-12 border border-dashed border-border/40 rounded-sm flex items-center justify-center">
