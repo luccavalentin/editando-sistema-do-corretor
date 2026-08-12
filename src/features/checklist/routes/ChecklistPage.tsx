@@ -171,8 +171,8 @@ export function ChecklistPage() {
 
   if (mode === 'selection') {
     return (
-      <div className="p-10 max-w-5xl mx-auto space-y-12 bg-background min-h-screen">
-        <div className="border-b border-border pb-8 text-center sm:text-left">
+      <div className="p-6 max-w-5xl mx-auto space-y-8 bg-background min-h-screen">
+        <div className="border-b border-border pb-6 text-center sm:text-left">
           <h1 className="text-3xl font-semibold font-heading text-primary uppercase tracking-tight">
             Central de Qualidade
           </h1>

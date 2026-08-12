@@ -59,7 +59,7 @@ export function ProductionPage() {
               const isUrgent = horasRestantes < 12;
 
               return (
-                <Card key={peca.id} className="elevation-1 bg-card p-5 flex flex-col justify-between border-l-4 border-l-primary/40 group hover:elevation-2 transition-all">
+                <Card key={peca.id} className="rounded border border-border bg-card p-4 flex flex-col justify-between border-l-2 border-l-primary/60 shadow-sm transition-all duration-200 hover:shadow-md">
                   <div className="space-y-4">
                     <div className="flex justify-between items-start">
                       <span className="bg-muted text-muted-foreground px-2 py-0.5 rounded text-[10px] font-semibold uppercase border border-border tracking-wider">
@@ -126,7 +126,7 @@ export function ProductionPage() {
                 </div>
                 <div className="space-y-2">
                   {agenda.filter((a: any) => a.especialidade === esp).map((item: any) => (
-                    <div key={item.id} className="p-4 bg-card elevation-1 rounded-md interactive-item space-y-3">
+                    <div key={item.id} className="p-3 bg-card border border-border shadow-sm rounded interactive-item space-y-2">
                       <div className="flex justify-between items-start">
                         <div className="font-mono text-[11px] font-semibold text-primary">{item.os.protocolo}</div>
                         <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest">{item.status}</span>
