@@ -9,11 +9,10 @@ export async function getCurrentUserRole(): Promise<AppRole | null> {
   const { data, error } = await supabase
     .from('user_roles')
     .select('role')
-    .eq('user_id', session.user.id)
-    .single();
+    .eq('user_id', session.user.id);
 
   if (error) {
-    console.error("Error fetching user role from user_roles table:", {
+    console.error("getCurrentUserRole: Error fetching user role from user_roles table:", {
       code: error.code,
       message: error.message,
       details: error.details,
@@ -23,7 +22,20 @@ export async function getCurrentUserRole(): Promise<AppRole | null> {
     return null;
   }
 
-  return (data?.role as AppRole) || null;
+  const roles = data || [];
+  if (roles.length === 0) {
+    console.error("getCurrentUserRole: No role rows found for user in database", {
+      userId: session.user.id
+    });
+    return null;
+  }
+
+  const roleOrder: AppRole[] = ['superadmin', 'admin_adm', 'lider', 'vendedor', 'financeiro', 'mecanico', 'montador'];
+  const userRole = roles
+    .map(r => r.role as AppRole)
+    .sort((a, b) => roleOrder.indexOf(a) - roleOrder.indexOf(b))[0];
+
+  return userRole || null;
 }
 
 export function Authorize({ 

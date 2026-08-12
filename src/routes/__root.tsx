@@ -12,6 +12,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Toaster } from "sonner";
 import { SidebarProvider, SidebarContainer } from "@/components/ui/sidebar";
 import { RequireRole } from "@/core/RequireRole";
+import { AuthProvider } from "@/core/AuthProvider";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -130,21 +131,23 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SidebarProvider>
-        {!isHydrated ? (
-          <div className="flex h-screen w-full items-center justify-center bg-background">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-navy/10 border-t-orange" />
-          </div>
-        ) : isLoginPage ? (
-          <Outlet />
-        ) : (
-          <RequireRole>
-            <SidebarContainer>
-              <Outlet />
-            </SidebarContainer>
-          </RequireRole>
-        )}
-      </SidebarProvider>
+      <AuthProvider>
+        <SidebarProvider>
+          {!isHydrated ? (
+            <div className="flex h-screen w-full items-center justify-center bg-background">
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-navy/10 border-t-orange" />
+            </div>
+          ) : isLoginPage ? (
+            <Outlet />
+          ) : (
+            <RequireRole>
+              <SidebarContainer>
+                <Outlet />
+              </SidebarContainer>
+            </RequireRole>
+          )}
+        </SidebarProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
