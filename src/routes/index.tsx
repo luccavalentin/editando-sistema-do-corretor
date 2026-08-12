@@ -84,54 +84,63 @@ function Dashboard() {
   }
 
   return (
-    <div className="p-8 space-y-8 bg-background min-h-screen">
-      <div className="flex justify-between items-center border-b border-border pb-6">
-        <div>
-          <h1 className="text-2xl font-semibold font-heading text-primary flex items-center gap-3 uppercase tracking-tight">
-            <LayoutDashboard className="w-6 h-6 text-orange" />
-            Central de Operações
-          </h1>
-          <p className="text-[11px] text-muted-foreground mt-1.5 font-medium uppercase tracking-widest opacity-80">Monitoramento Dinâmico de Pátio • Fluxo em Tempo Real</p>
+    <div className="p-8 space-y-10 bg-background min-h-screen">
+      <div className="flex justify-between items-end border-b border-border pb-8">
+        <div className="space-y-2">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-navy flex items-center justify-center shadow-lg shadow-navy/20">
+              <LayoutDashboard className="w-5 h-5 text-cyan" />
+            </div>
+            <h1 className="text-2xl font-bold font-heading text-primary uppercase tracking-tight">
+              Central de Operações
+            </h1>
+          </div>
+          <p className="text-[11px] text-muted-foreground font-bold uppercase tracking-[0.2em] opacity-60">
+            Monitoramento em Tempo Real • Pátio Industrial Tecnoar
+          </p>
         </div>
-        <div className="flex gap-3">
-          <Button variant="outline" size="sm" className="h-9 px-4 rounded-md border-border hover:bg-muted/50 transition-all font-medium text-xs uppercase tracking-wider">
-            <Filter className="w-3.5 h-3.5 mr-2" />
+        <div className="flex gap-4">
+          <Button variant="outline" className="h-10 px-6 rounded border-border hover:bg-muted font-bold text-[11px] uppercase tracking-widest transition-all">
+            <Filter className="w-4 h-4 mr-2.5" />
             Filtrar Visão
           </Button>
           <Button 
             onClick={() => setViewMode('tv')} 
-            size="sm"
-            className="h-9 px-5 bg-primary hover:bg-primary/90 rounded-md gap-2.5 shadow-sm transition-all text-xs font-semibold uppercase tracking-wider"
+            className="h-10 px-8 bg-navy hover:bg-navy/90 text-white rounded shadow-xl shadow-navy/20 gap-3 transition-all text-[11px] font-bold uppercase tracking-widest"
           >
-            <Tv className="w-3.5 h-3.5 text-cyan" />
-            Exibição TV
+            <Tv className="w-4 h-4 text-cyan" />
+            Modo Monitor
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
         <StatCard title="No pátio agora" value={stats?.noPatio || 0} icon={Truck} color="text-cyan" />
         <StatCard title="Entraram hoje" value={stats?.entraramHoje || 0} icon={PlusCircle} color="text-orange" />
         <StatCard title="Concluídas hoje" value={stats?.concluidasHoje || 0} icon={CheckCircle2} color="text-emerald-500" />
-        <StatCard title="Tempo Médio" value="4.2h" icon={Clock} color="text-primary" />
+        <StatCard title="Tempo Médio" value="4.2h" icon={Clock} color="text-navy" />
         <StatCard title="Em Atraso" value={stats?.atrasadas || 0} icon={AlertCircle} color="text-destructive" />
         <StatCard title="Peças Vencendo" value={stats?.pecasVencendo || 0} icon={Package} color="text-orange" />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-4 xl:grid-cols-5 gap-8 overflow-x-auto pb-8">
         {STATUS_FLOW.map(status => {
           const items = osList.filter((o: any) => o.status === status);
           return (
-            <div key={status} className="flex flex-col gap-4 bg-muted/10 p-3 rounded-md border border-border">
-              <div className="flex justify-between items-center px-1">
-                <h3 className="font-semibold text-primary text-[11px] uppercase tracking-widest flex items-center gap-2">
-                  <div className={`w-1.5 h-1.5 rounded-full ${items.length > 0 ? 'bg-orange shadow-[0_0_8px_rgba(240,96,0,0.3)]' : 'bg-muted-foreground/30'}`} />
-                  {STATUS_LABELS[status]}
-                </h3>
-                <span className="bg-primary/5 text-primary px-2 py-0.5 rounded text-[10px] font-semibold tabular-nums border border-border">{items.length}</span>
+            <div key={status} className="flex flex-col gap-6 min-w-[280px]">
+              <div className="flex justify-between items-center px-2">
+                <div className="flex items-center gap-3">
+                  <div className={`w-2 h-2 rounded-full ${items.length > 0 ? 'bg-orange animate-pulse shadow-[0_0_10px_rgba(240,96,0,0.5)]' : 'bg-muted-foreground/30'}`} />
+                  <h3 className="font-bold text-primary text-[11px] uppercase tracking-[0.15em]">
+                    {STATUS_LABELS[status]}
+                  </h3>
+                </div>
+                <span className="bg-navy/5 text-navy px-3 py-1 rounded-full text-[10px] font-black tabular-nums border border-navy/10">
+                  {items.length}
+                </span>
               </div>
               
-              <div className="space-y-3 flex-1">
+              <div className="space-y-4 flex-1">
                 {(items as any[]).map((os: any) => (
                   <OSKanbanCard 
                     key={os.id} 
@@ -141,8 +150,11 @@ function Dashboard() {
                   />
                 ))}
                 {items.length === 0 && (
-                  <div className="h-20 border border-dashed border-border/60 rounded-md flex items-center justify-center bg-muted/5">
-                    <span className="text-[10px] uppercase font-medium text-muted-foreground/40 tracking-widest italic">Sem Atividade</span>
+                  <div className="h-32 border-2 border-dashed border-border/40 rounded-xl flex flex-col items-center justify-center bg-muted/5 gap-2 group transition-all hover:bg-muted/10">
+                    <div className="w-8 h-8 rounded-full bg-muted/20 flex items-center justify-center">
+                      <PlusCircle className="w-4 h-4 text-muted-foreground/30 group-hover:text-muted-foreground/50 transition-colors" />
+                    </div>
+                    <span className="text-[10px] uppercase font-bold text-muted-foreground/30 tracking-[0.2em]">Sem Fila</span>
                   </div>
                 )}
               </div>
@@ -153,6 +165,7 @@ function Dashboard() {
     </div>
   );
 }
+
 
 function TVStatCard({ label, value, icon, color, pulse }: any) {
   return (
