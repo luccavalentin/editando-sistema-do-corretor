@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSuspenseQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getChecklistTemplates, saveChecklist } from '../lib/checklist.functions';
-import { getOSList } from '@/integrations/management.functions';
+import { getChecklistTemplates, saveChecklist } from '../services/checklist.functions';
+import { getOSList } from '@/features/os/services/os.functions';
 import { ChecklistItem, type ChecklistResponse } from '../components/ChecklistItem';
 import { ChecklistDiarioItem, type ChecklistDiarioResponse } from '../components/ChecklistDiarioItem';
 import { SignaturePad } from '../components/SignaturePad';
