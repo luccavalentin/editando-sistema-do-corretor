@@ -152,30 +152,36 @@ export type Database = {
           assinatura_url: string | null
           criado_em: string | null
           criado_por: string | null
+          data: string | null
           finalizado_em: string | null
           id: string
-          os_id: string
+          os_id: string | null
           respostas: Json
+          setor: string | null
           tipo: Database["public"]["Enums"]["checklist_type"]
         }
         Insert: {
           assinatura_url?: string | null
           criado_em?: string | null
           criado_por?: string | null
+          data?: string | null
           finalizado_em?: string | null
           id?: string
-          os_id: string
+          os_id?: string | null
           respostas?: Json
+          setor?: string | null
           tipo: Database["public"]["Enums"]["checklist_type"]
         }
         Update: {
           assinatura_url?: string | null
           criado_em?: string | null
           criado_por?: string | null
+          data?: string | null
           finalizado_em?: string | null
           id?: string
-          os_id?: string
+          os_id?: string | null
           respostas?: Json
+          setor?: string | null
           tipo?: Database["public"]["Enums"]["checklist_type"]
         }
         Relationships: [
@@ -1098,6 +1104,7 @@ export type Database = {
         | "estado_caminhao"
         | "operacional_lider"
         | "processo_setor"
+        | "checklist_diario"
       follow_up_status: "pendente" | "contatado" | "agendado" | "recusado"
       peca_teste_status:
         | "recebida"
@@ -1258,6 +1265,7 @@ export const Constants = {
         "estado_caminhao",
         "operacional_lider",
         "processo_setor",
+        "checklist_diario",
       ],
       follow_up_status: ["pendente", "contatado", "agendado", "recusado"],
       peca_teste_status: [
