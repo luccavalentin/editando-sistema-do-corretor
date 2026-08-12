@@ -39,6 +39,8 @@ function SettingsPage() {
       <Tabs defaultValue="integracoes" className="w-full">
         <TabsList className="bg-navy/5 p-1 rounded-xl mb-6">
           <TabsTrigger value="integracoes" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-navy">Integrações</TabsTrigger>
+          <TabsTrigger value="config" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-navy">Sistema</TabsTrigger>
+          <TabsTrigger value="processos" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-navy">Processos</TabsTrigger>
           <TabsTrigger value="usuarios" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-navy">Usuários</TabsTrigger>
         </TabsList>
         <TabsContent value="integracoes" className="space-y-6">
