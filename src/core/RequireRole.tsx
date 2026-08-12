@@ -11,37 +11,75 @@ export function RequireRole({ children }: { children: React.ReactNode }) {
   const location = useLocation();
 
   useEffect(() => {
+    let isMounted = true;
+
     async function checkAccess() {
+      if (location.pathname === '/login') {
+        setLoading(false);
+        return;
+      }
+
       try {
-        const userRole = await getCurrentUserRole();
+        // Ensure Supabase Auth is fully ready
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
         
-        if (!userRole) {
-          console.warn("No role found for user, redirecting to login");
-          setRole(null);
-          setLoading(false);
-          // Only navigate if we're not already on login (though RequireRole isn't usually on login)
-          if (location.pathname !== '/login') {
+        if (sessionError) throw sessionError;
+
+        if (!session) {
+          console.warn("No active session, redirecting to login");
+          if (isMounted) {
+            setRole(null);
+            setLoading(false);
             navigate({ to: '/login' });
           }
           return;
         }
 
-        setRole(userRole);
-        setLoading(false);
+        // Fetch role directly to be sure
+        const { data: roleData, error: roleError } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', session.user.id)
+          .single();
 
-        if (!canAccessRoute(location.pathname, userRole)) {
-          console.warn(`User role ${userRole} cannot access ${location.pathname}`);
-          toast.error("Acesso negado para seu nível de permissão");
-          navigate({ to: '/' });
+        if (roleError || !roleData) {
+          console.error("User has no role assigned:", roleError);
+          if (isMounted) {
+            toast.error("Usuário sem permissões atribuídas. Contate o administrador.");
+            setRole(null);
+            setLoading(false);
+            navigate({ to: '/login' });
+          }
+          return;
+        }
+
+        const userRole = roleData.role as AppRole;
+
+        if (isMounted) {
+          setRole(userRole);
+          setLoading(false);
+
+          if (!canAccessRoute(location.pathname, userRole)) {
+            console.warn(`Access denied for ${userRole} at ${location.pathname}`);
+            toast.error("Acesso negado para seu nível de permissão");
+            navigate({ to: '/' });
+          }
         }
       } catch (err) {
         console.error("Auth check failed:", err);
-        setRole(null);
-        setLoading(false);
-        navigate({ to: '/login' });
+        if (isMounted) {
+          setRole(null);
+          setLoading(false);
+          navigate({ to: '/login' });
+        }
       }
     }
+
     checkAccess();
+
+    return () => {
+      isMounted = false;
+    };
   }, [location.pathname, navigate]);
 
   if (loading) {
