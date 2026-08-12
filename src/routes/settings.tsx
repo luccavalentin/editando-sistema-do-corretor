@@ -95,6 +95,12 @@ function SettingsPage() {
             </Card>
           </div>
         </TabsContent>
+        <TabsContent value="config">
+          <AppConfigPage />
+        </TabsContent>
+        <TabsContent value="processos">
+          <ProcessosPage />
+        </TabsContent>
         <TabsContent value="usuarios">
           <UsersPage />
         </TabsContent>
