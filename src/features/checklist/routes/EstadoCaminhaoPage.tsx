@@ -10,13 +10,14 @@ import { toast } from 'sonner';
 import { Camera, ArrowRight, ArrowLeft, CheckCircle2, Loader2 } from 'lucide-react';
 import { useServerFn } from '@tanstack/react-start';
 import { saveChecklist } from '../services/checklist.functions';
+import { OrdemServico } from '@/features/os/types/os.types';
 
 export function EstadoCaminhaoPage() {
   const [selectedOS, setSelectedOS] = useState<string | null>(null);
   const [obs, setObs] = useState('');
   const [assinatura, setAssinatura] = useState<string | null>(null);
 
-  const { data: osList } = useSuspenseQuery({
+  const { data: osList = [] } = useSuspenseQuery({
     queryKey: ['ordens-servico', 'ativas'],
     queryFn: () => getOSList()
   });
@@ -39,7 +40,7 @@ export function EstadoCaminhaoPage() {
       os_id: selectedOS,
       tipo: 'estado_caminhao',
       respostas: [{ item_id: 'geral', status: 'ok', observacao: obs }],
-      assinatura_url: assinatura,
+      assinatura_url: signature,
       finalizado: true
     });
   };
@@ -50,10 +51,10 @@ export function EstadoCaminhaoPage() {
         <h1 className="text-2xl font-bold font-space text-[#001830]">Estado do Caminhão & Entrega</h1>
         <p className="text-muted-foreground">Compare o estado de entrada com o de saída e registre a entrega.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {osList.map(os => (
+          {(osList as any[]).map(os => (
             <Card key={os.id} className="p-4 cursor-pointer hover:border-[#f06000]" onClick={() => setSelectedOS(os.id)}>
               <div className="font-bold">{os.protocolo}</div>
-              <div className="text-sm">{os.veiculos.placa_cavalo} - {os.clientes.nome}</div>
+              <div className="text-sm">{os.cliente?.nome} - {os.veiculo?.placa_cavalo}</div>
             </Card>
           ))}
         </div>
@@ -61,7 +62,7 @@ export function EstadoCaminhaoPage() {
     );
   }
 
-  const currentOS = osList.find(o => o.id === selectedOS);
+  const currentOS = (osList as any[]).find(o => o.id === selectedOS);
 
   return (
     <div className="p-4 max-w-5xl mx-auto space-y-4 pb-20">
@@ -130,3 +131,4 @@ export function EstadoCaminhaoPage() {
     </div>
   );
 }
+
