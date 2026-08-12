@@ -2,10 +2,14 @@ import Dexie, { type Table } from 'dexie';
 
 export interface PendingChecklistResponse {
   id?: number;
-  os_id: string;
+  os_id: string | null;
+  setor?: string;
+  data?: string;
   tipo: string;
   item_id: string;
-  status: 'ok' | 'nao_ok' | 'nao_aplica';
+  status?: 'ok' | 'nao_ok' | 'nao_aplica';
+  ok_abertura?: boolean;
+  ok_fechamento?: boolean;
   observacao?: string;
   evidencias?: string[];
   timestamp: number;
@@ -17,8 +21,8 @@ export class ChecklistDatabase extends Dexie {
 
   constructor() {
     super('TecnoarChecklistDB');
-    this.version(1).stores({
-      responses: '++id, [os_id+tipo+item_id], sincronizado, os_id'
+    this.version(2).stores({
+      responses: '++id, [os_id+tipo+item_id], [setor+data+tipo+item_id], sincronizado, os_id, setor, data'
     });
   }
 }
@@ -33,8 +37,11 @@ export async function saveOfflineResponse(response: Omit<PendingChecklistRespons
   });
 }
 
-export async function getPendingResponses(osId: string) {
-  return await db.responses.where({ os_id: osId, sincronizado: 0 }).toArray();
+export async function getPendingResponses(osId: string | null, setor?: string, data?: string) {
+  if (osId) {
+    return await db.responses.where({ os_id: osId, sincronizado: 0 }).toArray();
+  }
+  return await db.responses.where({ setor, data, sincronizado: 0 }).toArray();
 }
 
 export async function markAsSynced(ids: number[]) {

@@ -25,8 +25,8 @@ export function ChecklistDiarioItem({ label, itemId, value, onChange, tipo = 'du
     
     onChange({
       item_id: itemId,
-      ok_abertura: field === 'ok_abertura' ? nextVal : value?.ok_abertura,
-      ok_fechamento: field === 'ok_fechamento' ? nextVal : value?.ok_fechamento,
+      ok_abertura: field === 'ok_abertura' ? nextVal : (value?.ok_abertura ?? false),
+      ok_fechamento: field === 'ok_fechamento' ? nextVal : (value?.ok_fechamento ?? false),
       observacao: value?.observacao || ''
     });
   };
@@ -83,8 +83,8 @@ export function ChecklistDiarioItem({ label, itemId, value, onChange, tipo = 'du
           value={value?.observacao || ''}
           onChange={(e) => onChange({ 
             item_id: itemId, 
-            ok_abertura: value?.ok_abertura,
-            ok_fechamento: value?.ok_fechamento,
+            ok_abertura: value?.ok_abertura ?? false,
+            ok_fechamento: value?.ok_fechamento ?? false,
             observacao: e.target.value 
           })}
           className="rounded-sm text-[11px] min-h-[40px] border-border bg-background focus:ring-1 focus:ring-primary placeholder:text-muted-foreground/30"
