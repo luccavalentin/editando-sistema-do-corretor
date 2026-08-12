@@ -101,10 +101,12 @@ export default function FollowUpPage() {
         ))}
 
         {!drafts?.length && (
-          <div className="col-span-full py-20 text-center space-y-4 opacity-50">
-            <MessageCircle className="w-16 h-16 mx-auto text-navy" />
-            <p className="text-xl font-medium">Nenhum rascunho de follow-up disponível.</p>
-            <p>Clique em "Gerar Rascunhos" para a IA analisar sua base de clientes.</p>
+          <div className="col-span-full py-24 text-center space-y-5 bg-muted/5 border border-dashed border-border rounded-lg">
+            <MessageCircle className="w-16 h-16 mx-auto text-primary opacity-20" />
+            <div className="space-y-2">
+              <p className="text-lg font-semibold text-primary uppercase tracking-tight">Nenhum rascunho disponível</p>
+              <p className="text-sm text-muted-foreground max-w-sm mx-auto">Clique em "Gerar Rascunhos" para a IA analisar sua base de clientes e sugerir ações de follow-up.</p>
+            </div>
           </div>
         )}
       </div>
