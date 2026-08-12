@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AppRole, canAccessRoute } from '@/core/access-matrix';
 import { getCurrentUserRole } from '@/core/auth';
+import { supabase } from '@/integrations/supabase/client';
 import { useNavigate, useLocation } from '@tanstack/react-router';
 import { toast } from 'sonner';
 
