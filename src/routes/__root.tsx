@@ -112,118 +112,22 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body className="selection:bg-orange/20 selection:text-navy">
-        Analise completamente todo o projeto e identifique TODOS os bugs, erros, falhas, comportamentos inesperados e possíveis problemas existentes na aplicação.
-        {"\n\n"}
-        Seu objetivo é realizar uma auditoria técnica profunda no sistema inteiro, corrigindo problemas de lógica, frontend, backend, integração, renderização, estado, banco de dados, responsividade e performance.
-        {"\n\n"}
-        Antes de modificar qualquer coisa:
-        - Analise toda a estrutura do projeto
-        - Analise rotas
-        - Analise componentes
-        - Analise hooks
-        - Analise estados globais
-        - Analise integrações
-        - Analise Supabase
-        - Analise APIs
-        - Analise banco de dados
-        - Analise autenticação
-        - Analise permissões
-        - Analise carregamentos
-        - Analise console errors
-        - Analise warnings
-        - Analise logs
-        - Analise comportamento da interface
-        - Analise responsividade
-        - Analise possíveis falhas silenciosas
-        - Analise segurança básica
-        - Analise fluxos completos do sistema
-        {"\n\n"}
-        Identifique e corrija:
-        - Bugs visuais
-        - Bugs de navegação
-        - Erros de console
-        - Warnings
-        - Loops infinitos
-        - Problemas de renderização
-        - Re-renderizações desnecessárias
-        - Falhas de autenticação
-        - Problemas de sessão
-        - Problemas de permissões
-        - Problemas de loading
-        - Problemas de estado
-        - Problemas de sincronização
-        - Problemas de responsividade
-        - Problemas de formulários
-        - Problemas de validação
-        - Problemas em chamadas API
-        - Problemas em queries Supabase
-        - Problemas de realtime
-        - Problemas de cache
-        - Problemas de tipagem
-        - Problemas de imports
-        - Problemas de dependências
-        - Problemas de performance
-        - Problemas de UX
-        - Problemas mobile
-        - Problemas de acessibilidade
-        - Memory leaks
-        - Requests duplicados
-        - Condições de corrida
-        - Falhas silenciosas
-        - Tratamento incorreto de erros
-        - Quebras em edge cases
-        {"\n\n"}
-        Verifique especialmente:
-        - Fluxos de login/logout
-        - Persistência de sessão
-        - Proteção de rotas
-        - Navegação entre páginas
-        - CRUDs completos
-        - Uploads
-        - Modais
-        - Estados assíncronos
-        - Atualizações em tempo real
-        - Compatibilidade mobile
-        - Responsividade geral
-        - Componentes reutilizáveis
-        - Integrações externas
-        - Webhooks
-        - Fluxos críticos do sistema
-        {"\n\n"}
-        Durante a análise:
-        1. Liste os problemas encontrados
-        2. Explique a causa de cada problema
-        3. Explique o impacto no sistema
-        4. Corrija utilizando boas práticas modernas
-        5. Garanta que a correção não quebre funcionalidades existentes
-        {"\n\n"}
-        Regras importantes:
-        - NÃO remover funcionalidades sem necessidade
-        - NÃO alterar design sem motivo
-        - NÃO criar soluções temporárias ou gambiarra
-        - Sempre aplicar soluções profissionais
-        - Priorizar estabilidade, segurança e confiabilidade
-        - Garantir código limpo e sustentável
-        - Melhorar tratamento de erros em toda aplicação
-        - Validar edge cases importantes
-        - Garantir compatibilidade mobile e desktop
-        {"\n\n"}
-        Após finalizar:
-        - Faça uma nova varredura completa
-        - Verifique se ainda existem erros
-        - Verifique possíveis regressões
-        - Garanta estabilidade geral do sistema
-        {"\n\n"}
-        O resultado final deve deixar a aplicação:
-        - Estável
-        - Confiável
-        - Sem erros visíveis
-        - Sem warnings desnecessários
-        - Sem bugs críticos
-        - Fluida
-        - Responsiva
-        - Profissional
-        - Pronta para produção
+        For the code present, I get the error below.
+        
+        Please think step-by-step in order to resolve it.
+        ```
+        Error: OMIE_APP_KEY e OMIE_APP_SECRET não configurados.
+        
+        {"{"}
+          "timestamp": 1786556880356,
+          "error_type": "RUNTIME_ERROR",
+          "filename": "http://localhost:8080/_serverFn/eyJmaWxlIjoiL3NyYy9mZWF0dXJlcy9vbWllL3NlcnZpY2VzL29taWUuZnVuY3Rpb25zLnRzP3Rzcy1zZXJ2ZXJmbi1zcGxpdCIsImV4cG9ydCI6InN5bmNDbGllbnRlc09taWVfY3JlYXRlU2VydmVyRm5faGFuZGxlciJ9",
+          "lineno": 0,
+          "colno": 0,
+          "stack": "Error: OMIE_APP_KEY e OMIE_APP_SECRET não configurados.\\n    at callOmie (/dev-server/src/features/omie/services/omie.functions.ts:23:11)\\n    at Object.accept (/dev-server/src/features/omie/services/omie.functions.ts:67:28)\\n    at server (/dev-server/node_modules/@tanstack/start-client-core/src/createServerFn.ts:944:38)\\n    at callNextMiddleware (/dev-server/node_modules/@tanstack/start-client-core/src/createServerFn.ts:322:30)\\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\\n    at async userNext (/dev-server/node_modules/@tanstack/start-client-core/src/createServerFn.ts:312:26)",
+          "has_blank_screen": true
+        {"}"}
+        ```
         <Toaster position="top-right" closeButton richColors />
         {children}
         <Scripts />
