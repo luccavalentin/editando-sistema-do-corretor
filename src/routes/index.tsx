@@ -85,53 +85,53 @@ function Dashboard() {
 
   return (
     <div className="p-8 space-y-8 bg-background min-h-screen">
-      <div className="flex justify-between items-center border-b border-border/50 pb-6">
+      <div className="flex justify-between items-center border-b border-border pb-6">
         <div>
-          <h1 className="text-2xl font-black font-heading text-navy flex items-center gap-3 uppercase tracking-tighter">
+          <h1 className="text-2xl font-semibold font-heading text-primary flex items-center gap-3 uppercase tracking-tight">
             <LayoutDashboard className="w-6 h-6 text-orange" />
-            CENTRAL DE OPERAÇÕES
+            Central de Operações
           </h1>
-          <p className="text-xs text-muted-foreground mt-2 font-bold uppercase tracking-[0.2em] opacity-70">Monitoramento Dinâmico de Pátio • Fluxo em Tempo Real</p>
+          <p className="text-[11px] text-muted-foreground mt-1.5 font-medium uppercase tracking-widest opacity-80">Monitoramento Dinâmico de Pátio • Fluxo em Tempo Real</p>
         </div>
         <div className="flex gap-3">
-          <Button variant="outline" size="sm" className="rounded-md border-primary/10 hover:border-primary/30">
-            <Filter className="w-4 h-4" />
-            FILTRAR VISÃO
+          <Button variant="outline" size="sm" className="h-9 px-4 rounded-md border-border hover:bg-muted/50 transition-all font-medium text-xs uppercase tracking-wider">
+            <Filter className="w-3.5 h-3.5 mr-2" />
+            Filtrar Visão
           </Button>
           <Button 
             onClick={() => setViewMode('tv')} 
             size="sm"
-            className="bg-navy hover:bg-navy/80 rounded-md gap-3 px-6 shadow-md"
+            className="h-9 px-5 bg-primary hover:bg-primary/90 rounded-md gap-2.5 shadow-sm transition-all text-xs font-semibold uppercase tracking-wider"
           >
-            <Tv className="w-4 h-4 text-cyan" />
-            EXIBIÇÃO TV
+            <Tv className="w-3.5 h-3.5 text-cyan" />
+            Exibição TV
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-        <StatCard title="No pátio agora" value={stats?.noPatio || 0} icon={Truck} color="text-cyan-600" />
-        <StatCard title="Entraram hoje" value={stats?.entraramHoje || 0} icon={PlusCircle} color="text-orange-500" />
-        <StatCard title="Concluídas hoje" value={stats?.concluidasHoje || 0} icon={CheckCircle2} color="text-green-500" />
-        <StatCard title="Tempo Médio" value="4.2h" icon={Clock} color="text-blue-500" />
-        <StatCard title="Em Atraso" value={stats?.atrasadas || 0} icon={AlertCircle} color="text-red-500" />
-        <StatCard title="Peças Vencendo" value={stats?.pecasVencendo || 0} icon={Package} color="text-orange-600" />
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+        <StatCard title="No pátio agora" value={stats?.noPatio || 0} icon={Truck} color="text-cyan" />
+        <StatCard title="Entraram hoje" value={stats?.entraramHoje || 0} icon={PlusCircle} color="text-orange" />
+        <StatCard title="Concluídas hoje" value={stats?.concluidasHoje || 0} icon={CheckCircle2} color="text-emerald-500" />
+        <StatCard title="Tempo Médio" value="4.2h" icon={Clock} color="text-primary" />
+        <StatCard title="Em Atraso" value={stats?.atrasadas || 0} icon={AlertCircle} color="text-destructive" />
+        <StatCard title="Peças Vencendo" value={stats?.pecasVencendo || 0} icon={Package} color="text-orange" />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-4 xl:grid-cols-5 gap-6">
         {STATUS_FLOW.map(status => {
           const items = osList.filter((o: any) => o.status === status);
           return (
-            <div key={status} className="flex flex-col gap-2 bg-muted/20 p-2 rounded-sm border border-border/50">
-              <div className="flex justify-between items-center px-1 mb-1">
-                <h3 className="font-bold text-navy text-[10px] uppercase tracking-widest flex items-center gap-1.5">
-                  <div className={`w-1.5 h-1.5 rounded-full ${items.length > 0 ? 'bg-orange shadow-[0_0_5px_rgba(240,96,0,0.5)]' : 'bg-muted-foreground/30'}`} />
+            <div key={status} className="flex flex-col gap-4 bg-muted/10 p-3 rounded-md border border-border">
+              <div className="flex justify-between items-center px-1">
+                <h3 className="font-semibold text-primary text-[11px] uppercase tracking-widest flex items-center gap-2">
+                  <div className={`w-1.5 h-1.5 rounded-full ${items.length > 0 ? 'bg-orange shadow-[0_0_8px_rgba(240,96,0,0.3)]' : 'bg-muted-foreground/30'}`} />
                   {STATUS_LABELS[status]}
                 </h3>
-                <span className="bg-navy/5 text-navy px-1.5 py-0.5 rounded-xs text-[9px] font-bold tabular-nums border border-navy/10">{items.length}</span>
+                <span className="bg-primary/5 text-primary px-2 py-0.5 rounded text-[10px] font-semibold tabular-nums border border-border">{items.length}</span>
               </div>
               
-              <div className="space-y-2 flex-1">
+              <div className="space-y-3 flex-1">
                 {(items as any[]).map((os: any) => (
                   <OSKanbanCard 
                     key={os.id} 
@@ -141,8 +141,8 @@ function Dashboard() {
                   />
                 ))}
                 {items.length === 0 && (
-                  <div className="h-12 border border-dashed border-border/40 rounded-sm flex items-center justify-center">
-                    <span className="text-[9px] uppercase font-bold text-muted-foreground/30 tracking-widest italic">Vazio</span>
+                  <div className="h-20 border border-dashed border-border/60 rounded-md flex items-center justify-center bg-muted/5">
+                    <span className="text-[10px] uppercase font-medium text-muted-foreground/40 tracking-widest italic">Sem Atividade</span>
                   </div>
                 )}
               </div>

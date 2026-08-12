@@ -42,19 +42,19 @@ function RankingPage() {
 
   return (
     <div className="p-8 space-y-8 bg-background min-h-screen">
-      <div className="flex justify-between items-center border-b border-border/50 pb-8">
+      <div className="flex justify-between items-center border-b border-border pb-6">
         <div>
-          <h1 className="text-2xl font-black font-heading text-navy uppercase tracking-tighter text-primary">
-            ELITE TECNOAR
+          <h1 className="text-2xl font-semibold font-heading text-primary uppercase tracking-tight">
+            Elite Tecnoar
           </h1>
-          <p className="text-xs text-muted-foreground mt-2 font-bold uppercase tracking-[0.2em] opacity-70">
+          <p className="text-[11px] text-muted-foreground mt-1.5 font-medium uppercase tracking-widest opacity-80">
             Performance Técnica e Reconhecimento Profissional
           </p>
         </div>
-        <div className="flex bg-primary/5 p-1 border border-primary/10 rounded-lg h-12">
-          <button className="px-6 py-1.5 rounded-md bg-white shadow-md text-[10px] font-black text-navy uppercase tracking-widest border border-primary/5 transition-all">Geral</button>
-          <button className="px-6 py-1.5 text-[10px] font-black text-white/30 hover:text-white/60 uppercase tracking-widest transition-all">Mensal</button>
-          <button className="px-6 py-1.5 text-[10px] font-black text-white/30 hover:text-white/60 uppercase tracking-widest transition-all">Semanal</button>
+        <div className="flex bg-muted/30 p-1 border border-border rounded-md h-10">
+          <button className="px-5 py-1 rounded bg-card shadow-sm text-[11px] font-semibold text-primary uppercase tracking-wider transition-all">Geral</button>
+          <button className="px-5 py-1 text-[11px] font-medium text-muted-foreground hover:text-primary uppercase tracking-wider transition-all">Mensal</button>
+          <button className="px-5 py-1 text-[11px] font-medium text-muted-foreground hover:text-primary uppercase tracking-wider transition-all">Semanal</button>
         </div>
       </div>
 
@@ -124,20 +124,20 @@ function RankingPage() {
       </div>
 
       {/* Tabela de Classificação */}
-      <Card className="rounded-sm border border-border shadow-xs overflow-hidden">
+      <Card className="elevation-1 overflow-hidden">
         <CardHeader className="bg-muted/30 border-b border-border py-4 px-6">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-sm font-bold uppercase tracking-[0.2em] text-navy flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-primary" /> CLASSIFICAÇÃO GERAL
+            <CardTitle className="text-[11px] font-semibold uppercase tracking-widest text-primary flex items-center gap-2.5">
+              <TrendingUp className="w-4 h-4 text-primary" /> Classificação Geral
             </CardTitle>
-            <Star className="w-4 h-4 text-orange" />
+            <Star className="w-4 h-4 text-orange fill-orange/20" />
           </div>
         </CardHeader>
         <CardContent className="p-0">
           <Table className="table-system">
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[100px] pl-8">Posição</TableHead>
+                <TableHead className="w-[120px] pl-8">Posição</TableHead>
                 <TableHead>Colaborador</TableHead>
                 <TableHead>Pontuação</TableHead>
                 <TableHead>Nível</TableHead>
@@ -148,19 +148,19 @@ function RankingPage() {
                {ranking?.map((user, index) => {
                 const level = getLevel(user.points);
                 return (
-                  <TableRow key={user.id} className="hover:bg-navy/5 transition-colors">
-                    <TableCell className="pl-8 font-semibold text-navy">{index + 1}º</TableCell>
-                    <TableCell className="font-bold text-navy">{user.email?.split('@')[0] || 'Técnico'}</TableCell>
+                  <TableRow key={user.id} className="interactive-item group">
+                    <TableCell className="pl-8 font-semibold text-primary">{index + 1}º</TableCell>
+                    <TableCell className="font-semibold text-primary uppercase tracking-tight">{user.email?.split('@')[0] || 'Técnico'}</TableCell>
                     <TableCell>
-                      <span className="font-semibold text-orange">{user.points}</span>
+                      <span className="font-semibold text-orange tabular-nums">{user.points}</span>
                     </TableCell>
                     <TableCell>
-                      <span className={`px-3 py-1 rounded-sm text-[10px] font-semibold uppercase border ${level.color} border-current`}>
+                      <span className={`px-2.5 py-0.5 rounded text-[10px] font-semibold uppercase border ${level.color} border-current/20 bg-current/5`}>
                         {level.label}
                       </span>
                     </TableCell>
                     <TableCell className="pr-8 text-right">
-                      <div className="inline-flex items-center gap-1 text-green-700 font-bold text-xs">
+                      <div className="inline-flex items-center gap-1 text-emerald-600 font-semibold text-[11px]">
                         <TrendingUp className="w-3 h-3" />
                         +{(user.points * 0.1).toFixed(0)}%
                       </div>
