@@ -11,7 +11,7 @@ interface OSKanbanCardProps {
 
 export function OSKanbanCard({ os, onNextStatus, nextStatus }: OSKanbanCardProps) {
   return (
-    <Card className="rounded-md elevation-1 bg-card group hover:elevation-2 transition-all">
+    <Card className="card-system group">
       <CardContent className="p-4 space-y-3">
         <div className="flex justify-between items-start">
           <span className="text-[10px] font-mono font-medium text-muted-foreground">{os.protocolo}</span>
