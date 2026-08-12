@@ -179,12 +179,6 @@ function IAModule() {
           </TabsContent>
 
           <TabsContent value="library" className="h-full m-0 p-8">
-            {/* ... existindo ... */}
-          </TabsContent>
-
-          <TabsContent value="followup" className="h-full m-0 p-8 overflow-auto">
-            <FollowUpPage />
-          </TabsContent>
             <div className="max-w-6xl mx-auto space-y-8">
               <div className="flex justify-between items-end">
                 <div>
