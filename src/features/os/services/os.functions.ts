@@ -3,6 +3,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { OSStatusSchema } from "../types/os.types";
 import { getOSStatsServer, getOSListServer } from "./os.server";
+import { pushOSOmie } from "../../omie/services/omie.functions";
 
 export const getOSStats = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -30,6 +31,17 @@ export const updateOSStatus = createServerFn({ method: "POST" })
       _usuario_id: userId
     });
     if (error) throw new Error(error.message);
+
+    // Automação Omie: Se status transicionou para 'enviado_financeiro', enviar para Omie
+    if (data.novo_status === 'enviado_financeiro') {
+      try {
+        // Chamada interna da server function
+        await pushOSOmie({ data: { os_id: data.os_id } });
+      } catch (err) {
+        console.error("[OMIE] Erro no push automático:", err);
+      }
+    }
+
     return { success: true };
   });
 

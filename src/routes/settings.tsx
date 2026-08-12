@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { RefreshCw, Database, Send, AlertTriangle, Settings, Users, Briefcase } from 'lucide-react';
 import { useServerFn } from '@tanstack/react-start';
-import { syncClientesOmie, syncEstoqueOmie } from '@/integrations/omie.functions';
+import { syncClientesOmie, syncEstoqueOmie } from '@/features/omie/services/omie.functions';
 import { toast } from 'sonner';
 import { useState } from 'react';
 
