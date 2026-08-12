@@ -55,8 +55,8 @@
 }
 
 :root {
-  --radius: 1rem;
-  --background: oklch(1 0 0);
+  --radius: 0.375rem;
+  --background: oklch(0.975 0.002 264);
   --foreground: oklch(0.05 0.02 264);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.05 0.02 264);
@@ -146,6 +146,8 @@
   }
 
   /* Glassmorphism utility */
+  table { font-variant-numeric: tabular-nums; }
+
   .glass {
     @apply bg-background/60 backdrop-blur-md border border-white/10;
   }
@@ -155,4 +157,12 @@
   .btn-touch {
     @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
   }
+}
+
+@layer utilities {
+  .surface {
+    @apply bg-card border border-border shadow-xs rounded-md;
+  }
+  .table-dense tbody tr { height: 2.25rem; }
+  .table-dense tbody tr:nth-child(even) { background-color: color-mix(in oklab, var(--muted) 55%, transparent); }
 }
