@@ -67,60 +67,60 @@ function ReportsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        <Card className="rounded-sm border border-border shadow-xs bg-card">
-          <CardHeader className="py-3 px-4 border-b border-border/50 bg-muted/20">
-            <CardTitle className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">VOLUME TOTAL</CardTitle>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card className="elevation-1 bg-card">
+          <CardHeader className="py-4 px-5 border-b border-border/50 bg-muted/20">
+            <CardTitle className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Volume Total</CardTitle>
           </CardHeader>
-          <CardContent className="py-4 px-4">
-            <p className="text-2xl font-semibold text-navy tracking-tight tabular-nums">{reports?.length || 0}</p>
+          <CardContent className="py-6 px-5">
+            <p className="text-3xl font-semibold text-primary tracking-tight tabular-nums">{reports?.length || 0}</p>
           </CardContent>
         </Card>
-        <Card className="rounded-sm border border-border shadow-xs bg-card">
-          <CardHeader className="py-3 px-4 border-b border-border/50 bg-muted/20">
-            <CardTitle className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">TICKET MÉDIO (SERV)</CardTitle>
+        <Card className="elevation-1 bg-card">
+          <CardHeader className="py-4 px-5 border-b border-border/50 bg-muted/20">
+            <CardTitle className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Ticket Médio (Serv)</CardTitle>
           </CardHeader>
-          <CardContent className="py-4 px-4">
-            <p className="text-2xl font-semibold text-navy tracking-tight tabular-nums">
+          <CardContent className="py-6 px-5">
+            <p className="text-3xl font-semibold text-primary tracking-tight tabular-nums">
               R$ {(reports?.reduce((acc: number, curr: any) => acc + (Number(curr.valor_servico) || 0), 0) / (reports?.length || 1)).toFixed(2)}
             </p>
           </CardContent>
         </Card>
-        <Card className="rounded-sm border border-border shadow-xs bg-card">
-          <CardHeader className="py-3 px-4 border-b border-border/50 bg-muted/20">
-            <CardTitle className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">OS CONCLUÍDAS</CardTitle>
+        <Card className="elevation-1 bg-card">
+          <CardHeader className="py-4 px-5 border-b border-border/50 bg-muted/20">
+            <CardTitle className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">OS Concluídas</CardTitle>
           </CardHeader>
-          <CardContent className="py-4 px-4">
-            <p className="text-2xl font-semibold text-primary tracking-tight tabular-nums">{reports?.filter((os: any) => os.status === 'concluida').length || 0}</p>
+          <CardContent className="py-6 px-5">
+            <p className="text-3xl font-semibold text-primary tracking-tight tabular-nums">{reports?.filter((os: any) => os.status === 'concluida').length || 0}</p>
           </CardContent>
         </Card>
       </div>
 
-      <div className="bg-card rounded-sm border border-border shadow-xs overflow-hidden">
+      <div className="bg-card elevation-1 rounded-md overflow-hidden">
         <Table className="table-system">
           <TableHeader>
             <TableRow>
               <TableHead>Protocolo</TableHead>
               <TableHead>Cliente</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>Vlr Peças</TableHead>
-              <TableHead>Vlr Serviço</TableHead>
-              <TableHead className="text-right">Data</TableHead>
+              <TableHead className="text-right">Vlr Peças</TableHead>
+              <TableHead className="text-right">Vlr Serviço</TableHead>
+              <TableHead className="text-right pr-6">Data</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {reports?.map((os: any) => (
-              <TableRow key={os.id}>
-                <TableCell className="font-mono text-xs font-bold opacity-50">{os.protocolo}</TableCell>
-                <TableCell className="font-bold text-navy uppercase tracking-tight">{os.cliente?.nome}</TableCell>
+              <TableRow key={os.id} className="interactive-item">
+                <TableCell className="font-mono text-xs font-medium text-muted-foreground">{os.protocolo}</TableCell>
+                <TableCell className="font-semibold text-primary uppercase tracking-tight">{os.cliente?.nome}</TableCell>
                 <TableCell>
-                  <span className="bg-navy/5 text-navy border border-navy/10 px-1.5 py-0.5 rounded-xs text-[9px] font-bold uppercase">
+                  <span className="bg-muted text-muted-foreground border border-border px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider">
                     {os.status.replace('_', ' ')}
                   </span>
                 </TableCell>
-                <TableCell className="tabular-nums font-medium">R$ {os.valor_pecas || 0}</TableCell>
-                <TableCell className="tabular-nums font-medium">R$ {os.valor_servico || 0}</TableCell>
-                <TableCell className="text-[10px] text-muted-foreground font-bold uppercase text-right">
+                <TableCell className="text-right tabular-nums font-medium">R$ {os.valor_pecas || 0}</TableCell>
+                <TableCell className="text-right tabular-nums font-medium">R$ {os.valor_servico || 0}</TableCell>
+                <TableCell className="text-[11px] text-muted-foreground font-medium uppercase text-right pr-6">
                   {new Date(os.criado_em).toLocaleDateString()}
                 </TableCell>
               </TableRow>
