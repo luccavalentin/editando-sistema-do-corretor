@@ -1,5 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { 
   LayoutDashboard, 
@@ -59,25 +61,32 @@ function Dashboard() {
         </div>
 
         <div className="flex-1 grid grid-cols-8 gap-4 overflow-hidden">
-          {STATUS_FLOW.slice(0, 8).map(status => {
-            const count = osList.filter((o: any) => o.status === status).length;
-            return (
-              <div key={status} className="flex flex-col gap-3">
-                <div className="bg-white/5 rounded-md p-4 border border-white/10 flex flex-col items-center justify-center gap-2 aspect-square">
-                  <span className="text-3xl font-semibold">{count}</span>
-                  <span className="text-[10px] uppercase font-bold text-center leading-tight opacity-80">{STATUS_LABELS[status]}</span>
-                </div>
-                <div className="flex-1 bg-white/5 rounded-md p-2 border border-white/10 overflow-hidden relative">
-                  {/* Feed simplificado */}
-                  <div className="absolute inset-0 p-3 space-y-2 opacity-30 text-[10px] font-mono">
-                    {(osList as any[]).filter((o: any) => o.status === status).map((o: any) => (
-                      <div key={o.id} className="border-b border-white/10 pb-1">{o.protocolo}</div>
-                    ))}
+          <AnimatePresence mode="popLayout">
+            {STATUS_FLOW.slice(0, 8).map(status => {
+              const count = osList.filter((o: any) => o.status === status).length;
+              return (
+                <motion.div 
+                  key={status} 
+                  layout
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="flex flex-col gap-3"
+                >
+                  <div className="bg-white/5 rounded-md p-4 border border-white/10 flex flex-col items-center justify-center gap-2 aspect-square">
+                    <span className="text-3xl font-semibold">{count}</span>
+                    <span className="text-[10px] uppercase font-bold text-center leading-tight opacity-80">{STATUS_LABELS[status]}</span>
                   </div>
-                </div>
-              </div>
-            );
-          })}
+                  <div className="flex-1 bg-white/5 rounded-md p-2 border border-white/10 overflow-hidden relative">
+                    <div className="absolute inset-0 p-3 space-y-2 opacity-30 text-[10px] font-mono">
+                      {(osList as any[]).filter((o: any) => o.status === status).map((o: any) => (
+                        <div key={o.id} className="border-b border-white/10 pb-1">{o.protocolo}</div>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
         </div>
       </div>
     );
@@ -168,13 +177,37 @@ function Dashboard() {
 
 
 function TVStatCard({ label, value, icon, color, pulse }: any) {
+  const [prevValue, setPrevValue] = useState(value);
+  const [flash, setFlash] = useState(false);
+
+  useEffect(() => {
+    if (value !== prevValue) {
+      setFlash(true);
+      const timer = setTimeout(() => setFlash(false), 1000);
+      setPrevValue(value);
+      return () => clearTimeout(timer);
+    }
+    return undefined;
+  }, [value, prevValue]);
+
   return (
-    <div className={`bg-white/5 rounded-lg p-4 border border-white/10 flex flex-col gap-2 ${pulse ? 'animate-pulse' : ''}`}>
+    <div className={cn(
+      "bg-white/5 rounded-lg p-4 border border-white/10 flex flex-col gap-2 transition-all duration-500",
+      pulse ? 'animate-pulse' : '',
+      flash && "bg-white/10 border-cyan/30"
+    )}>
       <div className="flex justify-between items-start">
         <div className="p-2 bg-white/5 rounded-md text-white/40">
           {icon}
         </div>
-        <span className={`text-2xl font-semibold ${color}`}>{value}</span>
+        <motion.span 
+          key={value}
+          initial={{ opacity: 0.5, y: 5 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={cn("text-2xl font-semibold tabular-nums", color)}
+        >
+          {value}
+        </motion.span>
       </div>
       <span className="text-xs font-bold uppercase tracking-widest text-white/40">{label}</span>
     </div>

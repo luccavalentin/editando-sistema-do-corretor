@@ -34,6 +34,10 @@
   --shadow-base: 0 1px 1px rgba(0,0,0,0.05);
   --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
   --shadow-popover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  /* Premium Motion Easing */
+  --ease-premium: cubic-bezier(0.2, 0, 0, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
 }
 
 :root {
@@ -172,7 +176,8 @@
     background-color: var(--color-card);
     padding: 0 0.75rem;
     font-size: var(--text-sm);
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: border-color var(--duration-fast) var(--ease-premium), 
+                box-shadow var(--duration-fast) var(--ease-premium);
   }
 
   input:focus-visible, select:focus-visible, textarea:focus-visible {
@@ -206,11 +211,16 @@
     border-radius: var(--radius);
     border: 1px solid var(--color-border);
     box-shadow: var(--shadow-base);
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: border-color var(--duration-base) var(--ease-premium), 
+                box-shadow var(--duration-base) var(--ease-premium),
+                transform var(--duration-fast) var(--ease-premium);
   }
   .card-system:hover {
     box-shadow: var(--shadow-card);
-    border-color: color-mix(in oklch, var(--color-border), var(--color-foreground) 15%);
+    border-color: color-mix(in oklch, var(--color-border), var(--color-foreground) 10%);
+  }
+  .card-system:active {
+    transform: translateY(1px);
   }
   
   .table-system thead th {
@@ -221,7 +231,8 @@
   }
   
   .table-system tbody tr {
-    transition: background-color 0.15s ease-in-out;
+    transition: background-color var(--duration-fast) var(--ease-premium);
+    cursor: pointer;
   }
   .table-system tbody tr:hover {
     background-color: var(--color-muted);
@@ -252,13 +263,23 @@
 
   .interactive-item {
     cursor: pointer;
-    transition: all 0.15s ease-in-out;
+    transition: all var(--duration-fast) var(--ease-premium);
   }
   .interactive-item:hover {
     background-color: var(--color-muted);
   }
   .interactive-item:active {
-    transform: scale(0.995);
+    opacity: 0.8;
+  }
+
+  .premium-flash {
+    animation: premium-flash-anim 1s var(--ease-premium);
+  }
+
+  @keyframes premium-flash-anim {
+    0% { background-color: transparent; }
+    10% { background-color: color-mix(in oklch, var(--color-orange), transparent 80%); }
+    100% { background-color: transparent; }
   }
 }
 

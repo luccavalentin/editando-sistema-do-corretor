@@ -9,6 +9,7 @@ import {
   useLocation
 } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Toaster } from "sonner";
 import { SidebarProvider, SidebarContainer } from "@/components/ui/sidebar";
 import { RequireRole } from "@/core/RequireRole";
@@ -142,7 +143,21 @@ function RootComponent() {
           ) : (
             <RequireRole>
               <SidebarContainer>
-                <Outlet />
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={location.pathname}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ 
+                      duration: 0.25, 
+                      ease: [0.2, 0, 0, 1] 
+                    }}
+                    className="flex-1"
+                  >
+                    <Outlet />
+                  </motion.div>
+                </AnimatePresence>
               </SidebarContainer>
             </RequireRole>
           )}
