@@ -11,15 +11,18 @@ interface StatCardProps {
 export function StatCard({ title, value, icon: Icon, color }: StatCardProps) {
   return (
     <Card className="card-system">
-      <CardContent className="p-4">
-        <div className="flex justify-between items-start mb-4">
-          <p className="label-premium">{title}</p>
-          <Icon className={`w-4 h-4 ${color} opacity-80`} />
+      <CardContent className="p-5 space-y-4">
+        <div className="flex justify-between items-start">
+          <span className="label-premium">{title}</span>
+          <div className={`p-2 rounded-md bg-muted/50 ${color}`}>
+            <Icon className="w-4 h-4" />
+          </div>
         </div>
-        <div className="flex items-baseline gap-2">
+        <div className="flex items-baseline">
           <span className="text-kpi">{value}</span>
         </div>
       </CardContent>
     </Card>
   );
 }
+
