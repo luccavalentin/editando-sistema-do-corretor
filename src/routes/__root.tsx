@@ -112,7 +112,13 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body className="selection:bg-orange/20 selection:text-navy">
-        [anexo]
+        This page didn't load
+        {"\n\n"}
+        Something went wrong on our end. You can try refreshing or head back home.
+        {"\n\n"}
+        Try againGo home
+        {"\n\n"}
+        Não consigo visualizar a pagina
         <Toaster position="top-right" closeButton richColors />
         {children}
         <Scripts />
