@@ -27,3 +27,10 @@ export const updatePecaStatus = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return result;
   });
+import { getAgendaServicosServer } from "../services/production.server";
+
+export const getAgendaServicos = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    return getAgendaServicosServer(context.supabase);
+  });

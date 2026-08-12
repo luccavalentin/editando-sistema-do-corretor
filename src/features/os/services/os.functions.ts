@@ -83,3 +83,21 @@ export const openOS = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return os;
   });
+import { getReportsDataServer, getRankingServer } from "./os.server";
+
+export const getReportsData = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .validator((data: any) => z.object({
+    period: z.enum(['day', 'week', 'month', 'year', 'all']).default('all'),
+    tecnico_id: z.string().optional(),
+    cliente_id: z.string().optional()
+  }).parse(data))
+  .handler(async ({ data, context }) => {
+    return getReportsDataServer(context.supabase, data);
+  });
+
+export const getRanking = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    return getRankingServer(context.supabase);
+  });
