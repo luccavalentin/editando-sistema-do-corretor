@@ -237,6 +237,10 @@ function IAModule() {
             </div>
           </TabsContent>
 
+          <TabsContent value="followup" className="h-full m-0 p-8 overflow-auto">
+            <FollowUpPage />
+          </TabsContent>
+
           <TabsContent value="settings" className="h-full m-0 p-8">
             <div className="max-w-2xl mx-auto space-y-8">
               <div>
