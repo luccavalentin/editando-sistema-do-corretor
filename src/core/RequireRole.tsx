@@ -69,10 +69,10 @@ export function RequireRole({ children }: { children: React.ReactNode }) {
           .sort((a, b) => roleOrder.indexOf(a) - roleOrder.indexOf(b))[0];
 
         if (isMounted) {
-          setRole(userRole);
+          setRole(userRole || null);
           setLoading(false);
 
-          if (!canAccessRoute(location.pathname, userRole)) {
+          if (userRole && !canAccessRoute(location.pathname, userRole)) {
             console.warn(`Access denied for ${userRole} at ${location.pathname}`);
             toast.error("Acesso negado para seu nível de permissão");
             navigate({ to: '/' });
