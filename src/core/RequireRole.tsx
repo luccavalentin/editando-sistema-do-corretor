@@ -48,11 +48,17 @@ export function RequireRole({ children }: { children: React.ReactNode }) {
             error: roleError,
             userId: session.user.id
           });
+          
+          // Debug fallback: if no role but authenticated, try to re-fetch or default to 'user' for safety check
+          // but here we must enforce role assignment
           if (isMounted) {
-            toast.error("Usuário sem permissões atribuídas. Contate o administrador.");
+            toast.error("Permissões não encontradas. Contate o administrador.");
             setRole(null);
             setLoading(false);
-            navigate({ to: '/login' });
+            // Don't navigate immediately if we might be in a transient state
+            setTimeout(() => {
+              if (isMounted) navigate({ to: '/login' });
+            }, 2000);
           }
           return;
         }
