@@ -113,7 +113,6 @@ export function ProductionPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {['eletrica', 'socorro', 'troca_cuicas_aparelho_diag', 'teste_valvulas', 'troca_valvulas', 'vazamentos_ar'].map((esp) => (
               <div key={esp} className="space-y-3">
-              <div className="space-y-3">
                 <div className="px-1 border-b border-border pb-2">
                   <h3 className="font-bold text-navy text-[10px] uppercase tracking-widest flex items-center justify-between">
                     {esp.replace(/_/g, ' ')}
