@@ -99,17 +99,17 @@ function Dashboard() {
             Monitoramento em Tempo Real • Pátio Industrial Tecnoar
           </p>
         </div>
-        <div className="flex gap-4">
-          <Button variant="outline" className="h-10 px-6 rounded border-border hover:bg-muted font-bold text-[11px] uppercase tracking-widest transition-all">
-            <Filter className="w-4 h-4 mr-2.5" />
-            Filtrar Visão
+        <div className="flex gap-3">
+          <Button variant="outline" className="h-9 px-4 rounded border-border hover:bg-muted font-bold text-[10px] uppercase tracking-widest transition-all">
+            <Filter className="w-3.5 h-3.5 mr-2" />
+            Filtrar
           </Button>
           <Button 
             onClick={() => setViewMode('tv')} 
-            className="h-10 px-8 bg-navy hover:bg-navy/90 text-white rounded shadow-xl shadow-navy/20 gap-3 transition-all text-[11px] font-bold uppercase tracking-widest"
+            className="h-9 px-6 bg-navy hover:bg-navy/90 text-white rounded shadow-sm gap-2 transition-all text-[10px] font-bold uppercase tracking-widest"
           >
-            <Tv className="w-4 h-4 text-cyan" />
-            Modo Monitor
+            <Tv className="w-3.5 h-3.5 text-cyan" />
+            Monitor
           </Button>
         </div>
       </div>
