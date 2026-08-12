@@ -285,7 +285,7 @@
 
   @keyframes premium-flash-anim {
     0% { background-color: transparent; }
-    10% { background-color: color-mix(in oklch, var(--color-orange), transparent 80%); }
+    10% { background-color: color-mix(in srgb, var(--color-orange), transparent 80%); }
     100% { background-color: transparent; }
   }
 }
