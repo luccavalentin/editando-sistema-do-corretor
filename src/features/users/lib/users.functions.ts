@@ -14,16 +14,17 @@ export const inviteUserFn = createServerFn({ method: "POST" })
   }).parse(data))
   .middleware([requireSupabaseAuth])
   .handler(async ({ data, context }) => {
-    const { supabaseAdmin, userId } = context;
+    const { supabaseAdmin, userId, supabase } = context;
 
     // Verificar se quem convida é superadmin
-    const { data: userRole } = await context.supabase
+    const { data: userRole, error: roleCheckError } = await supabase
       .from('user_roles')
       .select('role')
       .eq('user_id', userId)
+      .eq('role', 'superadmin')
       .single();
 
-    if (userRole?.role !== 'superadmin') {
+    if (roleCheckError || !userRole) {
       throw new Error("Apenas Superadministradores podem convidar novos usuários.");
     }
 

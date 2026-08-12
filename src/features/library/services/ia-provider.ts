@@ -131,17 +131,34 @@ export async function getIAProvider(activeProvider: string): Promise<IAProvider>
 
 export async function generateEmbedding(text: string): Promise<number[]> {
   const apiKey = process.env['OPENAI_API_KEY'] || process.env['GEMINI_API_KEY'];
-  if (!apiKey) return new Array(1536).fill(0); // Fallback silencioso
+  if (!apiKey) {
+    console.warn("[IA] Nenhuma API Key configurada para Embeddings. Retornando vetor zero.");
+    return new Array(1536).fill(0);
+  }
   
-  if (process.env['OPENAI_API_KEY']) {
-    const data = await callAI("https://api.openai.com/v1/embeddings", {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${process.env['OPENAI_API_KEY']}`
-    }, {
-      input: text,
-      model: "text-embedding-3-small"
-    });
-    return data.data[0].embedding;
+  try {
+    if (process.env['OPENAI_API_KEY']) {
+      const data = await callAI("https://api.openai.com/v1/embeddings", {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${process.env['OPENAI_API_KEY']}`
+      }, {
+        input: text,
+        model: "text-embedding-3-small"
+      });
+      return data.data[0].embedding;
+    }
+    
+    // Fallback para Gemini Embeddings se OpenAI não disponível
+    if (process.env['GEMINI_API_KEY']) {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/embedding-001:embedContent?key=${process.env['GEMINI_API_KEY']}`;
+      const data = await callAI(url, { "Content-Type": "application/json" }, {
+        model: "models/embedding-001",
+        content: { parts: [{ text }] }
+      });
+      return data.embedding.values;
+    }
+  } catch (error) {
+    console.error("[IA] Erro ao gerar embedding:", error);
   }
   
   return new Array(768).fill(0);
