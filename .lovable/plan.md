@@ -33,4 +33,3 @@ Este plano descreve a implementação do novo tipo de checklist diário vinculad
 - O campo `respostas` no banco armazenará um JSONB contendo tanto os itens do 5S quanto os itens da conferência do líder.
 - O rodapé exibirá informações fixas: "Código: FOR-OFI-001 | Revisão: 00".
 - Assinatura do líder via Canvas.
-
