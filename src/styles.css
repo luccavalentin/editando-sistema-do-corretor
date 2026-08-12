@@ -170,7 +170,7 @@
   input, select, textarea {
     height: 2.5rem;
     width: 100%;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius);
     border: 1px solid var(--color-input);
     background-color: var(--color-background);
     padding: 0 0.75rem;
@@ -206,7 +206,7 @@
 
   .card-system {
     background-color: var(--color-card);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius);
     border: 1px solid var(--color-border);
     box-shadow: var(--shadow-base);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);

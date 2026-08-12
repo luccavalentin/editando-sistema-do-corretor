@@ -10,10 +10,10 @@ interface StatCardProps {
 
 export function StatCard({ title, value, icon: Icon, color }: StatCardProps) {
   return (
-    <Card className="card-system">
-      <CardContent className="p-5 space-y-4">
+    <Card className="rounded border border-border bg-card p-0 shadow-sm">
+      <CardContent className="p-4 space-y-3">
         <div className="flex justify-between items-start">
-          <span className="label-premium">{title}</span>
+          <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{title}</span>
           <div className={`p-2 rounded-md bg-muted/50 ${color}`}>
             <Icon className="w-4 h-4" />
           </div>

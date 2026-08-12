@@ -58,7 +58,7 @@ function ManagementPage() {
   };
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-8 bg-background min-h-screen print:p-0">
+    <div className="p-6 max-w-7xl mx-auto space-y-6 bg-background min-h-screen print:p-0">
       <div className="flex justify-between items-center border-b border-border pb-6 print:hidden">
         <div>
           <h1 className="text-2xl font-semibold font-heading text-primary uppercase tracking-tight">
@@ -144,14 +144,14 @@ function ManagementPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 print:hidden">
         <div className="md:col-span-2 lg:col-span-3 space-y-6">
           {step === 1 && (
-            <Card className="elevation-1 bg-card overflow-hidden">
+            <Card className="rounded border border-border bg-card overflow-hidden shadow-sm">
               <CardHeader className="bg-muted/30 border-b border-border py-4 px-6">
                 <CardTitle className="flex items-center gap-2.5 text-[13px] font-semibold uppercase tracking-wider text-primary">
                   <UserPlus className="w-4 h-4 text-orange" />
                   1. Identificação do Cliente
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-8 space-y-8">
+              <CardContent className="p-6 space-y-6">
                 <div className="flex gap-3">
                   <Input 
                     placeholder="Buscar por CNPJ ou Nome..." 
@@ -159,11 +159,11 @@ function ManagementPage() {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="h-10 focus-visible:ring-primary/30"
                   />
-                  <Button onClick={handleSearch} className="h-10 px-8 bg-primary text-white hover:bg-primary/90 font-semibold text-[11px] uppercase tracking-wider">
+                  <Button onClick={handleSearch} className="h-10 px-6 bg-primary text-white hover:bg-primary/90 font-semibold text-[11px] uppercase tracking-wider rounded">
                     Buscar
                   </Button>
                 </div>
-                <div className="p-12 border border-dashed border-border rounded-md flex flex-col items-center justify-center text-center bg-muted/5 group hover:bg-muted/10 transition-colors">
+                <div className="p-8 border border-dashed border-border rounded flex flex-col items-center justify-center text-center bg-muted/5 group hover:bg-muted/10 transition-colors">
                   <UserPlus className="w-10 h-10 mb-4 opacity-20 text-primary group-hover:scale-110 transition-transform" />
                   <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-widest max-w-xs">Cliente não encontrado localmente ou na Omie?</p>
                   <Button variant="outline" size="sm" className="mt-5 h-9 px-6 rounded-md border-primary text-primary hover:bg-primary/5 text-[11px] font-semibold uppercase tracking-wider transition-all">
@@ -289,11 +289,11 @@ function ManagementPage() {
         </div>
 
         <div className="space-y-4 print:hidden">
-          <Card className="elevation-1 bg-card overflow-hidden">
+          <Card className="rounded border border-border bg-card overflow-hidden shadow-sm">
             <CardHeader className="bg-muted/30 border-b border-border py-4 px-5">
               <CardTitle className="text-[11px] font-semibold uppercase tracking-widest text-primary">Resumo da OS</CardTitle>
             </CardHeader>
-            <CardContent className="p-5 space-y-6">
+            <CardContent className="p-4 space-y-4">
               <div className="flex justify-between items-center">
                 <div className="text-[11px] uppercase font-medium text-muted-foreground tracking-wider">Status</div>
                 <div className="bg-emerald-500/10 text-emerald-700 border border-emerald-500/20 px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider">Nova OS</div>
