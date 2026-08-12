@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSuspenseQuery, useMutation } from '@tanstack/react-query';
-import { getOSList } from '@/integrations/management.functions';
+import { getOSList } from '@/features/os/services/os.functions';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
