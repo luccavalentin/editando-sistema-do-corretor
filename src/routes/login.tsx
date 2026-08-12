@@ -35,6 +35,9 @@ function LoginPage() {
         return;
       }
 
+      // Explicitly refresh session to ensure RequireRole gets the new state
+      await supabase.auth.refreshSession();
+      
       toast.success("Acesso autorizado");
       navigate({ to: '/' });
     } catch (err) {

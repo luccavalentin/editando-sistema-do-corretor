@@ -14,19 +14,29 @@ export function RequireRole({ children }: { children: React.ReactNode }) {
     async function checkAccess() {
       try {
         const userRole = await getCurrentUserRole();
-        setRole(userRole);
-        setLoading(false);
-
+        
         if (!userRole) {
-          navigate({ to: '/login' });
+          console.warn("No role found for user, redirecting to login");
+          setRole(null);
+          setLoading(false);
+          // Only navigate if we're not already on login (though RequireRole isn't usually on login)
+          if (location.pathname !== '/login') {
+            navigate({ to: '/login' });
+          }
           return;
         }
 
+        setRole(userRole);
+        setLoading(false);
+
         if (!canAccessRoute(location.pathname, userRole)) {
+          console.warn(`User role ${userRole} cannot access ${location.pathname}`);
+          toast.error("Acesso negado para seu nível de permissão");
           navigate({ to: '/' });
         }
       } catch (err) {
         console.error("Auth check failed:", err);
+        setRole(null);
         setLoading(false);
         navigate({ to: '/login' });
       }

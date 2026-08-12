@@ -73,7 +73,7 @@ export function TermoResponsabilidadePage() {
   };
 
   if (isPrinting) {
-    const os = osList.find(o => o.id === selectedOS);
+    const os = osList.find((o: any) => o.id === selectedOS);
     return (
       <div className="p-5 max-w-2xl mx-auto bg-white text-black print:p-0">
         <div className="flex justify-between items-center mb-5 print:hidden">
@@ -136,7 +136,7 @@ export function TermoResponsabilidadePage() {
         <Card className="p-4 space-y-4">
           <Label>Selecione a Ordem de Serviço</Label>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {osList.map(os => (
+            {osList.map((os: any) => (
               <div 
                 key={os.id} 
                 onClick={() => setSelectedOS(os.id)}
