@@ -92,6 +92,9 @@ function IAModule() {
             <TabsTrigger value="library" className="w-full justify-start gap-3 rounded-xl data-[state=active]:bg-orange data-[state=active]:text-white text-white/60">
               <Library className="w-4 h-4" /> Biblioteca
             </TabsTrigger>
+            <TabsTrigger value="followup" className="w-full justify-start gap-3 rounded-xl data-[state=active]:bg-orange data-[state=active]:text-white text-white/60">
+              <MessageCircle className="w-4 h-4" /> Follow-up IA
+            </TabsTrigger>
             <TabsTrigger value="history" className="w-full justify-start gap-3 rounded-xl data-[state=active]:bg-orange data-[state=active]:text-white text-white/60">
               <History className="w-4 h-4" /> Histórico
             </TabsTrigger>
