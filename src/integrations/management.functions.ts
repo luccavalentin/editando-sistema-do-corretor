@@ -1,9 +1,11 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { supabase } from "./supabase/client";
+import { requireSupabaseAuth } from "./supabase/auth-middleware";
 
 export const getOSStats = createServerFn({ method: "GET" })
-  .handler(async () => {
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabase } = context;
     const { data: os, error } = await supabase
       .from("ordens_servico")
       .select("status, criado_em, finalizado_em");
@@ -27,7 +29,9 @@ export const getOSStats = createServerFn({ method: "GET" })
   });
 
 export const getOSList = createServerFn({ method: "GET" })
-  .handler(async () => {
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabase } = context;
     const { data, error } = await supabase
       .from("ordens_servico")
       .select(`
@@ -42,28 +46,29 @@ export const getOSList = createServerFn({ method: "GET" })
   });
 
 export const updateOSStatus = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((data) => z.object({
     os_id: z.string(),
     novo_status: z.string()
   }).parse(data))
-  .handler(async ({ data }) => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) throw new Error("Unauthorized");
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
 
     const { error } = await supabase.rpc('transicionar_status_os', {
       _os_id: data.os_id,
       _novo_status: data.novo_status,
-      _usuario_id: session.user.id
+      _usuario_id: userId
     });
 
     if (error) throw new Error(error.message);
     return { success: true };
   });
 
-// Busca cliente local por documento ou nome
 export const searchClienteLocal = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((data) => z.object({ query: z.string() }).parse(data))
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    const { supabase } = context;
     const { data: clientes, error } = await supabase
       .from("clientes")
       .select("*")
@@ -74,10 +79,11 @@ export const searchClienteLocal = createServerFn({ method: "GET" })
     return clientes;
   });
 
-// Busca veículos de um cliente
 export const getVeiculosByCliente = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((data) => z.object({ cliente_id: z.string() }).parse(data))
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    const { supabase } = context;
     const { data: veiculos, error } = await supabase
       .from("veiculos")
       .select("*")
@@ -87,19 +93,8 @@ export const getVeiculosByCliente = createServerFn({ method: "GET" })
     return veiculos;
   });
 
-// Gera protocolo TNR-AAAA-NNNNNN
-const generateProtocolo = async () => {
-  const year = new Date().getFullYear();
-  const { count } = await supabase
-    .from("ordens_servico")
-    .select("*", { count: "exact", head: true });
-    
-  const nextNum = (count || 0) + 1;
-  return `TNR-${year}-${String(nextNum).padStart(6, "0")}`;
-};
-
-// Abre nova Ordem de Serviço
 export const openOS = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((data) => z.object({
     cliente_id: z.string(),
     veiculo_id: z.string(),
@@ -109,18 +104,23 @@ export const openOS = createServerFn({ method: "POST" })
     fotos_entrada: z.array(z.string()).optional(),
     observacoes_gerais: z.string().optional(),
   }).parse(data))
-  .handler(async ({ data }) => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) throw new Error("Unauthorized");
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
 
-    const protocolo = await generateProtocolo();
+    // Gera protocolo
+    const year = new Date().getFullYear();
+    const { count } = await supabase
+      .from("ordens_servico")
+      .select("*", { count: "exact", head: true });
+      
+    const protocolo = `TNR-${year}-${String((count || 0) + 1).padStart(6, "0")}`;
 
     const { data: os, error } = await supabase
       .from("ordens_servico")
       .insert({
         ...data,
         protocolo,
-        responsavel_abertura_id: session.user.id,
+        responsavel_abertura_id: userId,
         status: "aberta"
       })
       .select()
@@ -131,12 +131,14 @@ export const openOS = createServerFn({ method: "POST" })
   });
 
 export const getReportsData = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((data: any) => z.object({
     period: z.enum(['day', 'week', 'month', 'year', 'all']).default('all'),
     tecnico_id: z.string().optional(),
     cliente_id: z.string().optional()
   }).parse(data))
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    const { supabase } = context;
     let query = supabase
       .from("ordens_servico")
       .select(`
@@ -162,12 +164,12 @@ export const getReportsData = createServerFn({ method: "GET" })
   });
 
 export const getRanking = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((data: any) => z.object({
     period: z.enum(['daily', 'weekly', 'monthly', 'all']).default('all')
   }).parse(data))
-
-  .handler(async ({ data }) => {
-    // We use a broader query to avoid complex join issues in types
+  .handler(async ({ data, context }) => {
+    const { supabase } = context;
     const { data: events, error } = await supabase
       .from("ranking_eventos")
       .select(`
@@ -178,9 +180,7 @@ export const getRanking = createServerFn({ method: "GET" })
 
     if (error) throw new Error(error.message);
 
-    // Manual aggregation
     const aggregation: Record<string, { email: string, points: number }> = {};
-    
     events?.forEach(event => {
       const userId = event.usuario_id;
       if (!aggregation[userId]) {
