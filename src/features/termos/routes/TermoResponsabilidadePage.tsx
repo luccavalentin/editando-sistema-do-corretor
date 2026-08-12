@@ -1,12 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useSuspenseQuery, useMutation } from '@tanstack/react-query';
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { getOSList } from '@/integrations/management.functions';
+import { getOSList } from '@/features/os/services/os.functions';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
@@ -37,6 +36,7 @@ export const saveTermo = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return result;
   });
+
 
 export function TermoResponsabilidadePage() {
   const [selectedOS, setSelectedOS] = useState<string | null>(null);

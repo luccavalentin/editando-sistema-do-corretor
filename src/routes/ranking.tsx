@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
-import { getRanking } from '@/integrations/management.functions';
+import { getRanking } from '@/features/os/services/os.functions';
 import { useServerFn } from '@tanstack/react-start';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';

@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireSupabaseAuth } from "./supabase/auth-middleware";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { OSStatusSchema } from "../types/os.types";
 
 export const getOSStats = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -49,7 +50,7 @@ export const updateOSStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => z.object({
     os_id: z.string(),
-    novo_status: z.string()
+    novo_status: OSStatusSchema
   }).parse(data))
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;

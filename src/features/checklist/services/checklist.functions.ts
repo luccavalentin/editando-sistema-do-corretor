@@ -3,7 +3,6 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { iaChat } from "@/features/library/lib/ia.functions";
 
-
 export const getChecklistTemplates = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => z.object({ tipo: z.string() }).parse(data))
@@ -53,17 +52,13 @@ export const saveChecklist = createServerFn({ method: "POST" })
 
     if (error) throw new Error(error.message);
 
-    // Se houver item NÃO OK no diagnóstico, solicitar sugestão da IA em segundo plano
     if (data.tipo === 'diagnostico_defeitos') {
       const itensNaoOk = (data.respostas as any[]).filter(r => r.status === 'nao_ok');
       if (itensNaoOk.length > 0) {
-        // Chamada "fire-and-forget" para sugestão
         const prompt = `Itens com defeito: ${itensNaoOk.map(i => i.item).join(', ')}. Observações: ${itensNaoOk.map(i => i.observacao).join('; ')}`;
         iaChat({ mensagem: prompt, is_suggestion: true } as any).catch(console.error);
       }
     }
-
-    // Se finalizado, transicionar status da OS via RPC
 
     if (data.finalizado) {
       let novoStatus = 'checklist_diagnostico';
@@ -75,7 +70,6 @@ export const saveChecklist = createServerFn({ method: "POST" })
         novoStatus = 'aguardando_retirada';
       } else if (data.tipo === 'conferencia_final') {
         novoStatus = 'aguardando_retirada';
-        // Lógica de Ranking: Checklist Final sem retrabalho
         const temRetrabalho = data.respostas.some((r: any) => r.status === 'nao_ok');
         if (!temRetrabalho) {
           const { data: os } = await context.supabase

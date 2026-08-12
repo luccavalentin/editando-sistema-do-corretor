@@ -1,11 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useServerFn } from '@tanstack/react-start';
-import { searchClienteLocal, openOS, getVeiculosByCliente } from '@/integrations/management.functions';
+import { searchClienteLocal, openOS } from '@/features/os/services/os.functions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Search, UserPlus, Truck, Plus, Printer, Camera } from 'lucide-react';
+import { UserPlus, Truck, Plus, Printer, Camera } from 'lucide-react';
 import { toast } from 'sonner';
 
 export const Route = createFileRoute('/management')({
