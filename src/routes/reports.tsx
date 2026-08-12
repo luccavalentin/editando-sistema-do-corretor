@@ -3,9 +3,11 @@ import { useQuery } from '@tanstack/react-query';
 import { getReportsData } from '@/features/os/services/os.functions';
 import { useServerFn } from '@tanstack/react-start';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Download, Filter } from 'lucide-react';
+import { Download, Filter, TrendingUp } from 'lucide-react';
+import { StatCard } from '@/features/os/components/StatCard';
+
 
 export const Route = createFileRoute('/reports')({
   component: ReportsPage,
