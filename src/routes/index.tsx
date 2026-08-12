@@ -60,11 +60,21 @@ function Dashboard() {
           <TVStatCard label="OS em atraso" value={stats?.atrasadas || 0} icon={<AlertCircle />} color="text-orange" pulse />
         </div>
 
-        <div className="flex-1 grid grid-cols-8 gap-4 overflow-hidden">
+        <motion.div 
+          layout
+          className="flex-1 grid grid-cols-8 gap-4 overflow-hidden"
+        >
+          <AnimatePresence mode="popLayout">
           {STATUS_FLOW.slice(0, 8).map(status => {
             const count = osList.filter((o: any) => o.status === status).length;
             return (
-              <div key={status} className="flex flex-col gap-3">
+              <motion.div 
+                key={status} 
+                layout
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex flex-col gap-3"
+              >
                 <div className="bg-white/5 rounded-md p-4 border border-white/10 flex flex-col items-center justify-center gap-2 aspect-square">
                   <span className="text-3xl font-semibold">{count}</span>
                   <span className="text-[10px] uppercase font-bold text-center leading-tight opacity-80">{STATUS_LABELS[status]}</span>
@@ -75,9 +85,9 @@ function Dashboard() {
                     {(osList as any[]).filter((o: any) => o.status === status).map((o: any) => (
                       <div key={o.id} className="border-b border-white/10 pb-1">{o.protocolo}</div>
                     ))}
-                  </div>
-                </div>
-              </div>
+              </motion.div>
+          </AnimatePresence>
+        </motion.div>
             );
           })}
         </div>

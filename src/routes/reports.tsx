@@ -1,5 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
+import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '@/lib/utils';
 import { getReportsData } from '@/features/os/services/os.functions';
 import { useServerFn } from '@tanstack/react-start';
 import { Button } from '@/components/ui/button';
@@ -49,10 +51,25 @@ function ReportsPage() {
     document.body.removeChild(link);
   };
 
-  if (isLoading) return <div className="p-5">Carregando relatórios...</div>;
+  if (isLoading) return (
+    <div className="p-8 space-y-10 bg-background min-h-screen">
+      <div className="h-20 w-full bg-muted/20 animate-pulse rounded" />
+      <div className="grid grid-cols-3 gap-8">
+        <div className="h-32 bg-muted/20 animate-pulse rounded" />
+        <div className="h-32 bg-muted/20 animate-pulse rounded" />
+        <div className="h-32 bg-muted/20 animate-pulse rounded" />
+      </div>
+      <div className="h-96 bg-muted/20 animate-pulse rounded" />
+    </div>
+  );
 
   return (
-    <div className="p-8 space-y-10 bg-background min-h-screen">
+    <motion.div 
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: [0.2, 0, 0, 1] }}
+      className="p-8 space-y-10 bg-background min-h-screen"
+    >
       <div className="flex justify-between items-end border-b border-border pb-6">
         <div className="space-y-1">
           <div className="flex items-center gap-3">
@@ -167,7 +184,7 @@ function ReportsPage() {
           </TableBody>
         </Table>
       </Card>
-    </div>
+    </motion.div>
 
   );
 }
