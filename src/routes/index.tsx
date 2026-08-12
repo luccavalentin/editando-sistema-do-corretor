@@ -110,7 +110,7 @@ function Dashboard() {
               <div className="text-3xl font-mono font-bold">{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
               <div className="text-white/40 font-medium uppercase tracking-widest text-xs">Atualização em tempo real</div>
             </div>
-            <Button variant="ghost" onClick={() => setViewMode('operacional')} className="text-white/40 hover:text-white">
+            <Button variant="ghost" onClick={() => setViewMode('operacional')} className="text-white/70 hover:text-white">
               <Maximize2 className="w-6 h-6" />
             </Button>
           </div>
@@ -130,7 +130,7 @@ function Dashboard() {
               <div key={status} className="flex flex-col gap-3">
                 <div className="bg-white/5 rounded-md p-4 border border-white/10 flex flex-col items-center justify-center gap-2 aspect-square">
                   <span className="text-3xl font-semibold">{count}</span>
-                  <span className="text-[10px] uppercase font-bold text-center leading-tight opacity-60">{STATUS_LABELS[status]}</span>
+                  <span className="text-[10px] uppercase font-bold text-center leading-tight opacity-80">{STATUS_LABELS[status]}</span>
                 </div>
                 <div className="flex-1 bg-white/5 rounded-md p-2 border border-white/10 overflow-hidden relative">
                   {/* Feed simplificado */}
@@ -201,7 +201,7 @@ function Dashboard() {
                   <Card key={os.id} className="rounded-sm border border-border shadow-xs bg-card group hover:border-primary/30 transition-colors">
                     <CardContent className="p-3 space-y-2">
                       <div className="flex justify-between items-start">
-                        <span className="text-xs font-mono font-bold text-navy/40">{os.protocolo}</span>
+                        <span className="text-xs font-mono font-bold text-navy/60">{os.protocolo}</span>
                         <Clock className="w-3 h-3 text-muted-foreground" />
                       </div>
                       
