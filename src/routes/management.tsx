@@ -144,30 +144,30 @@ function ManagementPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 print:hidden">
         <div className="md:col-span-2 lg:col-span-3 space-y-6">
           {step === 1 && (
-            <Card className="rounded-sm border border-border shadow-xs bg-card overflow-hidden">
-              <CardHeader className="bg-muted/30 border-b border-border py-4">
-                <CardTitle className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-navy">
-                  <UserPlus className="w-4 h-4 text-primary" />
+            <Card className="elevation-1 bg-card overflow-hidden">
+              <CardHeader className="bg-muted/30 border-b border-border py-4 px-6">
+                <CardTitle className="flex items-center gap-2.5 text-[13px] font-semibold uppercase tracking-wider text-primary">
+                  <UserPlus className="w-4 h-4 text-orange" />
                   1. Identificação do Cliente
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-6 space-y-6">
-                <div className="flex gap-2">
+              <CardContent className="p-8 space-y-8">
+                <div className="flex gap-3">
                   <Input 
                     placeholder="Buscar por CNPJ ou Nome..." 
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="rounded-sm h-10 border-border bg-background focus:ring-1 focus:ring-primary text-sm"
+                    className="h-10 focus-visible:ring-primary/30"
                   />
-                  <Button onClick={handleSearch} className="h-10 px-6 rounded-sm bg-navy text-white hover:bg-navy/90 font-bold text-xs uppercase tracking-widest">
-                    BUSCAR
+                  <Button onClick={handleSearch} className="h-10 px-8 bg-primary text-white hover:bg-primary/90 font-semibold text-[11px] uppercase tracking-wider">
+                    Buscar
                   </Button>
                 </div>
-                <div className="p-8 border border-dashed border-border rounded-sm flex flex-col items-center justify-center text-center bg-muted/10">
-                  <UserPlus className="w-8 h-8 mb-3 opacity-20 text-navy" />
-                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider max-w-xs">Cliente não encontrado localmente ou na Omie?</p>
-                  <Button variant="outline" size="sm" className="mt-4 rounded-sm border-primary text-primary hover:bg-primary/5 text-[10px] font-bold uppercase tracking-[0.2em] h-8">
-                    NOVO CADASTRO MANUAL
+                <div className="p-12 border border-dashed border-border rounded-md flex flex-col items-center justify-center text-center bg-muted/5 group hover:bg-muted/10 transition-colors">
+                  <UserPlus className="w-10 h-10 mb-4 opacity-20 text-primary group-hover:scale-110 transition-transform" />
+                  <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-widest max-w-xs">Cliente não encontrado localmente ou na Omie?</p>
+                  <Button variant="outline" size="sm" className="mt-5 h-9 px-6 rounded-md border-primary text-primary hover:bg-primary/5 text-[11px] font-semibold uppercase tracking-wider transition-all">
+                    Novo Cadastro Manual
                   </Button>
                 </div>
               </CardContent>
@@ -289,35 +289,35 @@ function ManagementPage() {
         </div>
 
         <div className="space-y-4 print:hidden">
-          <Card className="rounded-sm border border-border shadow-xs bg-card overflow-hidden">
-            <CardHeader className="bg-muted/30 border-b border-border py-4 px-4">
-              <CardTitle className="text-xs font-bold uppercase tracking-widest text-navy">RESUMO DA OS</CardTitle>
+          <Card className="elevation-1 bg-card overflow-hidden">
+            <CardHeader className="bg-muted/30 border-b border-border py-4 px-5">
+              <CardTitle className="text-[11px] font-semibold uppercase tracking-widest text-primary">Resumo da OS</CardTitle>
             </CardHeader>
-            <CardContent className="p-4 space-y-5">
+            <CardContent className="p-5 space-y-6">
               <div className="flex justify-between items-center">
-                <div className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Status</div>
-                <div className="bg-green-500/10 text-green-700 border border-green-500/20 px-2 py-0.5 rounded-xs text-[9px] font-bold uppercase">NOVA OS</div>
+                <div className="text-[11px] uppercase font-medium text-muted-foreground tracking-wider">Status</div>
+                <div className="bg-emerald-500/10 text-emerald-700 border border-emerald-500/20 px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider">Nova OS</div>
               </div>
               
               {selectedCliente && (
                 <div className="space-y-1">
-                  <div className="text-xs uppercase font-bold text-muted-foreground">Cliente</div>
-                  <div className="text-sm font-bold text-navy">{selectedCliente.nome}</div>
-                  <div className="text-xs text-muted-foreground">{selectedCliente.documento}</div>
+                  <div className="text-[11px] uppercase font-medium text-muted-foreground tracking-wider">Cliente</div>
+                  <div className="text-sm font-semibold text-primary">{selectedCliente.nome}</div>
+                  <div className="text-[11px] text-muted-foreground font-medium">{selectedCliente.documento}</div>
                 </div>
               )}
 
               {selectedVeiculo && (
-                <div className="space-y-1 border-t border-navy/5 pt-4">
-                  <div className="text-xs uppercase font-bold text-muted-foreground">Veículo</div>
-                  <div className="text-sm font-bold text-navy">{selectedVeiculo.placa_cavalo}</div>
+                <div className="space-y-1 border-t border-border pt-5">
+                  <div className="text-[11px] uppercase font-medium text-muted-foreground tracking-wider">Veículo</div>
+                  <div className="text-sm font-semibold text-primary">{selectedVeiculo.placa_cavalo}</div>
                 </div>
               )}
 
               {osData.box && (
-                <div className="flex justify-between items-center border-t border-navy/5 pt-4">
-                  <div className="text-xs uppercase font-bold text-muted-foreground">Box</div>
-                  <div className="text-sm font-bold text-navy">{osData.box}</div>
+                <div className="flex justify-between items-center border-t border-border pt-5">
+                  <div className="text-[11px] uppercase font-medium text-muted-foreground tracking-wider">Box</div>
+                  <div className="text-sm font-semibold text-primary">{osData.box}</div>
                 </div>
               )}
             </CardContent>
