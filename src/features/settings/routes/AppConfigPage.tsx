@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -9,9 +9,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Settings, Clock, ShieldCheck, Database, MessageSquare, RefreshCw, AlertCircle, ExternalLink } from 'lucide-react';
+import { Settings, Clock, ShieldCheck, Database, MessageSquare, RefreshCw, AlertCircle, ExternalLink, Lock, Eye, EyeOff, CheckCircle2 } from 'lucide-react';
 import { useServerFn } from '@tanstack/react-start';
 import { syncClientesOmie, syncEstoqueOmie, checkOmieStatus } from '@/features/omie/services/omie.functions';
+import { getSecretsStatus, saveSecret } from '../services/secrets.functions';
 import { cn } from '@/lib/utils';
 
 export default function AppConfigPage() {
@@ -52,14 +53,14 @@ export default function AppConfigPage() {
   const getOmieStatus = useServerFn(checkOmieStatus);
   const { data: omieStatus } = useQuery({
     queryKey: ['omie_status'],
-    queryFn: () => getOmieStatus()
+    queryFn: () => getOmieStatus({ data: undefined })
   });
 
   const syncClientes = useServerFn(syncClientesOmie);
   const syncEstoque = useServerFn(syncEstoqueOmie);
 
   const mutationClientes = useMutation({
-    mutationFn: () => syncClientes(),
+    mutationFn: () => syncClientes({ data: undefined }),
     onSuccess: () => {
       toast.success('Sincronização de clientes iniciada com sucesso');
       queryClient.invalidateQueries({ queryKey: ['omie_sync_logs'] });
@@ -68,13 +69,91 @@ export default function AppConfigPage() {
   });
 
   const mutationEstoque = useMutation({
-    mutationFn: () => syncEstoque(),
+    mutationFn: () => syncEstoque({ data: undefined }),
     onSuccess: () => {
       toast.success('Sincronização de estoque iniciada com sucesso');
       queryClient.invalidateQueries({ queryKey: ['omie_sync_logs'] });
     },
     onError: (error: any) => toast.error(`Erro ao sincronizar estoque: ${error.message}`)
   });
+
+  const [showValues, setShowValues] = useState<Record<string, boolean>>({});
+  const getSecrets = useServerFn(getSecretsStatus);
+  const { data: secretsStatus, refetch: refetchSecrets } = useQuery({
+    queryKey: ['secrets_status'],
+    queryFn: () => getSecrets({ data: undefined })
+  });
+
+  const saveSecretFn = useServerFn(saveSecret);
+  const secretMutation = useMutation({
+    mutationFn: (data: { key: string, value: string }) => saveSecretFn({ data }),
+    onSuccess: (res) => {
+      if (res.success) {
+        toast.success("Segredo atualizado");
+        refetchSecrets();
+      } else {
+        toast.info(res.message, { duration: 6000 });
+      }
+    }
+  });
+
+  const toggleShow = (key: string) => {
+    setShowValues(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const SecretInput = ({ label, secretKey, category }: { label: string, secretKey: string, category: string }) => {
+    const isSet = secretsStatus?.[secretKey];
+    const [val, setVal] = useState("");
+
+    return (
+      <div className="p-4 rounded border border-border bg-card space-y-3">
+        <div className="flex justify-between items-center">
+          <div className="space-y-0.5">
+            <Label className="text-[10px] font-bold uppercase tracking-widest text-navy flex items-center gap-1.5">
+              <Lock className="w-3 h-3 text-primary/60" />
+              {label}
+            </Label>
+            <div className="flex items-center gap-2">
+              <Badge variant="outline" className="text-[8px] px-1 py-0 border-primary/20 text-primary/70">{category}</Badge>
+              {isSet ? (
+                <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-200/50 text-[8px] px-1 py-0 uppercase">Configurado</Badge>
+              ) : (
+                <Badge className="bg-amber-500/10 text-amber-600 border-amber-200/50 text-[8px] px-1 py-0 uppercase">Pendente</Badge>
+              )}
+            </div>
+          </div>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => toggleShow(secretKey)}
+            className="h-8 w-8 p-0"
+          >
+            {showValues[secretKey] ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+          </Button>
+        </div>
+        <div className="flex gap-2">
+          <Input 
+            type={showValues[secretKey] ? "text" : "password"} 
+            placeholder={isSet ? "••••••••••••••••" : "Insira a chave..."}
+            value={val}
+            onChange={(e) => setVal(e.target.value)}
+            className="h-9 text-xs"
+          />
+          <Button 
+            className="bg-navy text-white h-9 px-4 text-[10px] font-bold uppercase tracking-widest"
+            onClick={() => {
+              if (!val) return;
+              secretMutation.mutate({ key: secretKey, value: val });
+              setVal("");
+            }}
+            disabled={secretMutation.isPending || !val}
+          >
+            Salvar
+          </Button>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="space-y-6">
@@ -88,6 +167,7 @@ export default function AppConfigPage() {
           <TabsTrigger value="sla" className="rounded-xs text-[11px] font-bold uppercase tracking-wider px-4">SLA & PRAZOS</TabsTrigger>
           <TabsTrigger value="whatsapp" className="rounded-xs text-[11px] font-bold uppercase tracking-wider px-4">WHATSAPP</TabsTrigger>
           <TabsTrigger value="omie" className="rounded-xs text-[11px] font-bold uppercase tracking-wider px-4">INTEGRAÇÃO OMIE</TabsTrigger>
+          <TabsTrigger value="secrets" className="rounded-xs text-[11px] font-bold uppercase tracking-wider px-4">SEGREDOS & CHAVES</TabsTrigger>
         </TabsList>
 
         <TabsContent value="sla" className="space-y-4">
@@ -277,6 +357,39 @@ export default function AppConfigPage() {
                     </TableBody>
                   </Table>
                 </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="secrets" className="space-y-4">
+          <Card className="rounded-sm border border-border shadow-xs bg-card">
+            <CardHeader className="bg-muted/30 border-b border-border py-4">
+              <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-navy">
+                <Lock className="w-4 h-4 text-primary" />
+                CENTRAL DE SEGREDOS & CHAVES API
+              </CardTitle>
+              <CardDescription className="text-[10px] uppercase font-semibold text-muted-foreground/60 tracking-wider">
+                Gerencie as chaves de integração do sistema. As chaves são protegidas e nunca expostas no cliente.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <SecretInput label="Omie App Key" secretKey="OMIE_APP_KEY" category="ERP" />
+                <SecretInput label="Omie App Secret" secretKey="OMIE_APP_SECRET" category="ERP" />
+                <SecretInput label="Gemini API Key" secretKey="GEMINI_API_KEY" category="IA" />
+                <SecretInput label="OpenAI API Key" secretKey="OPENAI_API_KEY" category="IA" />
+                <SecretInput label="Anthropic API Key" secretKey="ANTHROPIC_API_KEY" category="IA" />
+                <SecretInput label="WhatsApp Token" secretKey="WHATSAPP_API_TOKEN" category="WhatsApp" />
+              </div>
+              
+              <div className="mt-8 p-4 rounded border border-primary/20 bg-primary/5 space-y-2">
+                <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-primary">
+                  <ShieldCheck className="w-4 h-4" />
+                  Segurança & Persistência
+                </div>
+                <p className="text-[11px] font-medium leading-relaxed text-muted-foreground">
+                  Para máxima proteção e persistência garantida, recomendamos que as chaves sejam inseridas diretamente no painel do <strong>Lovable Cloud</strong> (Settings → Environment/Secrets). A interface acima serve para monitorar quais chaves estão ativas no servidor.
+                </p>
               </div>
             </CardContent>
           </Card>
