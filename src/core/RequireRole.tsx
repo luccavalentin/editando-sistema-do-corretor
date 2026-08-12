@@ -2,11 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { AppRole, canAccessRoute } from '@/core/access-matrix';
 import { getCurrentUserRole } from '@/core/auth';
 import { useNavigate, useLocation } from '@tanstack/react-router';
+import { toast } from 'sonner';
 
-/**
- * Wrapper de rota para controle de acesso centralizado.
- * Resolve a checagem antes de renderizar para evitar flash de conteúdo.
- */
 export function RequireRole({ children }: { children: React.ReactNode }) {
   const [role, setRole] = useState<AppRole | null>(null);
   const [loading, setLoading] = useState(true);
@@ -15,17 +12,23 @@ export function RequireRole({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     async function checkAccess() {
-      const userRole = await getCurrentUserRole().catch(() => null);
-      setRole(userRole);
-      setLoading(false);
+      try {
+        const userRole = await getCurrentUserRole();
+        setRole(userRole);
+        setLoading(false);
 
-      if (!userRole) {
+        if (!userRole) {
+          navigate({ to: '/login' });
+          return;
+        }
+
+        if (!canAccessRoute(location.pathname, userRole)) {
+          navigate({ to: '/' });
+        }
+      } catch (err) {
+        console.error("Auth check failed:", err);
+        setLoading(false);
         navigate({ to: '/login' });
-        return;
-      }
-
-      if (!canAccessRoute(location.pathname, userRole)) {
-        navigate({ to: '/' });
       }
     }
     checkAccess();
