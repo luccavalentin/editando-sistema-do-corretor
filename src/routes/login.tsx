@@ -35,7 +35,7 @@ function LoginPage() {
         return;
       }
 
-      toast.success("ele da acesso autorizado mas nao entra no sistema1!!!");
+      toast.success("Acesso autorizado");
       navigate({ to: '/' });
     } catch (err) {
       toast.error("Erro inesperado ao realizar login");
