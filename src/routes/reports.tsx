@@ -18,7 +18,6 @@ function ReportsPage() {
     queryFn: () => fetchReports({ data: { period: 'all' } })
   });
 
-
   const exportToCSV = () => {
     if (!reports || reports.length === 0) return;
     
@@ -96,41 +95,46 @@ function ReportsPage() {
         </Card>
       </div>
 
-      <div className="bg-card elevation-1 rounded-md overflow-hidden">
-        <Table className="table-system">
-          <TableHeader>
-            <TableRow>
-              <TableHead>Protocolo</TableHead>
-              <TableHead>Cliente</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Vlr Peças</TableHead>
-              <TableHead className="text-right">Vlr Serviço</TableHead>
-              <TableHead className="text-right pr-6">Data</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {reports?.map((os: any) => (
-              <TableRow key={os.id} className="interactive-item">
-                <TableCell className="pl-8 font-mono text-[11px] font-semibold text-primary">{os.protocolo}</TableCell>
-                <TableCell className="font-semibold text-primary uppercase tracking-tight">{os.cliente?.nome}</TableCell>
-                <TableCell>
-                  <span className="bg-primary/5 text-primary border border-primary/10 px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider">
-                    {os.status.replace('_', ' ')}
-                  </span>
-                </TableCell>
-                <TableCell className="text-right tabular-nums font-medium">R$ {os.valor_pecas?.toLocaleString() || '0,00'}</TableCell>
-                <TableCell className="text-right tabular-nums font-medium">R$ {os.valor_servico?.toLocaleString() || '0,00'}</TableCell>
-                <TableCell className="text-[10px] text-muted-foreground font-semibold uppercase text-right pr-8">
-                  {new Date(os.criado_em).toLocaleDateString()}
-                </TableCell>
-              </TableRow>
-            ))}
-            {(!reports || reports.length === 0) && (
+      <Card className="elevation-1 overflow-hidden bg-card">
+        <CardHeader className="bg-muted/30 border-b border-border py-4 px-6">
+          <CardTitle className="text-[11px] font-semibold uppercase tracking-widest text-primary">Detalhamento Operacional</CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          <Table className="table-system">
+            <TableHeader>
               <TableRow>
-                <TableCell colSpan={6} className="h-24 text-center">
-                  <span className="text-[10px] uppercase font-bold text-muted-foreground/30 tracking-widest italic">Nenhum registro encontrado</span>
-                </TableCell>
+                <TableHead className="pl-8">Protocolo</TableHead>
+                <TableHead>Cliente</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="text-right">Peças</TableHead>
+                <TableHead className="text-right">Serviço</TableHead>
+                <TableHead className="text-right pr-8">Data</TableHead>
               </TableRow>
+            </TableHeader>
+            <TableBody>
+              {reports?.map((os: any) => (
+                <TableRow key={os.id} className="interactive-item">
+                  <TableCell className="pl-8 font-mono text-[11px] font-semibold text-primary">{os.protocolo}</TableCell>
+                  <TableCell className="font-semibold text-primary uppercase tracking-tight">{os.cliente?.nome}</TableCell>
+                  <TableCell>
+                    <span className="bg-primary/5 text-primary border border-primary/10 px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider">
+                      {os.status.replace('_', ' ')}
+                    </span>
+                  </TableCell>
+                  <TableCell className="text-right tabular-nums font-medium">R$ {os.valor_pecas?.toLocaleString() || '0,00'}</TableCell>
+                  <TableCell className="text-right tabular-nums font-medium">R$ {os.valor_servico?.toLocaleString() || '0,00'}</TableCell>
+                  <TableCell className="text-[10px] text-muted-foreground font-semibold uppercase text-right pr-8">
+                    {new Date(os.criado_em).toLocaleDateString()}
+                  </TableCell>
+                </TableRow>
+              ))}
+              {(!reports || reports.length === 0) && (
+                <TableRow>
+                  <TableCell colSpan={6} className="h-24 text-center">
+                    <span className="text-[10px] uppercase font-bold text-muted-foreground/30 tracking-widest italic">Nenhum registro encontrado</span>
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </CardContent>
