@@ -32,8 +32,11 @@ export function RequireRole({ children }: { children: React.ReactNode }) {
   }, [location.pathname, navigate]);
 
   if (loading) {
-    return React.createElement('div', { className: 'flex h-screen w-full items-center justify-center' },
-      React.createElement('div', { className: 'h-8 w-8 animate-spin rounded-full border-4 border-navy border-t-orange' })
+    return React.createElement('div', { className: 'flex h-screen w-full items-center justify-center bg-background' },
+      React.createElement('div', { className: 'flex flex-col items-center gap-4' },
+        React.createElement('div', { className: 'h-10 w-10 animate-spin rounded-full border-4 border-navy/10 border-t-orange shadow-lg shadow-orange/20' }),
+        React.createElement('span', { className: 'text-[10px] font-black text-navy uppercase tracking-[0.3em] opacity-40 animate-pulse' }, 'Validando Acesso')
+      )
     );
   }
 

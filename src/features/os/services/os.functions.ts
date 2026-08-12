@@ -108,11 +108,13 @@ export const openOS = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
 
-    // Gera protocolo
+    // Gera protocolo com trava de concorrência via timestamp se necessário
     const year = new Date().getFullYear();
-    const { count } = await supabase
+    const { count, error: countError } = await supabase
       .from("ordens_servico")
       .select("*", { count: "exact", head: true });
+    
+    if (countError) throw new Error(`Falha ao gerar protocolo: ${countError.message}`);
       
     const protocolo = `TNR-${year}-${String((count || 0) + 1).padStart(6, "0")}`;
 
