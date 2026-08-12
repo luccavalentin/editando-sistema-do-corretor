@@ -199,16 +199,19 @@
     @apply text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4 flex items-center gap-2;
   }
 
-@layer utilities {
   .btn-touch {
     @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
   }
-}
 
-@layer utilities {
   .surface {
     @apply bg-card border border-border shadow-xs rounded-md;
   }
-  .table-dense tbody tr { height: 2.25rem; }
-  .table-dense tbody tr:nth-child(even) { background-color: color-mix(in oklab, var(--muted) 55%, transparent); }
+
+  .table-dense tbody tr { 
+    height: 2.25rem; 
+  }
+
+  .table-dense tbody tr:nth-child(even) { 
+    background-color: color-mix(in oklab, var(--muted) 55%, transparent); 
+  }
 }
