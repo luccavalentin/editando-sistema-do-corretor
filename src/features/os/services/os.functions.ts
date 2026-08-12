@@ -30,6 +30,17 @@ export const updateOSStatus = createServerFn({ method: "POST" })
       _usuario_id: userId
     });
     if (error) throw new Error(error.message);
+    
+    // Automação Omie: Se status transicionou para 'enviado_financeiro', enviar para Omie
+    if (data.novo_status === 'enviado_financeiro') {
+      try {
+        await pushOSOmie({ data: { os_id: data.os_id } });
+      } catch (err) {
+        console.error("[OMIE] Erro no push automático:", err);
+        // Não jogamos erro aqui para não travar a transição de status no app
+      }
+    }
+    
     return { success: true };
   });
 
