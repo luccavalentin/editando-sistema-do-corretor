@@ -2,6 +2,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState, useRef, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import FollowUpPage from '@/features/ia/routes/FollowUpPage';
 import { 
   Bot, 
   Send, 
@@ -15,7 +16,8 @@ import {
   CheckCircle2,
   AlertCircle,
   FileText,
-  History
+  History,
+  MessageCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -90,6 +92,9 @@ function IAModule() {
             </TabsTrigger>
             <TabsTrigger value="library" className="w-full justify-start gap-3 rounded-xl data-[state=active]:bg-orange data-[state=active]:text-white text-white/60">
               <Library className="w-4 h-4" /> Biblioteca
+            </TabsTrigger>
+            <TabsTrigger value="followup" className="w-full justify-start gap-3 rounded-xl data-[state=active]:bg-orange data-[state=active]:text-white text-white/60">
+              <MessageCircle className="w-4 h-4" /> Follow-up IA
             </TabsTrigger>
             <TabsTrigger value="history" className="w-full justify-start gap-3 rounded-xl data-[state=active]:bg-orange data-[state=active]:text-white text-white/60">
               <History className="w-4 h-4" /> Histórico
@@ -224,6 +229,10 @@ function IAModule() {
                 ))}
               </div>
             </div>
+          </TabsContent>
+
+          <TabsContent value="followup" className="h-full m-0 p-8 overflow-auto">
+            <FollowUpPage />
           </TabsContent>
 
           <TabsContent value="settings" className="h-full m-0 p-8">

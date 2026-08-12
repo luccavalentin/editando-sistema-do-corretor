@@ -1,9 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import UsersPage from '@/features/users/routes/UsersPage';
+import AppConfigPage from '@/features/settings/routes/AppConfigPage';
+import ProcessosPage from '@/features/checklist/routes/ProcessosPage';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { RefreshCw, Database, Send, AlertTriangle } from 'lucide-react';
+import { RefreshCw, Database, Send, AlertTriangle, Settings, Users, Briefcase } from 'lucide-react';
 import { useServerFn } from '@tanstack/react-start';
 import { syncClientesOmie, syncEstoqueOmie } from '@/integrations/omie.functions';
 import { toast } from 'sonner';
@@ -37,6 +39,8 @@ function SettingsPage() {
       <Tabs defaultValue="integracoes" className="w-full">
         <TabsList className="bg-navy/5 p-1 rounded-xl mb-6">
           <TabsTrigger value="integracoes" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-navy">Integrações</TabsTrigger>
+          <TabsTrigger value="config" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-navy">Sistema</TabsTrigger>
+          <TabsTrigger value="processos" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-navy">Processos</TabsTrigger>
           <TabsTrigger value="usuarios" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-navy">Usuários</TabsTrigger>
         </TabsList>
         <TabsContent value="integracoes" className="space-y-6">
@@ -90,6 +94,12 @@ function SettingsPage() {
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+        <TabsContent value="config">
+          <AppConfigPage />
+        </TabsContent>
+        <TabsContent value="processos">
+          <ProcessosPage />
         </TabsContent>
         <TabsContent value="usuarios">
           <UsersPage />
