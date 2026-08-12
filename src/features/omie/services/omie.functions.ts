@@ -2,6 +2,16 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
+export const checkOmieStatus = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async () => {
+    const appKey = process.env['OMIE_APP_KEY'];
+    const appSecret = process.env['OMIE_APP_SECRET'];
+    return { 
+      configured: !!(appKey && appSecret) 
+    };
+  });
+
 const OMIE_API_URL = "https://app.omie.com.br/api/v1";
 
 async function callOmie(endpoint: string, method: string, params: any, retryCount = 0): Promise<any> {
