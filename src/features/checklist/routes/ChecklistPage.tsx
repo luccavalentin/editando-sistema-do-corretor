@@ -3,28 +3,39 @@ import { useSuspenseQuery, useMutation, useQueryClient } from '@tanstack/react-q
 import { getChecklistTemplates, saveChecklist } from '../lib/checklist.functions';
 import { getOSList } from '@/integrations/management.functions';
 import { ChecklistItem, type ChecklistResponse } from '../components/ChecklistItem';
+import { ChecklistDiarioItem, type ChecklistDiarioResponse } from '../components/ChecklistDiarioItem';
 import { SignaturePad } from '../components/SignaturePad';
 import { db, saveOfflineResponse, markAsSynced } from '../lib/db';
 import { useServerFn } from '@tanstack/react-start';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Loader2, Wifi, WifiOff, Send, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Loader2, Wifi, WifiOff, ArrowRight, ArrowLeft, ClipboardList, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLiveQuery } from 'dexie-react-hooks';
 
+const SETORES = ['Oficina Mecânica', 'Elétrica', 'Pintura', 'Almoxarifado', 'Escritório'];
+
 export function ChecklistPage() {
   const queryClient = useQueryClient();
+  const [mode, setMode] = useState<'selection' | 'tecnico' | 'diario'>('selection');
   const [selectedOS, setSelectedOS] = useState<string | null>(null);
+  const [selectedSetor, setSelectedSetor] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<string>('0');
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   
+  const today = new Date().toISOString().split('T')[0];
+
   // Queries
-  const { data: templates } = useSuspenseQuery({
+  const { data: tecnicoTemplates } = useSuspenseQuery({
     queryKey: ['checklist-templates', 'diagnostico_defeitos'],
     queryFn: () => getChecklistTemplates({ data: { tipo: 'diagnostico_defeitos' } })
+  });
+
+  const { data: diarioTemplates } = useSuspenseQuery({
+    queryKey: ['checklist-templates', 'checklist_diario'],
+    queryFn: () => getChecklistTemplates({ data: { tipo: 'checklist_diario' } })
   });
 
   const { data: osList } = useSuspenseQuery({
@@ -33,18 +44,24 @@ export function ChecklistPage() {
   });
 
   // Offline Sync State
-  const pendingResponses = useLiveQuery(() => selectedOS ? db.responses.where({ os_id: selectedOS, sincronizado: 0 }).toArray() : [], [selectedOS]);
-  const localResponses = useLiveQuery(() => selectedOS ? db.responses.where({ os_id: selectedOS }).toArray() : [], [selectedOS]);
+  const pendingResponses = useLiveQuery(
+    () => mode === 'tecnico' 
+      ? db.responses.where({ os_id: selectedOS, sincronizado: 0 }).toArray() 
+      : db.responses.where({ setor: selectedSetor, data: today, sincronizado: 0 }).toArray(),
+    [mode, selectedOS, selectedSetor, today]
+  );
+
+  const localResponses = useLiveQuery(
+    () => mode === 'tecnico'
+      ? db.responses.where({ os_id: selectedOS }).toArray()
+      : db.responses.where({ setor: selectedSetor, data: today }).toArray(),
+    [mode, selectedOS, selectedSetor, today]
+  );
 
   const responsesMap = useMemo(() => {
-    const map = new Map<string, ChecklistResponse>();
+    const map = new Map<string, any>();
     localResponses?.forEach((r: any) => {
-      map.set(r.item_id, {
-        item_id: r.item_id,
-        status: r.status,
-        observacao: r.observacao || '',
-        evidencias: r.evidencias || []
-      });
+      map.set(r.item_id, r);
     });
     return map;
   }, [localResponses]);
@@ -58,7 +75,9 @@ export function ChecklistPage() {
       markAsSynced(ids);
       toast.success("Checklist sincronizado!");
       if (variables.finalizado) {
+        setMode('selection');
         setSelectedOS(null);
+        setSelectedSetor(null);
         queryClient.invalidateQueries({ queryKey: ['ordens-servico'] });
       }
     }
@@ -76,64 +95,118 @@ export function ChecklistPage() {
     };
   }, []);
 
-  // Auto-sync when online
-  useEffect(() => {
-    if (isOnline && pendingResponses && pendingResponses.length > 0 && selectedOS) {
-      // Logic for background sync could be here
+  const handleResponseChange = async (res: ChecklistResponse | ChecklistDiarioResponse) => {
+    if (mode === 'tecnico' && selectedOS) {
+      await saveOfflineResponse({
+        os_id: selectedOS,
+        tipo: 'diagnostico_defeitos',
+        item_id: res.item_id,
+        status: (res as ChecklistResponse).status,
+        observacao: res.observacao || '',
+        evidencias: (res as ChecklistResponse).evidencias || [],
+        timestamp: Date.now(),
+        sincronizado: 0
+      } as any);
+    } else if (mode === 'diario' && selectedSetor) {
+      const dRes = res as ChecklistDiarioResponse;
+      await saveOfflineResponse({
+        os_id: null,
+        setor: selectedSetor,
+        data: today,
+        tipo: 'checklist_diario',
+        item_id: dRes.item_id,
+        ok_abertura: dRes.ok_abertura,
+        ok_fechamento: dRes.ok_fechamento,
+        observacao: dRes.observacao || '',
+        timestamp: Date.now(),
+        sincronizado: 0
+      } as any);
     }
-  }, [isOnline, pendingResponses, selectedOS]);
-
-  const handleResponseChange = async (res: ChecklistResponse) => {
-    if (!selectedOS) return;
-    await saveOfflineResponse({
-      os_id: selectedOS,
-      tipo: 'diagnostico_defeitos',
-      item_id: res.item_id,
-      status: res.status,
-      observacao: res.observacao || '',
-      evidencias: res.evidencias || []
-    });
   };
 
   const handleFinalize = async (signature: string) => {
-    if (!selectedOS) return;
-    
-    // Validar se todos itens tem resposta e se nao_ok tem obs
+    const templates = mode === 'tecnico' ? tecnicoTemplates : diarioTemplates;
     const allItensIds = templates.flatMap(t => (t.itens as any[]).map(i => i.id));
     const currentResponses = Array.from(responsesMap.values());
     
-    const faltam = allItensIds.filter(id => !responsesMap.has(id));
-    if (faltam.length > 0) {
-      toast.error(`Responda todos os itens (${faltam.length} pendentes)`);
-      return;
+    if (mode === 'tecnico') {
+      const faltam = allItensIds.filter(id => !responsesMap.has(id));
+      if (faltam.length > 0) {
+        toast.error(`Responda todos os itens (${faltam.length} pendentes)`);
+        return;
+      }
+      syncMutation.mutate({
+        os_id: selectedOS!,
+        tipo: 'diagnostico_defeitos',
+        respostas: currentResponses,
+        assinatura_url: signature,
+        finalizado: true
+      });
+    } else {
+      syncMutation.mutate({
+        os_id: null,
+        setor: selectedSetor!,
+        data: today,
+        tipo: 'checklist_diario',
+        respostas: currentResponses,
+        assinatura_url: signature,
+        finalizado: true
+      });
     }
-
-    const semObs = currentResponses.filter(r => r.status === 'nao_ok' && !r.observacao);
-    if (semObs.length > 0) {
-      toast.error("Itens 'NÃO OK' exigem observação.");
-      return;
-    }
-
-    if (!isOnline) {
-      toast.warning("Você está offline. A finalização será enviada assim que a conexão retornar.");
-      return;
-    }
-
-    syncMutation.mutate({
-      os_id: selectedOS,
-      tipo: 'diagnostico_defeitos',
-      respostas: currentResponses,
-      assinatura_url: signature,
-      finalizado: true
-    });
   };
 
-  if (!selectedOS) {
+  if (mode === 'selection') {
+    return (
+      <div className="p-6 max-w-4xl mx-auto space-y-8 bg-background min-h-screen">
+        <div className="border-b border-border pb-6">
+          <h1 className="text-xl font-black font-heading text-navy uppercase tracking-tighter">MÓDULO DE INSPEÇÃO</h1>
+          <p className="text-[11px] text-muted-foreground mt-1 font-bold uppercase tracking-[0.2em] opacity-60">Tecnoar Freios • Gestão de Qualidade</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Card 
+            className="p-8 border-2 border-border hover:border-primary/40 cursor-pointer transition-all group relative overflow-hidden flex flex-col items-center text-center space-y-4"
+            onClick={() => setMode('tecnico')}
+          >
+            <div className="w-16 h-16 rounded-sm bg-navy/5 flex items-center justify-center group-hover:bg-primary/5 transition-colors">
+              <ClipboardList className="w-8 h-8 text-navy group-hover:text-primary transition-colors" />
+            </div>
+            <div>
+              <h2 className="text-sm font-black text-navy uppercase tracking-widest">CHECKLIST TÉCNICO</h2>
+              <p className="text-[10px] text-muted-foreground uppercase font-bold mt-2 opacity-60">Diagnóstico de OS e veículos</p>
+            </div>
+            <ArrowRight className="w-4 h-4 text-muted-foreground/30 group-hover:text-primary transition-all group-hover:translate-x-1" />
+          </Card>
+
+          <Card 
+            className="p-8 border-2 border-border hover:border-primary/40 cursor-pointer transition-all group relative overflow-hidden flex flex-col items-center text-center space-y-4"
+            onClick={() => setMode('diario')}
+          >
+            <div className="w-16 h-16 rounded-sm bg-navy/5 flex items-center justify-center group-hover:bg-primary/5 transition-colors">
+              <CheckCircle2 className="w-8 h-8 text-navy group-hover:text-primary transition-colors" />
+            </div>
+            <div>
+              <h2 className="text-sm font-black text-navy uppercase tracking-widest">CHECKLIST DIÁRIO 5S</h2>
+              <p className="text-[10px] text-muted-foreground uppercase font-bold mt-2 opacity-60">Abertura e fechamento de setores</p>
+            </div>
+            <ArrowRight className="w-4 h-4 text-muted-foreground/30 group-hover:text-primary transition-all group-hover:translate-x-1" />
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  if (mode === 'tecnico' && !selectedOS) {
     return (
       <div className="p-6 max-w-4xl mx-auto space-y-6 bg-background min-h-screen">
-        <div className="border-b border-border pb-4">
-          <h1 className="text-lg font-bold font-heading text-navy uppercase tracking-tight">NOVO CHECKLIST TÉCNICO</h1>
-          <p className="text-[11px] text-muted-foreground mt-0.5 font-medium uppercase tracking-wider">Selecione uma Ordem de Serviço para inspeção</p>
+        <div className="flex items-center gap-4 border-b border-border pb-4">
+          <Button variant="ghost" size="sm" onClick={() => setMode('selection')} className="h-8 w-8 p-0 rounded-sm">
+            <ArrowLeft className="w-4 h-4" />
+          </Button>
+          <div>
+            <h1 className="text-lg font-bold font-heading text-navy uppercase tracking-tight">SELECIONE A ORDEM DE SERVIÇO</h1>
+            <p className="text-[11px] text-muted-foreground font-medium uppercase tracking-wider">Inspeção técnica vinculada a reparo</p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -151,30 +224,62 @@ export function ChecklistPage() {
               </div>
             </Card>
           ))}
-          {osList?.length === 0 && (
-            <div className="col-span-full p-12 text-center border border-dashed border-border rounded-sm bg-muted/10">
-              <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest italic opacity-40">Nenhuma Ordem de Serviço aberta disponível</p>
-            </div>
-          )}
         </div>
       </div>
     );
   }
 
-  const currentOS = osList?.find(os => os.id === selectedOS);
+  if (mode === 'diario' && !selectedSetor) {
+    return (
+      <div className="p-6 max-w-4xl mx-auto space-y-6 bg-background min-h-screen">
+        <div className="flex items-center gap-4 border-b border-border pb-4">
+          <Button variant="ghost" size="sm" onClick={() => setMode('selection')} className="h-8 w-8 p-0 rounded-sm">
+            <ArrowLeft className="w-4 h-4" />
+          </Button>
+          <div>
+            <h1 className="text-lg font-bold font-heading text-navy uppercase tracking-tight">SELECIONE O SETOR</h1>
+            <p className="text-[11px] text-muted-foreground font-medium uppercase tracking-wider">Checklist Diário 5S (FOR-OFI-001)</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {SETORES.map(setor => (
+            <Card key={setor} className="rounded-sm border border-border shadow-xs bg-card p-6 hover:border-primary/40 cursor-pointer transition-colors group flex flex-col items-center text-center gap-3" onClick={() => setSelectedSetor(setor)}>
+              <div className="w-10 h-10 rounded-sm bg-navy/5 flex items-center justify-center">
+                <ClipboardList className="w-5 h-5 text-navy opacity-40" />
+              </div>
+              <span className="font-bold text-xs text-navy uppercase tracking-widest">{setor}</span>
+            </Card>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  const currentOS = mode === 'tecnico' ? osList?.find(os => os.id === selectedOS) : null;
+  const templates = mode === 'tecnico' ? tecnicoTemplates : diarioTemplates;
 
   return (
     <div className="min-h-screen bg-muted/20 pb-20">
       <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm border-b border-border p-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" onClick={() => setSelectedOS(null)} className="h-8 w-8 p-0 rounded-sm">
+            <Button variant="ghost" size="sm" onClick={() => mode === 'tecnico' ? setSelectedOS(null) : setSelectedSetor(null)} className="h-8 w-8 p-0 rounded-sm">
               <ArrowLeft className="w-4 h-4" />
             </Button>
             <div className="h-8 w-px bg-border mx-1" />
             <div>
-              <div className="font-bold font-mono text-xs text-navy opacity-50 leading-none">{currentOS?.protocolo}</div>
-              <div className="text-[11px] font-bold text-navy uppercase tracking-tight mt-1">{currentOS?.veiculos.placa_cavalo} • {currentOS?.veiculos.modelo_cavalo}</div>
+              {mode === 'tecnico' ? (
+                <>
+                  <div className="font-bold font-mono text-xs text-navy opacity-50 leading-none">{currentOS?.protocolo}</div>
+                  <div className="text-[11px] font-bold text-navy uppercase tracking-tight mt-1">{currentOS?.veiculos.placa_cavalo}</div>
+                </>
+              ) : (
+                <>
+                  <div className="font-bold font-mono text-xs text-navy opacity-50 leading-none">{today}</div>
+                  <div className="text-[11px] font-bold text-navy uppercase tracking-tight mt-1">{selectedSetor}</div>
+                </>
+              )}
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -215,13 +320,24 @@ export function ChecklistPage() {
               </div>
               <div className="grid gap-3">
                 {(section.itens as any[]).map((item: any) => (
-                  <ChecklistItem
-                    key={item.id}
-                    label={item.label}
-                    itemId={item.id}
-                    value={responsesMap.get(item.id) || { item_id: item.id, status: 'nao_aplica', observacao: '', evidencias: [] }}
-                    onChange={handleResponseChange}
-                  />
+                  mode === 'tecnico' ? (
+                    <ChecklistItem
+                      key={item.id}
+                      label={item.label}
+                      itemId={item.id}
+                      value={responsesMap.get(item.id) || { item_id: item.id, status: 'nao_aplica', observacao: '', evidencias: [] }}
+                      onChange={handleResponseChange}
+                    />
+                  ) : (
+                    <ChecklistDiarioItem
+                      key={item.id}
+                      label={item.label}
+                      itemId={item.id}
+                      value={responsesMap.get(item.id) || { item_id: item.id, ok_abertura: false, ok_fechamento: false, observacao: '' }}
+                      onChange={handleResponseChange}
+                      tipo={item.grupo === 'abertura' ? 'abertura' : item.grupo === 'fechamento' ? 'fechamento' : 'dual'}
+                    />
+                  )
                 ))}
               </div>
               <div className="flex justify-end pt-4">
@@ -236,9 +352,11 @@ export function ChecklistPage() {
           <TabsContent value="final" className="space-y-4 pt-4">
             <div className="bg-card p-8 rounded-sm border border-border text-center space-y-6 shadow-xs">
               <div>
-                <h2 className="text-sm font-bold font-heading text-navy uppercase tracking-widest">CONCLUSÃO DA INSPEÇÃO</h2>
+                <h2 className="text-sm font-bold font-heading text-navy uppercase tracking-widest">
+                  {mode === 'tecnico' ? 'CONCLUSÃO DA INSPEÇÃO' : 'FECHAMENTO DO DIA'}
+                </h2>
                 <p className="text-[10px] text-muted-foreground font-medium uppercase mt-2 tracking-wider">
-                  Valide os dados e assine para oficializar o diagnóstico técnico
+                  {mode === 'tecnico' ? 'Valide os dados e assine para oficializar o diagnóstico técnico' : 'Confirme as marcações e assine o checklist diário'}
                 </p>
               </div>
               
@@ -247,14 +365,15 @@ export function ChecklistPage() {
                   <span className="opacity-50">Itens Respondidos:</span>
                   <span className="tabular-nums">{responsesMap.size} / {templates.reduce((acc: number, t: any) => acc + (t.itens as any[]).length, 0)}</span>
                 </div>
-                <div className="flex justify-between text-[11px] font-bold text-navy uppercase tracking-wider">
-                  <span className="opacity-50">Irregularidades:</span>
-                  <span className="text-red-600 tabular-nums">{Array.from(responsesMap.values()).filter(r => r.status === 'nao_ok').length}</span>
-                </div>
               </div>
 
               <SignaturePad onSave={handleFinalize} />
               
+              <div className="mt-8 pt-6 border-t border-border/50 text-left space-y-1">
+                <p className="text-[9px] font-bold text-muted-foreground uppercase opacity-40">Código: FOR-OFI-001</p>
+                <p className="text-[9px] font-bold text-muted-foreground uppercase opacity-40">Revisão: 00</p>
+              </div>
+
               {syncMutation.isPending && (
                 <div className="flex items-center justify-center gap-3 text-primary font-bold text-[10px] uppercase tracking-[0.2em] mt-6">
                   <Loader2 className="w-4 h-4 animate-spin" />
