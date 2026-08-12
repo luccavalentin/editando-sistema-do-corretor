@@ -45,16 +45,28 @@ export function ChecklistPage() {
 
   // Offline Sync State
   const pendingResponses = useLiveQuery(
-    () => mode === 'tecnico' 
-      ? db.responses.where({ os_id: selectedOS, sincronizado: 0 }).toArray() 
-      : db.responses.where({ setor: selectedSetor, data: today, sincronizado: 0 }).toArray(),
+    () => {
+      if (mode === 'tecnico') {
+        if (!selectedOS) return [];
+        return db.responses.where({ os_id: selectedOS, sincronizado: 0 }).toArray();
+      } else {
+        if (!selectedSetor || !today) return [];
+        return db.responses.where({ setor: selectedSetor, data: today, sincronizado: 0 }).toArray();
+      }
+    },
     [mode, selectedOS, selectedSetor, today]
   );
 
   const localResponses = useLiveQuery(
-    () => mode === 'tecnico'
-      ? db.responses.where({ os_id: selectedOS }).toArray()
-      : db.responses.where({ setor: selectedSetor, data: today }).toArray(),
+    () => {
+      if (mode === 'tecnico') {
+        if (!selectedOS) return [];
+        return db.responses.where({ os_id: selectedOS }).toArray();
+      } else {
+        if (!selectedSetor || !today) return [];
+        return db.responses.where({ setor: selectedSetor, data: today }).toArray();
+      }
+    },
     [mode, selectedOS, selectedSetor, today]
   );
 
