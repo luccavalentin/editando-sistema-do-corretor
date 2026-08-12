@@ -196,7 +196,10 @@
   }
 
   td {
-    @apply py-3 px-4 border-b border-border text-sm align-middle;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+    font-size: var(--text-sm);
+    vertical-align: middle;
   }
 
   /* Industrial Input States */
