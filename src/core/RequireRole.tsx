@@ -40,22 +40,21 @@ export function RequireRole({ children }: { children: React.ReactNode }) {
         const { data: roleData, error: roleError } = await supabase
           .from('user_roles')
           .select('role')
-          .eq('user_id', session.user.id)
-          .single();
+          .eq('user_id', session.user.id);
 
-        if (roleError || !roleData) {
+        const roles = roleData || [];
+
+        if (roleError || roles.length === 0) {
           console.error("Auth: User has no role assigned or RLS blocked read:", {
             error: roleError,
-            userId: session.user.id
+            userId: session.user.id,
+            rolesFound: roles.length
           });
           
-          // Debug fallback: if no role but authenticated, try to re-fetch or default to 'user' for safety check
-          // but here we must enforce role assignment
           if (isMounted) {
             toast.error("Permissões não encontradas. Contate o administrador.");
             setRole(null);
             setLoading(false);
-            // Don't navigate immediately if we might be in a transient state
             setTimeout(() => {
               if (isMounted) navigate({ to: '/login' });
             }, 2000);
@@ -63,7 +62,11 @@ export function RequireRole({ children }: { children: React.ReactNode }) {
           return;
         }
 
-        const userRole = roleData.role as AppRole;
+        // Use the most powerful role if multiple exist
+        const roleOrder: AppRole[] = ['superadmin', 'admin_adm', 'lider', 'vendedor', 'financeiro', 'mecanico', 'montador'];
+        const userRole = roles
+          .map(r => r.role as AppRole)
+          .sort((a, b) => roleOrder.indexOf(a) - roleOrder.indexOf(b))[0];
 
         if (isMounted) {
           setRole(userRole);
