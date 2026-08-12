@@ -171,39 +171,51 @@ export function ChecklistPage() {
 
   if (mode === 'selection') {
     return (
-      <div className="p-6 max-w-4xl mx-auto space-y-8 bg-background min-h-screen">
-        <div className="border-b border-border pb-6">
-          <h1 className="text-xl font-black font-heading text-navy uppercase tracking-tighter">MÓDULO DE INSPEÇÃO</h1>
-          <p className="text-[11px] text-muted-foreground mt-1 font-bold uppercase tracking-[0.2em] opacity-60">Tecnoar Freios • Gestão de Qualidade</p>
+      <div className="p-10 max-w-5xl mx-auto space-y-12 bg-background min-h-screen">
+        <div className="border-b border-border/50 pb-8 text-center sm:text-left">
+          <h1 className="text-3xl font-black font-heading text-navy uppercase tracking-tighter">
+            CENTRAL DE QUALIDADE
+          </h1>
+          <p className="text-xs text-muted-foreground mt-3 font-bold uppercase tracking-[0.3em] opacity-70">
+            Inspeções Técnicas & Gestão 5S • Tecnoar Freios
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <Card 
-            className="p-8 border-2 border-border hover:border-primary/40 cursor-pointer transition-all group relative overflow-hidden flex flex-col items-center text-center space-y-4"
+            className="p-10 border-2 border-border/50 hover:border-primary/40 hover:bg-primary/[0.02] cursor-pointer transition-all duration-300 group relative overflow-hidden flex flex-col items-center text-center space-y-6 shadow-md hover:shadow-xl"
             onClick={() => setMode('tecnico')}
           >
-            <div className="w-16 h-16 rounded-sm bg-navy/5 flex items-center justify-center group-hover:bg-primary/5 transition-colors">
-              <ClipboardList className="w-8 h-8 text-navy group-hover:text-primary transition-colors" />
+            <div className="w-20 h-20 rounded-xl bg-navy/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors shadow-inner">
+              <ClipboardList className="w-10 h-10 text-navy group-hover:text-primary transition-all duration-300 group-hover:scale-110" />
             </div>
-            <div>
-              <h2 className="text-sm font-black text-navy uppercase tracking-widest">CHECKLIST TÉCNICO</h2>
-              <p className="text-[10px] text-muted-foreground uppercase font-bold mt-2 opacity-60">Diagnóstico de OS e veículos</p>
+            <div className="space-y-3">
+              <h2 className="text-lg font-black text-navy uppercase tracking-[0.15em]">INSPEÇÃO TÉCNICA</h2>
+              <p className="text-[11px] text-muted-foreground uppercase font-bold tracking-widest opacity-80 max-w-[240px]">
+                Diagnóstico detalhado de OS, defeitos e conferência final
+              </p>
             </div>
-            <ArrowRight className="w-4 h-4 text-muted-foreground/30 group-hover:text-primary transition-all group-hover:translate-x-1" />
+            <div className="flex items-center gap-2 text-primary font-black text-[10px] uppercase tracking-[0.2em] pt-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+              Iniciar Checklist <ArrowRight className="w-3 h-3" />
+            </div>
           </Card>
 
           <Card 
-            className="p-8 border-2 border-border hover:border-primary/40 cursor-pointer transition-all group relative overflow-hidden flex flex-col items-center text-center space-y-4"
+            className="p-10 border-2 border-border/50 hover:border-primary/40 hover:bg-primary/[0.02] cursor-pointer transition-all duration-300 group relative overflow-hidden flex flex-col items-center text-center space-y-6 shadow-md hover:shadow-xl"
             onClick={() => setMode('diario')}
           >
-            <div className="w-16 h-16 rounded-sm bg-navy/5 flex items-center justify-center group-hover:bg-primary/5 transition-colors">
-              <CheckCircle2 className="w-8 h-8 text-navy group-hover:text-primary transition-colors" />
+            <div className="w-20 h-20 rounded-xl bg-navy/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors shadow-inner">
+              <CheckCircle2 className="w-10 h-10 text-navy group-hover:text-primary transition-all duration-300 group-hover:scale-110" />
             </div>
-            <div>
-              <h2 className="text-sm font-black text-navy uppercase tracking-widest">CHECKLIST DIÁRIO 5S</h2>
-              <p className="text-[10px] text-muted-foreground uppercase font-bold mt-2 opacity-60">Abertura e fechamento de setores</p>
+            <div className="space-y-3">
+              <h2 className="text-lg font-black text-navy uppercase tracking-[0.15em]">PROGRAMA 5S</h2>
+              <p className="text-[11px] text-muted-foreground uppercase font-bold tracking-widest opacity-80 max-w-[240px]">
+                Abertura e fechamento operacional dos setores da unidade
+              </p>
             </div>
-            <ArrowRight className="w-4 h-4 text-muted-foreground/30 group-hover:text-primary transition-all group-hover:translate-x-1" />
+            <div className="flex items-center gap-2 text-primary font-black text-[10px] uppercase tracking-[0.2em] pt-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+              Realizar Rotina <ArrowRight className="w-3 h-3" />
+            </div>
           </Card>
         </div>
       </div>
