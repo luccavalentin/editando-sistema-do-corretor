@@ -237,9 +237,14 @@
 }
 
 @layer utilities {
-
   .card-system {
-    @apply bg-card rounded-md elevation-1 overflow-hidden transition-all duration-200 hover:elevation-2;
+    background-color: var(--color-card);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: all 0.2s;
+  }
+  .card-system:hover {
+    box-shadow: var(--shadow-level-2);
   }
   
   .table-system {
