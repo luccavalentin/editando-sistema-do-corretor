@@ -46,34 +46,34 @@ export default function FollowUpPage() {
   };
 
   return (
-    <div className="space-y-5">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center gap-3">
-          <MessageCircle className="w-8 h-8 text-orange" />
-          <h2 className="text-xl font-bold text-navy">Follow-up Inteligente</h2>
+    <div className="space-y-6">
+      <div className="flex justify-between items-end border-b border-border pb-4">
+        <div>
+          <h2 className="text-sm font-bold text-navy uppercase tracking-widest">FOLLOW-UP INTELIGENTE</h2>
+          <p className="text-[10px] text-muted-foreground font-medium uppercase mt-0.5 tracking-wider">Geração de mensagens personalizadas via IA</p>
         </div>
-        <Button onClick={handleGenerate} className="bg-navy gap-2 rounded-md">
-          <Wand2 className="w-4 h-4" />
-          Gerar Rascunhos via IA
+        <Button onClick={handleGenerate} size="sm" className="bg-navy hover:bg-navy/90 text-white rounded-sm text-[10px] font-bold uppercase tracking-widest h-8 px-4 shadow-xs">
+          <Wand2 className="w-3.5 h-3.5 mr-2 text-cyan" />
+          GERAR RASCUNHOS
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {drafts?.map((draft: any) => (
-          <Card key={draft.id} className="rounded-md border-none shadow-xs shadow-navy/5 bg-white overflow-hidden">
-            <CardHeader className="bg-navy/5 border-b border-navy/5">
-              <div className="flex justify-between items-start">
+          <Card key={draft.id} className="rounded-sm border border-border shadow-xs bg-card overflow-hidden">
+            <CardHeader className="bg-muted/30 border-b border-border py-3 px-4">
+              <div className="flex justify-between items-center">
                 <div>
-                  <CardTitle className="text-navy">{draft.clientes?.nome}</CardTitle>
-                  <CardDescription>Gerado em {new Date(draft.criado_em).toLocaleDateString()}</CardDescription>
+                  <CardTitle className="text-xs font-bold uppercase tracking-wider text-navy">{draft.clientes?.nome}</CardTitle>
+                  <CardDescription className="text-[9px] uppercase font-bold text-muted-foreground/50 tracking-widest mt-0.5">Criado: {new Date(draft.criado_em).toLocaleDateString()}</CardDescription>
                 </div>
-                <Badge variant={draft.status === 'rascunho' ? 'secondary' : 'default'}>
-                  {draft.status.toUpperCase()}
-                </Badge>
+                <span className="bg-navy/5 text-navy border border-navy/10 px-1.5 py-0.5 rounded-xs text-[9px] font-bold uppercase tracking-tighter">
+                  {draft.status}
+                </span>
               </div>
             </CardHeader>
             <CardContent className="p-4 space-y-4">
-              <div className="bg-navy/5 p-4 rounded-md text-sm italic text-navy/80 border border-navy/10">
+              <div className="bg-background border border-border rounded-sm p-4 text-[13px] leading-relaxed text-navy font-medium italic">
                 "{draft.sugestao_texto}"
               </div>
               
