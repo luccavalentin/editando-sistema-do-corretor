@@ -120,7 +120,7 @@ export async function getIAProvider(activeProvider: string): Promise<IAProvider>
     new ClaudeProvider()
   ];
   
-  const active = providers.find(p => p.name === activeProvider) || providers[0];
+  const active = providers.find(p => p.name === activeProvider) || providers[0]!;
   
   return {
     name: active.name,
