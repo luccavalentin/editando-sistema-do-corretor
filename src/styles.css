@@ -170,10 +170,10 @@
     color: var(--color-primary);
   }
 
-  h1 { @apply text-3xl font-semibold; }
-  h2 { @apply text-2xl font-semibold; }
-  h3 { @apply text-xl font-semibold; }
-  h4 { @apply text-lg font-semibold; }
+  h1 { font-size: var(--text-3xl); font-weight: 600; }
+  h2 { font-size: var(--text-2xl); font-weight: 600; }
+  h3 { font-size: var(--text-xl); font-weight: 600; }
+  h4 { font-size: var(--text-lg); font-weight: 600; }
 
   table { 
     font-variant-numeric: tabular-nums;
