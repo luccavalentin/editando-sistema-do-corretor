@@ -19,7 +19,7 @@ function RankingPage() {
   });
 
 
-  if (isLoading) return <div className="p-8">Carregando ranking...</div>;
+  if (isLoading) return <div className="p-5">Carregando ranking...</div>;
 
   const topThree = ranking?.slice(0, 3) || [];
   const others = ranking?.slice(3) || [];
@@ -41,10 +41,10 @@ function RankingPage() {
   };
 
   return (
-    <div className="p-8 space-y-8">
+    <div className="p-5 space-y-5">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold font-heading text-navy">Ranking Tecnoar</h1>
-        <div className="flex bg-navy/5 p-1 rounded-xl">
+        <h1 className="text-xl font-bold font-heading text-navy">Ranking Tecnoar</h1>
+        <div className="flex bg-navy/5 p-1 rounded-md">
           <button className="px-4 py-2 rounded-lg bg-white shadow-sm text-xs font-bold text-navy">Geral</button>
           <button className="px-4 py-2 rounded-lg text-xs font-bold text-muted-foreground">Mensal</button>
           <button className="px-4 py-2 rounded-lg text-xs font-bold text-muted-foreground">Semanal</button>
@@ -62,13 +62,13 @@ function RankingPage() {
           >
             <div className="w-24 h-24 rounded-full bg-slate-100 border-4 border-slate-300 flex items-center justify-center relative">
               <span className="text-2xl font-bold text-slate-400">2</span>
-              <div className="absolute -top-2 -right-2 bg-white rounded-full p-1 shadow-md">
+              <div className="absolute -top-2 -right-2 bg-white rounded-full p-1 shadow-xs">
                 {getMedal(1)}
               </div>
             </div>
             <div className="text-center">
               <p className="font-bold text-navy">{topThree[1].email.split('@')[0]}</p>
-              <p className="text-xl font-black text-orange">{topThree[1].points} pts</p>
+              <p className="text-xl font-semibold text-orange">{topThree[1].points} pts</p>
             </div>
             <div className="w-32 h-24 bg-navy/5 rounded-t-3xl border-x border-t border-navy/10 flex items-end justify-center pb-2">
               <Medal className="w-6 h-6 text-slate-400" />
@@ -85,14 +85,14 @@ function RankingPage() {
             className="flex flex-col items-center gap-2"
           >
             <div className="w-32 h-32 rounded-full bg-yellow-50 border-4 border-yellow-400 flex items-center justify-center relative">
-              <span className="text-3xl font-bold text-yellow-600">1</span>
-              <div className="absolute -top-4 -right-2 bg-white rounded-full p-1 shadow-md">
+              <span className="text-xl font-bold text-yellow-600">1</span>
+              <div className="absolute -top-4 -right-2 bg-white rounded-full p-1 shadow-xs">
                 {getMedal(0)}
               </div>
             </div>
             <div className="text-center">
               <p className="text-lg font-bold text-navy">{topThree[0].email.split('@')[0]}</p>
-              <p className="text-3xl font-black text-orange">{topThree[0].points} pts</p>
+              <p className="text-xl font-semibold text-orange">{topThree[0].points} pts</p>
             </div>
             <div className="w-40 h-32 bg-navy/10 rounded-t-3xl border-x border-t border-navy/20 flex items-end justify-center pb-4">
               <Trophy className="w-10 h-10 text-yellow-500" />
@@ -110,13 +110,13 @@ function RankingPage() {
           >
             <div className="w-20 h-20 rounded-full bg-amber-50 border-4 border-amber-600 flex items-center justify-center relative">
               <span className="text-xl font-bold text-amber-700">3</span>
-              <div className="absolute -top-2 -right-2 bg-white rounded-full p-1 shadow-md">
+              <div className="absolute -top-2 -right-2 bg-white rounded-full p-1 shadow-xs">
                 {getMedal(2)}
               </div>
             </div>
             <div className="text-center">
               <p className="font-bold text-navy">{topThree[2].email.split('@')[0]}</p>
-              <p className="text-lg font-black text-orange">{topThree[2].points} pts</p>
+              <p className="text-lg font-semibold text-orange">{topThree[2].points} pts</p>
             </div>
             <div className="w-28 h-16 bg-navy/5 rounded-t-3xl border-x border-t border-navy/10 flex items-end justify-center pb-2">
               <Medal className="w-6 h-6 text-amber-700" />
@@ -126,7 +126,7 @@ function RankingPage() {
       </div>
 
       {/* Tabela de Classificação */}
-      <Card className="rounded-3xl border-navy/10 shadow-lg overflow-hidden">
+      <Card className="rounded-lg border-navy/10 shadow-sm overflow-hidden">
         <CardHeader className="bg-navy text-white px-8 py-6">
           <div className="flex items-center justify-between">
             <CardTitle className="text-xl font-heading flex items-center gap-2">
@@ -151,13 +151,13 @@ function RankingPage() {
                 const level = getLevel(user.points);
                 return (
                   <TableRow key={user.id} className="hover:bg-navy/5 transition-colors">
-                    <TableCell className="pl-8 font-black text-navy">{index + 1}º</TableCell>
+                    <TableCell className="pl-8 font-semibold text-navy">{index + 1}º</TableCell>
                     <TableCell className="font-bold text-navy">{user.email.split('@')[0]}</TableCell>
                     <TableCell>
-                      <span className="font-black text-orange">{user.points}</span>
+                      <span className="font-semibold text-orange">{user.points}</span>
                     </TableCell>
                     <TableCell>
-                      <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase border ${level.color} border-current`}>
+                      <span className={`px-3 py-1 rounded-sm text-[10px] font-semibold uppercase border ${level.color} border-current`}>
                         {level.label}
                       </span>
                     </TableCell>

@@ -34,19 +34,19 @@ function SettingsPage() {
   };
 
   return (
-    <div className='p-8 space-y-8'>
-      <h1 className='text-3xl font-bold font-heading text-navy'>Configurações</h1>
+    <div className='p-5 space-y-5'>
+      <h1 className='text-xl font-bold font-heading text-navy'>Configurações</h1>
       <Tabs defaultValue="integracoes" className="w-full">
-        <TabsList className="bg-navy/5 p-1 rounded-xl mb-6">
+        <TabsList className="bg-navy/5 p-1 rounded-md mb-4">
           <TabsTrigger value="integracoes" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-navy">Integrações</TabsTrigger>
           <TabsTrigger value="config" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-navy">Sistema</TabsTrigger>
           <TabsTrigger value="processos" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-navy">Processos</TabsTrigger>
           <TabsTrigger value="usuarios" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-navy">Usuários</TabsTrigger>
         </TabsList>
-        <TabsContent value="integracoes" className="space-y-6">
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-            <Card className="rounded-2xl border-none shadow-md shadow-navy/5 bg-white overflow-hidden group">
-              <CardHeader className="p-6">
+        <TabsContent value="integracoes" className="space-y-4">
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+            <Card className="rounded-md border-none shadow-xs shadow-navy/5 bg-white overflow-hidden group">
+              <CardHeader className="p-4">
                 <div className="flex justify-between items-center">
                   <Database className="w-8 h-8 text-cyan" />
                   <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
@@ -54,9 +54,9 @@ function SettingsPage() {
                 <CardTitle className="mt-4">Sincronização de Dados</CardTitle>
                 <CardDescription>Clientes e Estoque da Tecnoar (Omie)</CardDescription>
               </CardHeader>
-              <CardContent className="p-6 space-y-4">
+              <CardContent className="p-4 space-y-4">
                 <Button 
-                  className="w-full rounded-xl gap-2 bg-navy" 
+                  className="w-full rounded-md gap-2 bg-navy" 
                   onClick={() => handleSync('clientes')}
                   disabled={loading !== null}
                 >
@@ -65,7 +65,7 @@ function SettingsPage() {
                 </Button>
                 <Button 
                   variant="outline" 
-                  className="w-full rounded-xl gap-2 border-navy/10"
+                  className="w-full rounded-md gap-2 border-navy/10"
                   onClick={() => handleSync('estoque')}
                   disabled={loading !== null}
                 >
@@ -75,15 +75,15 @@ function SettingsPage() {
               </CardContent>
             </Card>
 
-            <Card className="rounded-2xl border-none shadow-md shadow-navy/5 bg-white overflow-hidden group">
-              <CardHeader className="p-6">
+            <Card className="rounded-md border-none shadow-xs shadow-navy/5 bg-white overflow-hidden group">
+              <CardHeader className="p-4">
                 <div className="flex justify-between items-center">
                   <Send className="w-8 h-8 text-orange" />
                 </div>
                 <CardTitle className="mt-4">Envio de OS</CardTitle>
                 <CardDescription>Regras para exportação financeira</CardDescription>
               </CardHeader>
-              <CardContent className="p-6 space-y-4">
+              <CardContent className="p-4 space-y-4">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <AlertTriangle className="w-4 h-4 text-orange" />
                   <span>Exportação automática em "Financeiro"</span>

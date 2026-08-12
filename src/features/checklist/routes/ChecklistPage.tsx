@@ -130,7 +130,7 @@ export function ChecklistPage() {
 
   if (!selectedOS) {
     return (
-      <div className="p-6 max-w-4xl mx-auto space-y-6">
+      <div className="p-4 max-w-4xl mx-auto space-y-4">
         <h1 className="text-2xl font-bold font-space text-[#001830]">Novo Checklist</h1>
         <p className="text-muted-foreground">Selecione uma Ordem de Serviço aberta para iniciar a inspeção.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -149,7 +149,7 @@ export function ChecklistPage() {
             </Card>
           ))}
           {osList?.length === 0 && (
-            <div className="col-span-full p-12 text-center border-2 border-dashed rounded-xl">
+            <div className="col-span-full p-12 text-center border-2 border-dashed rounded-md">
               Nenhuma OS aberta encontrada.
             </div>
           )}
@@ -190,7 +190,7 @@ export function ChecklistPage() {
         </div>
       </div>
 
-      <div className="p-4 max-w-4xl mx-auto space-y-6">
+      <div className="p-4 max-w-4xl mx-auto space-y-4">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="w-full grid grid-cols-3 sm:grid-cols-6 h-auto p-1 bg-background border">
             {templates.map((t, idx) => (
@@ -216,7 +216,7 @@ export function ChecklistPage() {
                 ))}
               </div>
               <div className="flex justify-end pt-4">
-                <Button onClick={() => setActiveTab((idx + 1).toString())} className="rounded-full px-8">
+                <Button onClick={() => setActiveTab((idx + 1).toString())} className="rounded-sm px-8">
                   Próximo
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
@@ -224,8 +224,8 @@ export function ChecklistPage() {
             </TabsContent>
           ))}
 
-          <TabsContent value="final" className="space-y-6 pt-4">
-            <div className="bg-card p-6 rounded-2xl border text-center space-y-4">
+          <TabsContent value="final" className="space-y-4 pt-4">
+            <div className="bg-card p-4 rounded-md border text-center space-y-4">
               <h2 className="text-xl font-bold font-space">Conclusão do Checklist</h2>
               <p className="text-muted-foreground text-sm">
                 Revise os itens e assine abaixo para finalizar o diagnóstico técnico.

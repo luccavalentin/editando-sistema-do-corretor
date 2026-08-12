@@ -27,13 +27,13 @@ export const Route = createFileRoute('/')({
 
 function StatCard({ title, value, icon: Icon, color }: any) {
   return (
-    <Card className="rounded-2xl border-none shadow-md shadow-navy/5 overflow-hidden group hover:shadow-lg transition-all">
-      <CardContent className="p-6">
+    <Card className="rounded-md border-none shadow-xs shadow-navy/5 overflow-hidden group hover:shadow-sm transition-all">
+      <CardContent className="p-4">
         <div className="flex justify-between items-start">
-          <div className={`p-3 rounded-2xl bg-muted group-hover:bg-white transition-colors ${color.replace('text-', 'bg-')}/10`}>
+          <div className={`p-3 rounded-md bg-muted group-hover:bg-white transition-colors ${color.replace('text-', 'bg-')}/10`}>
             <Icon className={`w-6 h-6 ${color}`} />
           </div>
-          <span className={`text-2xl font-black font-heading ${color}`}>{value}</span>
+          <span className={`text-2xl font-semibold font-heading ${color}`}>{value}</span>
         </div>
         <p className="mt-4 text-xs font-bold uppercase tracking-widest text-muted-foreground">{title}</p>
       </CardContent>
@@ -95,19 +95,19 @@ function Dashboard() {
 
   if (viewMode === 'tv') {
     return (
-      <div className="fixed inset-0 bg-navy z-50 p-8 text-white overflow-hidden flex flex-col gap-8">
+      <div className="fixed inset-0 bg-navy z-50 p-5 text-white overflow-hidden flex flex-col gap-4">
         <div className="flex justify-between items-center">
-          <div className="flex items-center gap-6">
-            <h1 className="text-4xl font-black font-heading tracking-tight">MONITORAMENTO DE PÁTIO</h1>
+          <div className="flex items-center gap-4">
+            <h1 className="text-2xl font-semibold font-heading tracking-tight">MONITORAMENTO DE PÁTIO</h1>
             <div className="h-12 w-px bg-white/20" />
             <div className="flex flex-col">
               <span className="text-cyan font-bold text-xl uppercase tracking-widest">Tecnoar Freios</span>
               <span className="text-white/40 text-sm font-medium">Iracemápolis-SP</span>
             </div>
           </div>
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-4">
             <div className="text-right">
-              <div className="text-5xl font-mono font-bold">{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+              <div className="text-3xl font-mono font-bold">{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
               <div className="text-white/40 font-medium uppercase tracking-widest text-xs">Atualização em tempo real</div>
             </div>
             <Button variant="ghost" onClick={() => setViewMode('operacional')} className="text-white/40 hover:text-white">
@@ -116,7 +116,7 @@ function Dashboard() {
           </div>
         </div>
 
-        <div className="grid grid-cols-4 gap-6">
+        <div className="grid grid-cols-4 gap-4">
           <TVStatCard label="No pátio agora" value={stats?.noPatio || 0} icon={<Truck />} color="text-white" />
           <TVStatCard label="Entraram hoje" value={stats?.entraramHoje || 0} icon={<ArrowRight />} color="text-cyan" />
           <TVStatCard label="Concluídas hoje" value={stats?.concluidasHoje || 0} icon={<CheckCircle2 />} color="text-green-400" />
@@ -128,11 +128,11 @@ function Dashboard() {
             const count = osList.filter((o: any) => o.status === status).length;
             return (
               <div key={status} className="flex flex-col gap-3">
-                <div className="bg-white/5 rounded-2xl p-4 border border-white/10 flex flex-col items-center justify-center gap-2 aspect-square">
-                  <span className="text-5xl font-black">{count}</span>
+                <div className="bg-white/5 rounded-md p-4 border border-white/10 flex flex-col items-center justify-center gap-2 aspect-square">
+                  <span className="text-3xl font-semibold">{count}</span>
                   <span className="text-[10px] uppercase font-bold text-center leading-tight opacity-60">{STATUS_LABELS[status]}</span>
                 </div>
-                <div className="flex-1 bg-white/5 rounded-2xl p-2 border border-white/10 overflow-hidden relative">
+                <div className="flex-1 bg-white/5 rounded-md p-2 border border-white/10 overflow-hidden relative">
                   {/* Feed simplificado */}
                   <div className="absolute inset-0 p-3 space-y-2 opacity-30 text-[10px] font-mono">
                     {(osList as any[]).filter((o: any) => o.status === status).map((o: any) => (
@@ -149,23 +149,23 @@ function Dashboard() {
   }
 
   return (
-    <div className="p-8 space-y-8 bg-navy/5 min-h-screen">
+    <div className="p-5 space-y-5 bg-navy/5 min-h-screen">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold font-heading text-navy flex items-center gap-3">
+          <h1 className="text-xl font-bold font-heading text-navy flex items-center gap-3">
             <LayoutDashboard className="w-8 h-8 text-orange" />
             Painel Operacional
           </h1>
           <p className="text-muted-foreground mt-1">Gestão de prontos-socorro da oficina</p>
         </div>
         <div className="flex gap-4">
-          <Button variant="outline" className="rounded-full gap-2 border-navy/10 hover:bg-navy/5">
+          <Button variant="outline" className="rounded-sm gap-2 border-navy/10 hover:bg-navy/5">
             <Filter className="w-4 h-4" />
             Filtros
           </Button>
           <Button 
             onClick={() => setViewMode('tv')} 
-            className="bg-navy text-white hover:bg-navy/90 rounded-full gap-2 px-6 shadow-lg shadow-navy/20"
+            className="bg-navy text-white hover:bg-navy/90 rounded-sm gap-2 px-6 shadow-sm shadow-navy/20"
           >
             <Tv className="w-4 h-4 text-cyan" />
             Modo TV
@@ -182,7 +182,7 @@ function Dashboard() {
         <StatCard title="Peças Vencendo" value={stats?.pecasVencendo || 0} icon={Package} color="text-orange-600" />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
         {STATUS_FLOW.map(status => {
           const items = osList.filter((o: any) => o.status === status);
           return (
@@ -192,12 +192,12 @@ function Dashboard() {
                   <div className={`w-2 h-2 rounded-full ${items.length > 0 ? 'bg-orange animate-pulse' : 'bg-navy/20'}`} />
                   {STATUS_LABELS[status]}
                 </h3>
-                <span className="bg-navy/10 text-navy px-2 py-0.5 rounded-full text-[10px] font-bold">{items.length}</span>
+                <span className="bg-navy/10 text-navy px-2 py-0.5 rounded-sm text-[10px] font-bold">{items.length}</span>
               </div>
               
                     <div className="space-y-3 min-h-[200px]">
                       {(items as any[]).map((os: any) => (
-                        <Card key={os.id} className="rounded-2xl border-none shadow-md shadow-navy/5 bg-white group hover:ring-2 hover:ring-orange/20 transition-all">
+                        <Card key={os.id} className="rounded-md border-none shadow-xs shadow-navy/5 bg-white group hover:ring-2 hover:ring-orange/20 transition-all">
                     <CardContent className="p-4 space-y-3">
                       <div className="flex justify-between items-start">
                         <span className="text-xs font-mono font-bold text-navy/40">{os.protocolo}</span>
@@ -218,7 +218,7 @@ function Dashboard() {
                         <Button 
                           size="sm" 
                           variant="ghost"
-                          className="h-8 rounded-full text-[10px] font-bold uppercase text-orange hover:bg-orange/5 gap-1"
+                          className="h-8 rounded-sm text-[10px] font-bold uppercase text-orange hover:bg-orange/5 gap-1"
                           onClick={() => {
                             const nextIndex = STATUS_FLOW.indexOf(status) + 1;
                             if (nextIndex < STATUS_FLOW.length) {
@@ -237,7 +237,7 @@ function Dashboard() {
                   </Card>
                 ))}
                 {items.length === 0 && (
-                  <div className="h-20 border-2 border-dashed border-navy/5 rounded-2xl" />
+                  <div className="h-20 border-2 border-dashed border-navy/5 rounded-md" />
                 )}
               </div>
             </div>
@@ -250,12 +250,12 @@ function Dashboard() {
 
 function TVStatCard({ label, value, icon, color, pulse }: any) {
   return (
-    <div className={`bg-white/5 rounded-3xl p-6 border border-white/10 flex flex-col gap-2 ${pulse ? 'animate-pulse' : ''}`}>
+    <div className={`bg-white/5 rounded-lg p-4 border border-white/10 flex flex-col gap-2 ${pulse ? 'animate-pulse' : ''}`}>
       <div className="flex justify-between items-start">
-        <div className="p-2 bg-white/5 rounded-xl text-white/40">
+        <div className="p-2 bg-white/5 rounded-md text-white/40">
           {icon}
         </div>
-        <span className={`text-4xl font-black ${color}`}>{value}</span>
+        <span className={`text-2xl font-semibold ${color}`}>{value}</span>
       </div>
       <span className="text-xs font-bold uppercase tracking-widest text-white/40">{label}</span>
     </div>

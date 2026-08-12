@@ -32,7 +32,7 @@ export function ChecklistItem({ label, itemId, value, onChange }: ChecklistItemP
   };
 
   return (
-    <div className="p-4 border rounded-xl bg-card space-y-4">
+    <div className="p-4 border rounded-md bg-card space-y-4">
       <div className="flex items-start justify-between gap-4">
         <span className="font-medium text-sm sm:text-base">{label}</span>
         <div className="flex gap-1 shrink-0">
