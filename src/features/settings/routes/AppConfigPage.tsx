@@ -81,7 +81,7 @@ export default function AppConfigPage() {
   const getSecrets = useServerFn(getSecretsStatus);
   const { data: secretsStatus, refetch: refetchSecrets } = useQuery({
     queryKey: ['secrets_status'],
-    queryFn: () => getSecrets()
+    queryFn: () => getSecrets({ data: undefined })
   });
 
   const saveSecretFn = useServerFn(saveSecret);
