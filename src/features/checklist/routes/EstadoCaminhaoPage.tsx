@@ -46,7 +46,7 @@ export function EstadoCaminhaoPage() {
 
   if (!selectedOS) {
     return (
-      <div className="p-6 max-w-4xl mx-auto space-y-6">
+      <div className="p-4 max-w-4xl mx-auto space-y-4">
         <h1 className="text-2xl font-bold font-space text-[#001830]">Estado do Caminhão & Entrega</h1>
         <p className="text-muted-foreground">Compare o estado de entrada com o de saída e registre a entrega.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -64,7 +64,7 @@ export function EstadoCaminhaoPage() {
   const currentOS = osList.find(o => o.id === selectedOS);
 
   return (
-    <div className="p-4 max-w-5xl mx-auto space-y-6 pb-20">
+    <div className="p-4 max-w-5xl mx-auto space-y-4 pb-20">
       <div className="flex items-center gap-3">
         <Button variant="ghost" size="icon" onClick={() => setSelectedOS(null)}>
           <ArrowLeft className="w-5 h-5" />
@@ -72,7 +72,7 @@ export function EstadoCaminhaoPage() {
         <h1 className="text-xl font-bold font-space">Entrega Técnica: {currentOS?.protocolo}</h1>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card className="p-4 space-y-4">
           <h2 className="font-bold flex items-center gap-2">
             <CheckCircle2 className="w-5 h-5 text-green-500" /> Fotos de Entrada
@@ -103,7 +103,7 @@ export function EstadoCaminhaoPage() {
         </Card>
       </div>
 
-      <Card className="p-6 space-y-6">
+      <Card className="p-4 space-y-4">
         <div className="space-y-2">
           <Label>Observações de Saída</Label>
           <Textarea 
@@ -119,7 +119,7 @@ export function EstadoCaminhaoPage() {
         </div>
 
         <Button 
-          className="w-full h-12 bg-green-600 hover:bg-green-700 font-bold rounded-full text-lg"
+          className="w-full h-12 bg-green-600 hover:bg-green-700 font-bold rounded-sm text-lg"
           onClick={handleFinalize}
           disabled={mutation.isPending}
         >

@@ -29,21 +29,21 @@ export default function ProcessosPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-5">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-3">
           <Briefcase className="w-8 h-8 text-cyan" />
-          <h2 className="text-3xl font-bold text-navy">Processos Operacionais</h2>
+          <h2 className="text-xl font-bold text-navy">Processos Operacionais</h2>
         </div>
-        <Button className="bg-navy gap-2 rounded-xl">
+        <Button className="bg-navy gap-2 rounded-md">
           <Plus className="w-4 h-4" />
           Novo Processo
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {processos?.map((proc: any) => (
-          <Card key={proc.id} className="rounded-2xl border-none shadow-md shadow-navy/5 bg-white flex flex-col">
+          <Card key={proc.id} className="rounded-md border-none shadow-xs shadow-navy/5 bg-white flex flex-col">
             <CardHeader>
               <div className="flex justify-between items-start mb-2">
                 <Badge className="bg-cyan/10 text-cyan border-none">{proc.setor.toUpperCase()}</Badge>
@@ -56,10 +56,10 @@ export default function ProcessosPage() {
                 <strong>{proc.passos.length} passos</strong> definidos.
               </div>
             </CardContent>
-            <div className="p-6 pt-0 mt-auto">
+            <div className="p-4 pt-0 mt-auto">
               <Button 
                 variant="outline" 
-                className="w-full rounded-xl gap-2 border-navy/10"
+                className="w-full rounded-md gap-2 border-navy/10"
                 onClick={() => handleConvertToTemplate(proc.id)}
               >
                 <CheckCircle2 className="w-4 h-4" /> Executar como Checklist

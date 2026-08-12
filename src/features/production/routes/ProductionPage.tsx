@@ -34,10 +34,10 @@ export function ProductionPage() {
   });
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
+    <div className="p-4 max-w-7xl mx-auto space-y-4">
       <div className="flex justify-between items-end">
         <div>
-          <h1 className="text-3xl font-bold font-space text-[#001830]">Produção & Histórico</h1>
+          <h1 className="text-xl font-bold font-space text-[#001830]">Produção & Histórico</h1>
           <p className="text-muted-foreground">Gestão de peças em teste e agenda de serviços.</p>
         </div>
       </div>
@@ -110,7 +110,7 @@ export function ProductionPage() {
         </TabsContent>
 
         <TabsContent value="agenda" className="pt-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {['eletrica', 'socorro', 'troca_cuicas_aparelho_diag', 'teste_valvulas', 'troca_valvulas', 'vazamentos_ar'].map((esp) => (
               <div key={esp} className="space-y-3">
                 <h3 className="font-bold font-space text-lg border-b pb-2 flex items-center justify-between">

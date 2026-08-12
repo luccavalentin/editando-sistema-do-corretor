@@ -46,21 +46,21 @@ export default function FollowUpPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-5">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-3">
           <MessageCircle className="w-8 h-8 text-orange" />
-          <h2 className="text-3xl font-bold text-navy">Follow-up Inteligente</h2>
+          <h2 className="text-xl font-bold text-navy">Follow-up Inteligente</h2>
         </div>
-        <Button onClick={handleGenerate} className="bg-navy gap-2 rounded-xl">
+        <Button onClick={handleGenerate} className="bg-navy gap-2 rounded-md">
           <Wand2 className="w-4 h-4" />
           Gerar Rascunhos via IA
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {drafts?.map((draft: any) => (
-          <Card key={draft.id} className="rounded-2xl border-none shadow-md shadow-navy/5 bg-white overflow-hidden">
+          <Card key={draft.id} className="rounded-md border-none shadow-xs shadow-navy/5 bg-white overflow-hidden">
             <CardHeader className="bg-navy/5 border-b border-navy/5">
               <div className="flex justify-between items-start">
                 <div>
@@ -72,8 +72,8 @@ export default function FollowUpPage() {
                 </Badge>
               </div>
             </CardHeader>
-            <CardContent className="p-6 space-y-4">
-              <div className="bg-navy/5 p-4 rounded-xl text-sm italic text-navy/80 border border-navy/10">
+            <CardContent className="p-4 space-y-4">
+              <div className="bg-navy/5 p-4 rounded-md text-sm italic text-navy/80 border border-navy/10">
                 "{draft.sugestao_texto}"
               </div>
               
@@ -84,7 +84,7 @@ export default function FollowUpPage() {
                   </Button>
                   <Button 
                     onClick={() => handleApprove(draft.id, draft.sugestao_texto)}
-                    className="bg-green-600 hover:bg-green-700 gap-1 rounded-xl"
+                    className="bg-green-600 hover:bg-green-700 gap-1 rounded-md"
                   >
                     <Check className="w-4 h-4" /> Aprovar
                   </Button>
@@ -92,7 +92,7 @@ export default function FollowUpPage() {
               )}
 
               {draft.status === 'aprovada' && (
-                <Button className="w-full bg-navy gap-2 rounded-xl">
+                <Button className="w-full bg-navy gap-2 rounded-md">
                   <Send className="w-4 h-4" /> Enviar via WhatsApp
                 </Button>
               )}

@@ -46,21 +46,21 @@ export default function AppConfigPage() {
   });
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-5">
       <div className="flex items-center gap-3">
         <Settings className="w-8 h-8 text-orange" />
-        <h2 className="text-3xl font-bold text-navy">Configurações do Sistema</h2>
+        <h2 className="text-xl font-bold text-navy">Configurações do Sistema</h2>
       </div>
 
       <Tabs defaultValue="sla" className="w-full">
-        <TabsList className="bg-navy/5 p-1 rounded-xl mb-6">
+        <TabsList className="bg-navy/5 p-1 rounded-md mb-4">
           <TabsTrigger value="sla" className="rounded-lg">SLA & Prazos</TabsTrigger>
           <TabsTrigger value="whatsapp" className="rounded-lg">WhatsApp</TabsTrigger>
           <TabsTrigger value="omie" className="rounded-lg">Logs Omie</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="sla" className="space-y-6">
-          <Card className="rounded-2xl border-none shadow-md shadow-navy/5 bg-white">
+        <TabsContent value="sla" className="space-y-4">
+          <Card className="rounded-md border-none shadow-xs shadow-navy/5 bg-white">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Clock className="w-5 h-5 text-cyan" />
@@ -69,7 +69,7 @@ export default function AppConfigPage() {
               <CardDescription>Defina os limites de tempo para alertas amarelo/vermelho por fase.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <Label>Prazo Peça em Teste (Horas)</Label>
                   <Input 
@@ -83,15 +83,15 @@ export default function AppConfigPage() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="whatsapp" className="space-y-6">
-          <Card className="rounded-2xl border-none shadow-md shadow-navy/5 bg-white border-l-4 border-l-orange">
+        <TabsContent value="whatsapp" className="space-y-4">
+          <Card className="rounded-md border-none shadow-xs shadow-navy/5 bg-white border-l-4 border-l-orange">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <MessageSquare className="w-5 h-5 text-orange" />
                 Integração WhatsApp
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-8 text-center space-y-4">
+            <CardContent className="p-5 text-center space-y-4">
               <div className="mx-auto w-16 h-16 bg-orange/10 rounded-full flex items-center justify-center">
                 <ShieldCheck className="w-8 h-8 text-orange" />
               </div>
@@ -99,15 +99,15 @@ export default function AppConfigPage() {
               <p className="text-muted-foreground max-w-md mx-auto">
                 Para habilitar o envio automático e o atendimento via IA, configure as chaves da Meta Cloud API nas variáveis de ambiente do servidor (WHATSAPP_API_KEY).
               </p>
-              <Button variant="outline" className="rounded-xl border-navy/20" disabled>
+              <Button variant="outline" className="rounded-md border-navy/20" disabled>
                 Configurar API
               </Button>
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="omie" className="space-y-6">
-          <Card className="rounded-2xl border-none shadow-md shadow-navy/5 bg-white">
+        <TabsContent value="omie" className="space-y-4">
+          <Card className="rounded-md border-none shadow-xs shadow-navy/5 bg-white">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Database className="w-5 h-5 text-navy" />

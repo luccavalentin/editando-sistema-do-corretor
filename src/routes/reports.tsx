@@ -48,52 +48,52 @@ function ReportsPage() {
     document.body.removeChild(link);
   };
 
-  if (isLoading) return <div className="p-8">Carregando relatórios...</div>;
+  if (isLoading) return <div className="p-5">Carregando relatórios...</div>;
 
   return (
-    <div className="p-8 space-y-6">
+    <div className="p-5 space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold font-heading text-navy">Relatórios de OS</h1>
+        <h1 className="text-xl font-bold font-heading text-navy">Relatórios de OS</h1>
         <div className="flex gap-2">
-          <Button variant="outline" className="rounded-xl">
+          <Button variant="outline" className="rounded-md">
             <Filter className="w-4 h-4 mr-2" /> Filtrar
           </Button>
-          <Button onClick={exportToCSV} className="bg-orange hover:bg-orange/90 text-white rounded-xl">
+          <Button onClick={exportToCSV} className="bg-orange hover:bg-orange/90 text-white rounded-md">
             <Download className="w-4 h-4 mr-2" /> Exportar CSV
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="rounded-2xl border-navy/10 shadow-sm">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card className="rounded-md border-navy/10 shadow-sm">
           <CardHeader>
             <CardTitle className="text-sm font-medium text-muted-foreground uppercase">Volume Total</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-4xl font-bold text-navy">{reports?.length || 0}</p>
+            <p className="text-2xl font-bold text-navy">{reports?.length || 0}</p>
           </CardContent>
         </Card>
-        <Card className="rounded-2xl border-navy/10 shadow-sm">
+        <Card className="rounded-md border-navy/10 shadow-sm">
           <CardHeader>
             <CardTitle className="text-sm font-medium text-muted-foreground uppercase">Ticket Médio (Serviços)</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-4xl font-bold text-navy">
+            <p className="text-2xl font-bold text-navy">
               R$ {(reports?.reduce((acc, curr) => acc + (Number(curr.valor_servico) || 0), 0) / (reports?.length || 1)).toFixed(2)}
             </p>
           </CardContent>
         </Card>
-        <Card className="rounded-2xl border-navy/10 shadow-sm">
+        <Card className="rounded-md border-navy/10 shadow-sm">
           <CardHeader>
             <CardTitle className="text-sm font-medium text-muted-foreground uppercase">Concluídas</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-4xl font-bold text-cyan">{reports?.filter(os => os.status === 'concluida').length || 0}</p>
+            <p className="text-2xl font-bold text-cyan">{reports?.filter(os => os.status === 'concluida').length || 0}</p>
           </CardContent>
         </Card>
       </div>
 
-      <div className="bg-white rounded-3xl border border-navy/10 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-lg border border-navy/10 shadow-sm overflow-hidden">
         <Table>
           <TableHeader className="bg-navy/5">
             <TableRow>
@@ -111,7 +111,7 @@ function ReportsPage() {
                 <TableCell className="font-mono text-xs">{os.protocolo}</TableCell>
                 <TableCell className="font-medium text-navy">{os.cliente?.nome}</TableCell>
                 <TableCell>
-                  <span className="px-2 py-1 rounded-full bg-navy/5 text-[10px] uppercase font-bold text-navy">
+                  <span className="px-2 py-1 rounded-sm bg-navy/5 text-[10px] uppercase font-bold text-navy">
                     {os.status}
                   </span>
                 </TableCell>

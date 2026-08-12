@@ -48,17 +48,17 @@ export function GarantiasPage() {
   });
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+    <div className="p-4 max-w-6xl mx-auto space-y-4">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold font-space text-[#001830]">Garantias</h1>
+          <h1 className="text-xl font-bold font-space text-[#001830]">Garantias</h1>
           <p className="text-muted-foreground">Monitoramento de prazos de peças e serviços.</p>
         </div>
         <div className="relative w-full md:w-80">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input 
             placeholder="Buscar por item, cliente ou placa..." 
-            className="pl-10 rounded-full"
+            className="pl-10 rounded-sm"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -120,7 +120,7 @@ export function GarantiasPage() {
           );
         })}
         {garantias.length === 0 && (
-          <div className="col-span-full py-20 text-center text-muted-foreground border-2 border-dashed rounded-3xl">
+          <div className="col-span-full py-20 text-center text-muted-foreground border-2 border-dashed rounded-lg">
             Nenhuma garantia encontrada para esta busca.
           </div>
         )}

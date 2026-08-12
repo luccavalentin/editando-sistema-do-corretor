@@ -25,18 +25,18 @@ export default function UsersPage() {
     }
   };
 
-  return React.createElement('div', { className: 'p-8 space-y-8' },
+  return React.createElement('div', { className: 'p-5 space-y-5' },
     React.createElement('div', { className: 'flex justify-between items-center' },
-      React.createElement('h1', { className: 'text-3xl font-bold text-navy flex items-center gap-3' },
+      React.createElement('h1', { className: 'text-xl font-bold text-navy flex items-center gap-3' },
         React.createElement(Users, { className: 'w-8 h-8 text-orange' }),
         'Gestão de Usuários'
       ),
-      React.createElement(Button, { className: 'bg-navy rounded-xl gap-2' },
+      React.createElement(Button, { className: 'bg-navy rounded-md gap-2' },
         React.createElement(UserPlus, { className: 'w-4 h-4' }),
         'Convidar Usuário'
       )
     ),
-    React.createElement(Card, { className: 'rounded-2xl border-none shadow-md shadow-navy/5 bg-white' },
+    React.createElement(Card, { className: 'rounded-md border-none shadow-xs shadow-navy/5 bg-white' },
       React.createElement(CardHeader, null,
         React.createElement(CardTitle, null, 'Usuários Cadastrados')
       ),

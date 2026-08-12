@@ -75,8 +75,8 @@ export function TermoResponsabilidadePage() {
   if (isPrinting) {
     const os = osList.find(o => o.id === selectedOS);
     return (
-      <div className="p-8 max-w-2xl mx-auto bg-white text-black print:p-0">
-        <div className="flex justify-between items-center mb-8 print:hidden">
+      <div className="p-5 max-w-2xl mx-auto bg-white text-black print:p-0">
+        <div className="flex justify-between items-center mb-5 print:hidden">
           <Button variant="ghost" onClick={() => setIsPrinting(false)}>
             <ArrowLeft className="w-4 h-4 mr-2" /> Voltar
           </Button>
@@ -85,7 +85,7 @@ export function TermoResponsabilidadePage() {
           </Button>
         </div>
         
-        <div className="border-2 border-black p-8 space-y-6">
+        <div className="border-2 border-black p-5 space-y-4">
           <div className="text-center space-y-2 border-b-2 border-black pb-4">
             <h1 className="text-2xl font-bold uppercase">Termo de Responsabilidade e Ciência</h1>
             <p className="text-sm font-bold">TECNOAR FREIOS - Iracemápolis/SP</p>
@@ -123,7 +123,7 @@ export function TermoResponsabilidadePage() {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-6 pb-20">
+    <div className="p-4 max-w-4xl mx-auto space-y-4 pb-20">
       <div className="flex items-center gap-3">
         <FileText className="w-8 h-8 text-[#f06000]" />
         <div>
@@ -132,7 +132,7 @@ export function TermoResponsabilidadePage() {
         </div>
       </div>
 
-      <div className="grid gap-6">
+      <div className="grid gap-4">
         <Card className="p-4 space-y-4">
           <Label>Selecione a Ordem de Serviço</Label>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -141,7 +141,7 @@ export function TermoResponsabilidadePage() {
                 key={os.id} 
                 onClick={() => setSelectedOS(os.id)}
                 className={cn(
-                  "p-3 border rounded-xl cursor-pointer transition-all",
+                  "p-3 border rounded-md cursor-pointer transition-all",
                   selectedOS === os.id ? "border-[#f06000] bg-[#f06000]/5 ring-1 ring-[#f06000]" : "hover:border-gray-300"
                 )}
               >
@@ -153,7 +153,7 @@ export function TermoResponsabilidadePage() {
         </Card>
 
         {selectedOS && (
-          <Card className="p-6 space-y-6">
+          <Card className="p-4 space-y-4">
             <div className="space-y-2">
               <Label htmlFor="dano">Descrição do Dano/Risco Identificado *</Label>
               <Textarea 
@@ -165,7 +165,7 @@ export function TermoResponsabilidadePage() {
               />
             </div>
 
-            <div className="flex items-center space-x-2 bg-muted/50 p-4 rounded-xl border border-amber-200">
+            <div className="flex items-center space-x-2 bg-muted/50 p-4 rounded-md border border-amber-200">
               <Checkbox 
                 id="recusa" 
                 checked={recusou} 
@@ -179,7 +179,7 @@ export function TermoResponsabilidadePage() {
 
             <div className="space-y-2">
               <Label>Fotos das Evidências</Label>
-              <Button variant="outline" className="w-full h-24 border-dashed rounded-2xl">
+              <Button variant="outline" className="w-full h-24 border-dashed rounded-md">
                 <Camera className="w-6 h-6 mr-2" /> Capturar/Upload de Fotos
               </Button>
             </div>
@@ -190,7 +190,7 @@ export function TermoResponsabilidadePage() {
             </div>
 
             <Button 
-              className="w-full h-12 text-lg font-bold bg-[#f06000] hover:bg-[#d05000] rounded-full"
+              className="w-full h-12 text-lg font-bold bg-[#f06000] hover:bg-[#d05000] rounded-sm"
               onClick={handleSave}
               disabled={mutation.isPending}
             >
