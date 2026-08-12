@@ -36,19 +36,19 @@ export function ProductionPage() {
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6 bg-background min-h-screen">
       <div className="flex justify-between items-end border-b border-border pb-6">
-        <div>
-          <h1 className="text-xl font-semibold font-heading text-primary uppercase tracking-tight">Produção e Agenda</h1>
-          <p className="text-[11px] text-muted-foreground mt-1.5 font-medium uppercase tracking-widest opacity-80">Gestão técnica e fluxo de testes</p>
+        <div className="space-y-1">
+          <h1 className="text-xl font-semibold text-primary uppercase tracking-tight">Produção e Agenda</h1>
+          <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-[0.1em] opacity-60">Gestão técnica e fluxo de testes</p>
         </div>
       </div>
 
       <Tabs defaultValue="pecas" className="w-full">
-        <TabsList className="bg-muted/50 p-1 border border-border rounded-sm h-10">
-          <TabsTrigger value="pecas" className="gap-2 text-[11px] font-bold uppercase tracking-wider rounded-xs px-4">
-            <Package className="w-3.5 h-3.5" /> PEÇAS EM TESTE
+        <TabsList className="bg-muted/50 p-1 border border-border rounded h-9">
+          <TabsTrigger value="pecas" className="gap-2 text-[10px] font-semibold uppercase tracking-wider rounded px-4">
+            <Package className="w-3 h-3" /> PEÇAS EM TESTE
           </TabsTrigger>
-          <TabsTrigger value="agenda" className="gap-2 text-[11px] font-bold uppercase tracking-wider rounded-xs px-4">
-            <Calendar className="w-3.5 h-3.5" /> AGENDA TÉCNICA
+          <TabsTrigger value="agenda" className="gap-2 text-[10px] font-semibold uppercase tracking-wider rounded px-4">
+            <Calendar className="w-3 h-3" /> AGENDA TÉCNICA
           </TabsTrigger>
         </TabsList>
 
@@ -59,48 +59,48 @@ export function ProductionPage() {
               const isUrgent = horasRestantes < 12;
 
               return (
-                <Card key={peca.id} className="rounded border border-border bg-card p-4 flex flex-col justify-between border-l-2 border-l-primary/60 shadow-sm transition-all duration-200 hover:shadow-md">
-                  <div className="space-y-4">
+                <Card key={peca.id} className="card-system p-3 flex flex-col justify-between border-l-2 border-l-primary/60 group">
+                  <div className="space-y-3">
                     <div className="flex justify-between items-start">
-                      <span className="bg-muted text-muted-foreground px-2 py-0.5 rounded text-[10px] font-semibold uppercase border border-border tracking-wider">
+                      <span className="bg-muted text-muted-foreground/80 px-1.5 py-0.5 rounded text-[9px] font-semibold uppercase border border-border tracking-wider">
                         {peca.status.replace('_', ' ')}
                       </span>
                       {isUrgent && peca.status === 'em_teste' && (
-                        <span className="bg-orange/10 text-orange border border-orange/20 px-2 py-0.5 rounded text-[10px] font-semibold uppercase animate-pulse">Urgente</span>
+                        <span className="bg-orange/10 text-orange border border-orange/20 px-1.5 py-0.5 rounded text-[9px] font-semibold uppercase">Urgente</span>
                       )}
                     </div>
                     
                     <div className="space-y-1">
-                      <h3 className="font-semibold text-primary text-sm leading-tight group-hover:text-orange transition-colors">{peca.descricao_peca}</h3>
-                      <p className="text-[11px] text-muted-foreground font-medium uppercase tracking-wide">{peca.cliente?.nome}</p>
+                      <h3 className="font-semibold text-primary text-[13px] leading-tight group-hover:text-orange transition-colors">{peca.descricao_peca}</h3>
+                      <p className="text-[9px] text-muted-foreground font-medium uppercase tracking-wide">{peca.cliente?.nome}</p>
                     </div>
 
                     <div className="space-y-2">
-                      <div className="flex items-center text-[11px] text-muted-foreground font-medium uppercase tracking-tight">
-                        <Clock className="w-3.5 h-3.5 mr-1.5 opacity-60" />
+                      <div className="flex items-center text-[9px] text-muted-foreground font-medium uppercase tracking-tight">
+                        <Clock className="w-3 h-3 mr-1.5 opacity-50" />
                         Vence: {format(new Date(peca.vencimento_em), "dd/MM HH:mm", { locale: ptBR })}
                       </div>
                       {peca.os && (
-                        <div className="text-[11px] font-semibold text-cyan uppercase tracking-wider flex items-center gap-1.5">
-                          <Package className="w-3.5 h-3.5 opacity-70" />
+                        <div className="text-[9px] font-semibold text-cyan uppercase tracking-wider flex items-center gap-1.5">
+                          <Package className="w-3 h-3 opacity-60" />
                           OS: {peca.os.protocolo}
                         </div>
                       )}
                     </div>
                   </div>
 
-                  <div className="mt-4 pt-4 border-t flex gap-2">
+                  <div className="mt-3 pt-3 border-t border-border/50 flex gap-2">
                     {peca.status === 'recebida' && (
-                      <Button size="sm" className="w-full bg-navy text-white hover:bg-navy/90 rounded-sm text-[10px] font-bold uppercase tracking-widest h-8" onClick={() => statusMutation.mutate({ id: peca.id, status: 'em_teste' })}>
+                      <Button size="sm" className="w-full bg-navy text-white hover:bg-navy/90 rounded text-[9px] font-semibold uppercase tracking-wider h-7" onClick={() => statusMutation.mutate({ id: peca.id, status: 'em_teste' })}>
                         INICIAR TESTE
                       </Button>
                     )}
                     {peca.status === 'em_teste' && (
                       <>
-                        <Button size="sm" variant="outline" className="flex-1 text-green-700 border-green-200 hover:bg-green-50 rounded-sm text-[10px] font-bold uppercase tracking-widest h-8" onClick={() => statusMutation.mutate({ id: peca.id, status: 'testada_aprovada', removeEtiqueta: true })}>
+                        <Button size="sm" variant="outline" className="flex-1 text-emerald-700 border-emerald-200 hover:bg-emerald-50 rounded text-[9px] font-semibold uppercase tracking-wider h-7" onClick={() => statusMutation.mutate({ id: peca.id, status: 'testada_aprovada', removeEtiqueta: true })}>
                           APROVAR
                         </Button>
-                        <Button size="sm" variant="outline" className="flex-1 text-red-700 border-red-200 hover:bg-red-50 rounded-sm text-[10px] font-bold uppercase tracking-widest h-8" onClick={() => statusMutation.mutate({ id: peca.id, status: 'testada_reprovada', removeEtiqueta: true })}>
+                        <Button size="sm" variant="outline" className="flex-1 text-red-700 border-red-200 hover:bg-red-50 rounded text-[9px] font-semibold uppercase tracking-wider h-7" onClick={() => statusMutation.mutate({ id: peca.id, status: 'testada_reprovada', removeEtiqueta: true })}>
                           REPROVAR
                         </Button>
                       </>
@@ -119,24 +119,24 @@ export function ProductionPage() {
                 <div className="px-1 border-b border-border pb-2">
                   <h3 className="font-bold text-navy text-[10px] uppercase tracking-widest flex items-center justify-between">
                     {esp.replace(/_/g, ' ')}
-                    <span className="bg-muted px-1.5 py-0.5 rounded-xs text-[9px] font-bold text-muted-foreground tabular-nums">
+                    <span className="bg-muted px-1 py-0.5 rounded text-[9px] font-medium text-muted-foreground tabular-nums">
                       {agenda.filter((a: any) => a.especialidade === esp).length}
                     </span>
                   </h3>
                 </div>
                 <div className="space-y-2">
                   {agenda.filter((a: any) => a.especialidade === esp).map((item: any) => (
-                    <div key={item.id} className="p-3 bg-card border border-border shadow-sm rounded interactive-item space-y-2">
+                    <div key={item.id} className="card-system p-2 interactive-item space-y-2">
                       <div className="flex justify-between items-start">
-                        <div className="font-mono text-[11px] font-semibold text-primary">{item.os.protocolo}</div>
-                        <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest">{item.status}</span>
+                        <div className="font-mono text-[10px] font-medium text-primary">{item.os.protocolo}</div>
+                        <span className="text-[9px] font-medium text-muted-foreground uppercase tracking-wider">{item.status}</span>
                       </div>
                       <div className="space-y-0.5">
                         <div className="text-[11px] font-semibold text-primary uppercase tracking-tight line-clamp-1">{item.os.clientes.nome}</div>
-                        <div className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">{item.os.veiculos.placa_cavalo}</div>
+                        <div className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">{item.os.veiculos.placa_cavalo}</div>
                       </div>
-                      <div className="pt-2 border-t border-border text-[10px] font-semibold text-primary uppercase tracking-widest flex items-center gap-2">
-                        <Clock className="w-3.5 h-3.5 opacity-60" />
+                      <div className="pt-2 border-t border-border/50 text-[9px] font-medium text-primary uppercase tracking-wider flex items-center gap-2">
+                        <Clock className="w-3 h-3 opacity-50" />
                         {format(new Date(item.data_prevista), "dd/MM HH:mm", { locale: ptBR })}
                       </div>
                     </div>

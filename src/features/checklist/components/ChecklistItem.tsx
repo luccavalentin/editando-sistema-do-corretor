@@ -32,16 +32,16 @@ export function ChecklistItem({ label, itemId, value, onChange }: ChecklistItemP
   };
 
   return (
-    <div className="p-3 border border-border rounded-sm bg-card hover:border-border/80 transition-all">
-      <div className="flex items-center justify-between gap-4">
-        <span className="font-bold text-[11px] uppercase tracking-wider text-navy opacity-80">{label}</span>
+    <div className="p-2 border border-border rounded bg-card hover:border-border/80 transition-all">
+      <div className="flex items-center justify-between gap-3">
+        <span className="font-medium text-[10px] uppercase tracking-wider text-navy opacity-80">{label}</span>
         <div className="flex gap-1 shrink-0">
           <button
             className={cn(
-              "w-8 h-8 flex items-center justify-center rounded-sm border transition-all cursor-pointer",
+              "w-7 h-7 flex items-center justify-center rounded border transition-all cursor-pointer",
               status === 'ok' 
-                ? "bg-green-600 text-white border-green-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]" 
-                : "bg-muted/30 text-muted-foreground/40 border-border hover:bg-muted/50"
+                ? "bg-emerald-600 text-white border-emerald-700 shadow-sm" 
+                : "bg-muted/30 text-muted-foreground/30 border-border hover:bg-muted/50 hover:text-muted-foreground/60"
             )}
             onClick={() => updateStatus('ok')}
             title="OK"
@@ -50,10 +50,10 @@ export function ChecklistItem({ label, itemId, value, onChange }: ChecklistItemP
           </button>
           <button
             className={cn(
-              "w-8 h-8 flex items-center justify-center rounded-sm border transition-all cursor-pointer",
+              "w-7 h-7 flex items-center justify-center rounded border transition-all cursor-pointer",
               status === 'nao_ok' 
-                ? "bg-red-600 text-white border-red-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]" 
-                : "bg-muted/30 text-muted-foreground/40 border-border hover:bg-muted/50"
+                ? "bg-red-600 text-white border-red-700 shadow-sm" 
+                : "bg-muted/30 text-muted-foreground/30 border-border hover:bg-muted/50 hover:text-muted-foreground/60"
             )}
             onClick={() => updateStatus('nao_ok')}
             title="NÃO OK"
@@ -62,10 +62,10 @@ export function ChecklistItem({ label, itemId, value, onChange }: ChecklistItemP
           </button>
           <button
             className={cn(
-              "w-8 h-8 flex items-center justify-center rounded-sm border transition-all cursor-pointer",
+              "w-7 h-7 flex items-center justify-center rounded border transition-all cursor-pointer",
               status === 'nao_aplica' 
-                ? "bg-navy text-white border-navy shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]" 
-                : "bg-muted/30 text-muted-foreground/40 border-border hover:bg-muted/50"
+                ? "bg-navy text-white border-navy shadow-sm" 
+                : "bg-muted/30 text-muted-foreground/30 border-border hover:bg-muted/50 hover:text-muted-foreground/60"
             )}
             onClick={() => updateStatus('nao_aplica')}
             title="NÃO SE APLICA"
@@ -76,13 +76,13 @@ export function ChecklistItem({ label, itemId, value, onChange }: ChecklistItemP
       </div>
 
       {(showObs || value?.observacao) && (
-        <div className="mt-3 space-y-2">
+        <div className="mt-2 space-y-1.5">
           <Textarea
-            placeholder="Descreva detalhadamente o problema identificado..."
+            placeholder="Observação obrigatória..."
             value={value?.observacao || ''}
             onChange={(e) => onChange({ ...value!, item_id: itemId, status: status!, observacao: e.target.value })}
             className={cn(
-              "rounded-sm text-[11px] min-h-[60px] border-border bg-background focus:ring-1 focus:ring-primary placeholder:text-muted-foreground/30",
+              "rounded text-[10px] min-h-[50px] border-border bg-background focus:ring-1 focus:ring-primary placeholder:text-muted-foreground/30 py-1.5 px-2",
               showObs && !value?.observacao && "border-red-500/50 bg-red-500/[0.02]"
             )}
           />
@@ -94,12 +94,12 @@ export function ChecklistItem({ label, itemId, value, onChange }: ChecklistItemP
         </div>
       )}
       
-      <div className="mt-3 flex gap-2 items-center border-t border-border/50 pt-2">
+      <div className="mt-2 flex gap-2 items-center border-t border-border/50 pt-1.5">
         <button 
-          className="text-[9px] font-bold uppercase tracking-widest h-6 border border-border rounded-sm px-2 bg-muted/20 hover:bg-muted/40 text-muted-foreground flex items-center gap-1.5 transition-colors cursor-pointer"
+          className="text-[9px] font-medium uppercase tracking-wider h-5 border border-border rounded px-2 bg-muted/10 hover:bg-muted/30 text-muted-foreground flex items-center gap-1.5 transition-colors cursor-pointer"
           onClick={(e) => e.preventDefault()}
         >
-          <Camera className="w-3 h-3 text-primary" />
+          <Camera className="w-2.5 h-2.5 text-primary/70" />
           ANEXAR EVIDÊNCIA
         </button>
         {value?.evidencias && value.evidencias.length > 0 && (

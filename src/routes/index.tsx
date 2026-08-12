@@ -86,29 +86,29 @@ function Dashboard() {
   return (
     <div className="p-6 space-y-8 bg-background min-h-screen">
       <div className="flex justify-between items-end border-b border-border pb-6">
-        <div className="space-y-2">
+        <div className="space-y-1">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-navy flex items-center justify-center shadow-lg shadow-navy/20">
-              <LayoutDashboard className="w-5 h-5 text-cyan" />
+            <div className="w-8 h-8 rounded bg-navy flex items-center justify-center shadow shadow-navy/10">
+              <LayoutDashboard className="w-4 h-4 text-cyan" />
             </div>
-            <h1 className="text-2xl font-bold font-heading text-primary uppercase tracking-tight">
+            <h1 className="text-xl font-semibold text-primary uppercase tracking-tight">
               Central de Operações
             </h1>
           </div>
-          <p className="text-[11px] text-muted-foreground font-bold uppercase tracking-[0.2em] opacity-60">
+          <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-[0.1em] opacity-60">
             Monitoramento em Tempo Real • Pátio Industrial Tecnoar
           </p>
         </div>
-        <div className="flex gap-3">
-          <Button variant="outline" className="h-9 px-4 rounded border-border hover:bg-muted font-bold text-[10px] uppercase tracking-widest transition-all">
-            <Filter className="w-3.5 h-3.5 mr-2" />
+        <div className="flex gap-2">
+          <Button variant="outline" className="h-8 px-3 rounded border-border hover:bg-muted font-medium text-[10px] uppercase tracking-wider transition-all">
+            <Filter className="w-3 h-3 mr-1.5" />
             Filtrar
           </Button>
           <Button 
             onClick={() => setViewMode('tv')} 
-            className="h-9 px-6 bg-navy hover:bg-navy/90 text-white rounded shadow-sm gap-2 transition-all text-[10px] font-bold uppercase tracking-widest"
+            className="h-8 px-4 bg-navy hover:bg-navy/90 text-white rounded shadow-sm gap-2 transition-all text-[10px] font-medium uppercase tracking-wider"
           >
-            <Tv className="w-3.5 h-3.5 text-cyan" />
+            <Tv className="w-3 h-3 text-cyan" />
             Monitor
           </Button>
         </div>
@@ -128,14 +128,14 @@ function Dashboard() {
           const items = osList.filter((o: any) => o.status === status);
           return (
             <div key={status} className="flex flex-col gap-4 min-w-[260px]">
-              <div className="flex justify-between items-center px-2">
-                <div className="flex items-center gap-3">
-                  <div className={`w-1.5 h-1.5 rounded-full ${items.length > 0 ? 'bg-orange animate-pulse shadow-[0_0_5px_rgba(240,96,0,0.5)]' : 'bg-muted-foreground/30'}`} />
-                  <h3 className="font-bold text-primary text-[11px] uppercase tracking-[0.15em]">
+              <div className="flex justify-between items-center px-1">
+                <div className="flex items-center gap-2">
+                  <div className={`w-1.5 h-1.5 rounded-full ${items.length > 0 ? 'bg-orange shadow-[0_0_4px_rgba(240,96,0,0.4)]' : 'bg-muted-foreground/20'}`} />
+                  <h3 className="font-semibold text-primary text-[10px] uppercase tracking-wider">
                     {STATUS_LABELS[status]}
                   </h3>
                 </div>
-                <span className="bg-navy/5 text-navy px-2 py-0.5 rounded text-[9px] font-black tabular-nums border border-navy/10">
+                <span className="bg-navy/5 text-navy px-1.5 py-0.5 rounded text-[9px] font-medium tabular-nums border border-navy/10">
                   {items.length}
                 </span>
               </div>

@@ -173,10 +173,10 @@ export function ChecklistPage() {
     return (
       <div className="p-6 max-w-5xl mx-auto space-y-8 bg-background min-h-screen">
         <div className="border-b border-border pb-6 text-center sm:text-left">
-          <h1 className="text-3xl font-semibold font-heading text-primary uppercase tracking-tight">
+          <h1 className="text-2xl font-semibold text-primary uppercase tracking-tight">
             Central de Qualidade
           </h1>
-          <p className="text-[11px] text-muted-foreground mt-2 font-medium uppercase tracking-widest opacity-80">
+          <p className="text-[10px] text-muted-foreground mt-1 font-medium uppercase tracking-widest opacity-60">
             Inspeções Técnicas & Gestão 5S • Tecnoar Freios
           </p>
         </div>
@@ -287,39 +287,39 @@ export function ChecklistPage() {
 
   return (
     <div className="min-h-screen bg-muted/20 pb-20">
-      <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm border-b border-border p-4">
+      <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm border-b border-border p-3">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" onClick={() => mode === 'tecnico' ? setSelectedOS(null) : setSelectedSetor(null)} className="h-8 w-8 p-0 rounded-sm">
-              <ArrowLeft className="w-4 h-4" />
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="sm" onClick={() => mode === 'tecnico' ? setSelectedOS(null) : setSelectedSetor(null)} className="h-7 w-7 p-0 rounded">
+              <ArrowLeft className="w-3.5 h-3.5" />
             </Button>
-            <div className="h-8 w-px bg-border mx-1" />
+            <div className="h-6 w-px bg-border mx-0.5" />
             <div>
               {mode === 'tecnico' ? (
                 <>
-                  <div className="font-bold font-mono text-xs text-navy opacity-50 leading-none">{currentOS?.protocolo}</div>
-                  <div className="text-[11px] font-bold text-navy uppercase tracking-tight mt-1">{currentOS?.veiculos.placa_cavalo}</div>
+                  <div className="font-medium font-mono text-[10px] text-navy opacity-50 leading-none">{currentOS?.protocolo}</div>
+                  <div className="text-[11px] font-semibold text-navy uppercase tracking-tight mt-0.5">{currentOS?.veiculos.placa_cavalo}</div>
                 </>
               ) : (
                 <>
-                  <div className="font-bold font-mono text-xs text-navy opacity-50 leading-none">{today}</div>
-                  <div className="text-[11px] font-bold text-navy uppercase tracking-tight mt-1">{selectedSetor}</div>
+                  <div className="font-medium font-mono text-[10px] text-navy opacity-50 leading-none">{today}</div>
+                  <div className="text-[11px] font-semibold text-navy uppercase tracking-tight mt-0.5">{selectedSetor}</div>
                 </>
               )}
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {isOnline ? (
-              <span className="bg-green-500/10 text-green-700 border border-green-500/20 px-1.5 py-0.5 rounded-xs text-[9px] font-bold uppercase flex items-center gap-1">
+              <span className="bg-emerald-500/10 text-emerald-700 border border-emerald-500/20 px-1.5 py-0.5 rounded text-[9px] font-semibold uppercase flex items-center gap-1">
                 <Wifi className="w-2.5 h-2.5" /> ONLINE
               </span>
             ) : (
-              <span className="bg-orange/10 text-orange border border-orange/20 px-1.5 py-0.5 rounded-xs text-[9px] font-bold uppercase flex items-center gap-1">
+              <span className="bg-orange/10 text-orange border border-orange/20 px-1.5 py-0.5 rounded text-[9px] font-semibold uppercase flex items-center gap-1">
                 <WifiOff className="w-2.5 h-2.5" /> OFFLINE
               </span>
             )}
             {pendingResponses && pendingResponses.length > 0 && (
-              <span className="bg-primary text-white px-1.5 py-0.5 rounded-xs text-[9px] font-bold uppercase tabular-nums">
+              <span className="bg-primary text-white px-1.5 py-0.5 rounded text-[9px] font-semibold uppercase tabular-nums shadow-sm">
                 {pendingResponses.length} PENDENTES
               </span>
             )}
@@ -329,22 +329,22 @@ export function ChecklistPage() {
 
       <div className="p-4 max-w-4xl mx-auto space-y-4">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="w-full grid grid-cols-3 sm:grid-cols-7 h-auto p-1 bg-muted/50 border border-border/50 rounded-lg mb-6 shadow-sm">
+          <TabsList className="w-full grid grid-cols-4 sm:grid-cols-7 h-auto p-1 bg-muted/50 border border-border/50 rounded mb-4 shadow-sm">
             {templates.map((t: any, idx: number) => (
-              <TabsTrigger key={t.id} value={idx.toString()} className="text-[10px] font-bold uppercase tracking-tighter py-2 rounded-xs px-1 overflow-hidden text-ellipsis whitespace-nowrap">
+              <TabsTrigger key={t.id} value={idx.toString()} className="text-[9px] font-semibold uppercase tracking-wider py-1.5 rounded px-1 overflow-hidden text-ellipsis whitespace-nowrap">
                 {t.secao.split(' ')[0]}
               </TabsTrigger>
             ))}
-            <TabsTrigger value="final" className="text-[10px] font-bold uppercase tracking-tight py-2 rounded-xs">FINALIZAR</TabsTrigger>
+            <TabsTrigger value="final" className="text-[9px] font-semibold uppercase tracking-wider py-1.5 rounded">FIM</TabsTrigger>
           </TabsList>
 
           {templates.map((section: any, idx: number) => (
             <TabsContent key={section.id} value={idx.toString()} className="space-y-6 pt-2">
-              <div className="flex items-center gap-3 border-b border-border pb-3">
-                <div className="w-1.5 h-6 bg-primary rounded-xs" />
-                <h2 className="text-xs font-bold font-heading text-navy uppercase tracking-[0.2em]">{section.secao}</h2>
+              <div className="flex items-center gap-2 border-b border-border pb-2">
+                <div className="w-1 h-4 bg-primary rounded" />
+                <h2 className="text-[11px] font-semibold text-primary uppercase tracking-wider">{section.secao}</h2>
               </div>
-              <div className="grid gap-3">
+              <div className="grid gap-2">
                 {(section.itens as any[]).map((item: any) => (
                   mode === 'tecnico' ? (
                     <ChecklistItem

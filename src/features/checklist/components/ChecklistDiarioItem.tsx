@@ -35,20 +35,20 @@ export function ChecklistDiarioItem({ label, itemId, value, onChange, tipo = 'du
   const showFechamento = tipo === 'dual' || tipo === 'fechamento';
 
   return (
-    <div className="p-3 border border-border rounded-sm bg-card hover:border-border/80 transition-all">
-      <div className="flex items-center justify-between gap-4">
-        <span className="font-bold text-[11px] uppercase tracking-wider text-navy opacity-80">{label}</span>
+    <div className="p-2 border border-border rounded bg-card hover:border-border/80 transition-all">
+      <div className="flex items-center justify-between gap-3">
+        <span className="font-medium text-[10px] uppercase tracking-wider text-navy opacity-80">{label}</span>
         <div className="flex gap-2 shrink-0">
           {showAbertura && (
             <div className="flex flex-col items-center gap-1">
-              <span className="text-[8px] font-bold text-muted-foreground uppercase opacity-50">AB</span>
+              <span className="text-[7px] font-medium text-muted-foreground uppercase opacity-40">AB</span>
               <button
                 type="button"
                 className={cn(
-                  "w-10 h-8 flex items-center justify-center rounded-sm border transition-all cursor-pointer",
+                  "w-8 h-7 flex items-center justify-center rounded border transition-all cursor-pointer",
                   value?.ok_abertura 
-                    ? "bg-green-600 text-white border-green-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]" 
-                    : "bg-muted/30 text-muted-foreground/40 border-border hover:bg-muted/50"
+                    ? "bg-emerald-600 text-white border-emerald-700 shadow-sm" 
+                    : "bg-muted/30 text-muted-foreground/30 border-border hover:bg-muted/50 hover:text-muted-foreground/60"
                 )}
                 onClick={() => updateStatus('ok_abertura', value?.ok_abertura)}
               >
@@ -59,14 +59,14 @@ export function ChecklistDiarioItem({ label, itemId, value, onChange, tipo = 'du
           
           {showFechamento && (
             <div className="flex flex-col items-center gap-1">
-              <span className="text-[8px] font-bold text-muted-foreground uppercase opacity-50">FC</span>
+              <span className="text-[7px] font-medium text-muted-foreground uppercase opacity-40">FC</span>
               <button
                 type="button"
                 className={cn(
-                  "w-10 h-8 flex items-center justify-center rounded-sm border transition-all cursor-pointer",
+                  "w-8 h-7 flex items-center justify-center rounded border transition-all cursor-pointer",
                   value?.ok_fechamento 
-                    ? "bg-navy text-white border-navy shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]" 
-                    : "bg-muted/30 text-muted-foreground/40 border-border hover:bg-muted/50"
+                    ? "bg-navy text-white border-navy shadow-sm" 
+                    : "bg-muted/30 text-muted-foreground/30 border-border hover:bg-muted/50 hover:text-muted-foreground/60"
                 )}
                 onClick={() => updateStatus('ok_fechamento', value?.ok_fechamento)}
               >
@@ -77,9 +77,9 @@ export function ChecklistDiarioItem({ label, itemId, value, onChange, tipo = 'du
         </div>
       </div>
 
-      <div className="mt-3">
+      <div className="mt-2">
         <Textarea
-          placeholder="Ocorrências / Observações..."
+          placeholder="Ocorrências..."
           value={value?.observacao || ''}
           onChange={(e) => onChange({ 
             item_id: itemId, 
@@ -87,7 +87,7 @@ export function ChecklistDiarioItem({ label, itemId, value, onChange, tipo = 'du
             ok_fechamento: value?.ok_fechamento ?? false,
             observacao: e.target.value 
           })}
-          className="rounded-sm text-[11px] min-h-[40px] border-border bg-background focus:ring-1 focus:ring-primary placeholder:text-muted-foreground/30"
+          className="rounded text-[10px] min-h-[36px] border-border bg-background focus:ring-1 focus:ring-primary placeholder:text-muted-foreground/30 py-1 px-2"
         />
       </div>
     </div>
