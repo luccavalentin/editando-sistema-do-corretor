@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -9,9 +9,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Settings, Clock, ShieldCheck, Database, MessageSquare, RefreshCw, AlertCircle, ExternalLink } from 'lucide-react';
+import { Settings, Clock, ShieldCheck, Database, MessageSquare, RefreshCw, AlertCircle, ExternalLink, Lock, Eye, EyeOff, CheckCircle2 } from 'lucide-react';
 import { useServerFn } from '@tanstack/react-start';
 import { syncClientesOmie, syncEstoqueOmie, checkOmieStatus } from '@/features/omie/services/omie.functions';
+import { getSecretsStatus, saveSecret } from '../services/secrets.functions';
 import { cn } from '@/lib/utils';
 
 export default function AppConfigPage() {
