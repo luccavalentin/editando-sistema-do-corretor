@@ -4,6 +4,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 export const checkOmieStatus = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
+  .validator((data: any) => z.void().optional().parse(data))
   .handler(async () => {
     const appKey = process.env['OMIE_APP_KEY'];
     const appSecret = process.env['OMIE_APP_SECRET'];
@@ -58,6 +59,7 @@ async function callOmie(endpoint: string, method: string, params: any, retryCoun
 
 export const syncClientesOmie = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
+  .validator((data: any) => z.void().optional().parse(data))
   .handler(async ({ context }) => {
     const { supabase } = context;
     
@@ -106,6 +108,7 @@ export const syncClientesOmie = createServerFn({ method: "POST" })
 
 export const syncEstoqueOmie = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
+  .validator((data: any) => z.void().optional().parse(data))
   .handler(async ({ context }) => {
     const { supabase } = context;
     try {

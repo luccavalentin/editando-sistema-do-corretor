@@ -5,6 +5,7 @@ import { getIAConfigServer, getBaseConhecimentoServer } from "../services/ia.ser
 
 export const getIAConfig = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
+  .validator((data: any) => z.void().optional().parse(data))
   .handler(async ({ context }) => {
     return getIAConfigServer(context.supabase);
   });
@@ -30,7 +31,7 @@ export const getBaseConhecimento = createServerFn({ method: "GET" })
     marca: z.string().optional(),
     categoria: z.string().optional(),
     query: z.string().optional()
-  }).parse(data))
+  }).optional().parse(data || {}))
   .handler(async ({ data, context }) => {
     return getBaseConhecimentoServer(context.supabase, data);
   });
