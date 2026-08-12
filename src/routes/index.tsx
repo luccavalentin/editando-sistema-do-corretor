@@ -84,8 +84,8 @@ function Dashboard() {
   }
 
   return (
-    <div className="p-8 space-y-10 bg-background min-h-screen">
-      <div className="flex justify-between items-end border-b border-border pb-8">
+    <div className="p-6 space-y-8 bg-background min-h-screen">
+      <div className="flex justify-between items-end border-b border-border pb-6">
         <div className="space-y-2">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-navy flex items-center justify-center shadow-lg shadow-navy/20">
@@ -114,7 +114,7 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
         <StatCard title="No pátio agora" value={stats?.noPatio || 0} icon={Truck} color="text-cyan" />
         <StatCard title="Entraram hoje" value={stats?.entraramHoje || 0} icon={PlusCircle} color="text-orange" />
         <StatCard title="Concluídas hoje" value={stats?.concluidasHoje || 0} icon={CheckCircle2} color="text-emerald-500" />
@@ -123,24 +123,24 @@ function Dashboard() {
         <StatCard title="Peças Vencendo" value={stats?.pecasVencendo || 0} icon={Package} color="text-orange" />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 xl:grid-cols-5 gap-8 overflow-x-auto pb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-4 xl:grid-cols-5 gap-6 overflow-x-auto pb-6">
         {STATUS_FLOW.map(status => {
           const items = osList.filter((o: any) => o.status === status);
           return (
-            <div key={status} className="flex flex-col gap-6 min-w-[280px]">
+            <div key={status} className="flex flex-col gap-4 min-w-[260px]">
               <div className="flex justify-between items-center px-2">
                 <div className="flex items-center gap-3">
-                  <div className={`w-2 h-2 rounded-full ${items.length > 0 ? 'bg-orange animate-pulse shadow-[0_0_10px_rgba(240,96,0,0.5)]' : 'bg-muted-foreground/30'}`} />
+                  <div className={`w-1.5 h-1.5 rounded-full ${items.length > 0 ? 'bg-orange animate-pulse shadow-[0_0_5px_rgba(240,96,0,0.5)]' : 'bg-muted-foreground/30'}`} />
                   <h3 className="font-bold text-primary text-[11px] uppercase tracking-[0.15em]">
                     {STATUS_LABELS[status]}
                   </h3>
                 </div>
-                <span className="bg-navy/5 text-navy px-3 py-1 rounded-full text-[10px] font-black tabular-nums border border-navy/10">
+                <span className="bg-navy/5 text-navy px-2 py-0.5 rounded text-[9px] font-black tabular-nums border border-navy/10">
                   {items.length}
                 </span>
               </div>
               
-              <div className="space-y-4 flex-1">
+              <div className="space-y-3 flex-1">
                 {(items as any[]).map((os: any) => (
                   <OSKanbanCard 
                     key={os.id} 

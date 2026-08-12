@@ -48,8 +48,8 @@ export function OSKanbanCard({ os, onNextStatus, nextStatus }: OSKanbanCardProps
           {nextStatus && (
             <Button 
               size="sm" 
-              variant="outline"
-              className="h-8 px-3 rounded border-orange/20 text-[10px] font-bold uppercase text-orange hover:bg-orange hover:text-white hover:border-orange transition-all gap-1.5 active:scale-95 shadow-sm"
+              variant="ghost"
+              className="h-7 px-2 rounded border border-orange/20 text-[9px] font-bold uppercase text-orange hover:bg-orange hover:text-white transition-all gap-1.5 shadow-none"
               onClick={(e) => {
                 e.stopPropagation();
                 onNextStatus(os.id, nextStatus);
@@ -64,4 +64,3 @@ export function OSKanbanCard({ os, onNextStatus, nextStatus }: OSKanbanCardProps
     </Card>
   );
 }
-
