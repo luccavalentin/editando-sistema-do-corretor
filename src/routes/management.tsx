@@ -154,10 +154,10 @@ function ManagementPage() {
               <CardContent className="p-4 space-y-4">
                 <div className="flex gap-3">
                   <Input 
-                    placeholder="Buscar por CNPJ ou Nome..." 
+                    placeholder="CNPJ ou Nome..." 
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="h-10 focus-visible:ring-primary/30"
+                    className="h-9 focus-visible:ring-primary/20 text-[11px] placeholder:text-muted-foreground/40 rounded"
                   />
                   <Button onClick={handleSearch} className="h-9 px-6 bg-primary text-white hover:bg-primary/90 font-semibold text-[10px] uppercase tracking-wider rounded">
                     Buscar
