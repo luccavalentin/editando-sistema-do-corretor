@@ -8,7 +8,7 @@ import {
   Scripts,
   useLocation
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Toaster } from "sonner";
 import { SidebarProvider, SidebarContainer } from "@/components/ui/sidebar";
 import { RequireRole } from "@/core/RequireRole";
@@ -122,11 +122,20 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const location = useLocation();
   const isLoginPage = location.pathname === '/login';
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
       <SidebarProvider>
-        {isLoginPage ? (
+        {!isHydrated ? (
+          <div className="flex h-screen w-full items-center justify-center bg-background">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-navy/10 border-t-orange" />
+          </div>
+        ) : isLoginPage ? (
           <Outlet />
         ) : (
           <RequireRole>
