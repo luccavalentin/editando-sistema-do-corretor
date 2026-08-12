@@ -15,7 +15,7 @@ function ReportsPage() {
   const fetchReports = useServerFn(getReportsData);
   const { data: reports, isLoading } = useQuery({
     queryKey: ['reports'],
-    queryFn: () => fetchReports({ period: 'all' } as any)
+    queryFn: () => fetchReports({ data: { period: 'all' } })
   });
 
 

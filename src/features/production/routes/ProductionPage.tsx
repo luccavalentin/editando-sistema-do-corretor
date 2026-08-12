@@ -16,12 +16,12 @@ export function ProductionPage() {
   
   const { data: pecas } = useSuspenseQuery({
     queryKey: ['pecas-teste'],
-    queryFn: () => getPecasTeste({ data: undefined })
+    queryFn: () => getPecasTeste()
   });
 
   const { data: agenda } = useSuspenseQuery({
     queryKey: ['agenda-servicos'],
-    queryFn: () => getAgendaServicos({ data: undefined })
+    queryFn: () => getAgendaServicos()
   });
 
   const updateStatusFn = useServerFn(updatePecaStatus);
