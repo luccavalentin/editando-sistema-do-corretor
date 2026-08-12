@@ -83,9 +83,23 @@ export function ChecklistPage() {
     }
   });
 
-  // Online/Offline Listeners
+  // Online/Offline Listeners and Auto-Sync
   useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
+    const handleOnline = () => {
+      setIsOnline(true);
+      // Sincronizar automaticamente quando voltar online se não estiver no meio de um salvamento
+      if (pendingResponses && pendingResponses.length > 0 && !syncMutation.isPending) {
+        const currentResponses = Array.from(responsesMap.values());
+        syncMutation.mutate({
+          os_id: selectedOS,
+          setor: selectedSetor,
+          data: today,
+          tipo: mode === 'tecnico' ? 'diagnostico_defeitos' : 'checklist_diario',
+          respostas: currentResponses,
+          finalizado: false
+        });
+      }
+    };
     const handleOffline = () => setIsOnline(false);
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
@@ -93,7 +107,7 @@ export function ChecklistPage() {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
-  }, []);
+  }, [isOnline, pendingResponses, syncMutation, responsesMap, selectedOS, selectedSetor, today, mode]);
 
   const handleResponseChange = async (res: ChecklistResponse | ChecklistDiarioResponse) => {
     if (mode === 'tecnico' && selectedOS) {

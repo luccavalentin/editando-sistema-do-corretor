@@ -4,7 +4,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const OMIE_API_URL = "https://app.omie.com.br/api/v1";
 
-async function callOmie(endpoint: string, method: string, params: any) {
+async function callOmie(endpoint: string, method: string, params: any, retryCount = 0): Promise<any> {
   const appKey = process.env['OMIE_APP_KEY'];
   const appSecret = process.env['OMIE_APP_SECRET'];
 
@@ -12,22 +12,38 @@ async function callOmie(endpoint: string, method: string, params: any) {
     throw new Error("OMIE_APP_KEY e OMIE_APP_SECRET não configurados.");
   }
 
-  const response = await fetch(`${OMIE_API_URL}${endpoint}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      call: method,
-      app_key: appKey,
-      app_secret: appSecret,
-      param: [params]
-    })
-  });
+  try {
+    const response = await fetch(`${OMIE_API_URL}${endpoint}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        call: method,
+        app_key: appKey,
+        app_secret: appSecret,
+        param: [params]
+      })
+    });
 
-  const data = await response.json();
-  if (data.faultString) {
-    throw new Error(`Omie API Error: ${data.faultString}`);
+    if (!response.ok && retryCount < 3) {
+      const waitTime = Math.pow(2, retryCount) * 1000;
+      console.log(`[OMIE] Erro ${response.status}. Tentando novamente em ${waitTime}ms...`);
+      await new Promise(resolve => setTimeout(resolve, waitTime));
+      return callOmie(endpoint, method, params, retryCount + 1);
+    }
+
+    const data = await response.json();
+    if (data.faultString) {
+      throw new Error(`Omie API Error: ${data.faultString}`);
+    }
+    return data;
+  } catch (error) {
+    if (retryCount < 3) {
+      const waitTime = Math.pow(2, retryCount) * 1000;
+      await new Promise(resolve => setTimeout(resolve, waitTime));
+      return callOmie(endpoint, method, params, retryCount + 1);
+    }
+    throw error;
   }
-  return data;
 }
 
 export const syncClientesOmie = createServerFn({ method: "POST" })
