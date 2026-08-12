@@ -2,6 +2,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState, useRef, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import FollowUpPage from '@/features/ia/routes/FollowUpPage';
 import { 
   Bot, 
   Send, 
