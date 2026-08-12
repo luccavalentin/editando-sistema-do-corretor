@@ -55,13 +55,18 @@ export const updateOSStatus = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
 
+    // Validação de segurança redundante removida pois o RPC já valida auth.uid()
+    // Mas adicionamos log de auditoria explícito se necessário
     const { error } = await supabase.rpc('transicionar_status_os', {
       _os_id: data.os_id,
       _novo_status: data.novo_status,
       _usuario_id: userId
     });
 
-    if (error) throw new Error(error.message);
+    if (error) {
+      console.error(`[OS] Falha na transição da OS ${data.os_id}:`, error);
+      throw new Error(error.message);
+    }
     return { success: true };
   });
 
