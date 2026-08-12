@@ -40,30 +40,39 @@ export function RequireRole({ children }: { children: React.ReactNode }) {
         const { data: roleData, error: roleError } = await supabase
           .from('user_roles')
           .select('role')
-          .eq('user_id', session.user.id)
-          .single();
+          .eq('user_id', session.user.id);
 
-        if (roleError || !roleData) {
+        const roles = roleData || [];
+
+        if (roleError || roles.length === 0) {
           console.error("Auth: User has no role assigned or RLS blocked read:", {
             error: roleError,
-            userId: session.user.id
+            userId: session.user.id,
+            rolesFound: roles.length
           });
+          
           if (isMounted) {
-            toast.error("Usuário sem permissões atribuídas. Contate o administrador.");
+            toast.error("Permissões não encontradas. Contate o administrador.");
             setRole(null);
             setLoading(false);
-            navigate({ to: '/login' });
+            setTimeout(() => {
+              if (isMounted) navigate({ to: '/login' });
+            }, 2000);
           }
           return;
         }
 
-        const userRole = roleData.role as AppRole;
+        // Use the most powerful role if multiple exist
+        const roleOrder: AppRole[] = ['superadmin', 'admin_adm', 'lider', 'vendedor', 'financeiro', 'mecanico', 'montador'];
+        const userRole = roles
+          .map(r => r.role as AppRole)
+          .sort((a, b) => roleOrder.indexOf(a) - roleOrder.indexOf(b))[0];
 
         if (isMounted) {
-          setRole(userRole);
+          setRole(userRole || null);
           setLoading(false);
 
-          if (!canAccessRoute(location.pathname, userRole)) {
+          if (userRole && !canAccessRoute(location.pathname, userRole)) {
             console.warn(`Access denied for ${userRole} at ${location.pathname}`);
             toast.error("Acesso negado para seu nível de permissão");
             navigate({ to: '/' });

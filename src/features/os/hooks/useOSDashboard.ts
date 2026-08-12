@@ -12,12 +12,14 @@ export function useOSDashboard() {
 
   const statsQuery = useQuery({
     queryKey: ['os-stats'],
-    queryFn: () => getStatsFn()
+    queryFn: () => getStatsFn(),
+    initialData: { noPatio: 0, entraramHoje: 0, concluidasHoje: 0, atrasadas: 0, pecasVencendo: 0 } as any
   });
 
   const listQuery = useQuery({
     queryKey: ['os-list'],
-    queryFn: () => getListFn()
+    queryFn: () => getListFn(),
+    initialData: [] as any[]
   });
 
   const updateStatusMutation = useMutation({

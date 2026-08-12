@@ -1,11 +1,15 @@
 import { OSStatus } from "../types/os.types";
 
 export async function getOSStatsServer(supabase: any) {
-  const { data: os, error } = await supabase
-    .from("ordens_servico")
-    .select("status, criado_em, finalizado_em");
-  
-  if (error) throw new Error(error.message);
+  try {
+    const { data: os, error } = await supabase
+      .from("ordens_servico")
+      .select("status, criado_em, finalizado_em");
+    
+    if (error) {
+      console.error("Error fetching OS stats:", error);
+      return { noPatio: 0, entraramHoje: 0, concluidasHoje: 0, atrasadas: 0, pecasVencendo: 0 };
+    }
   
   const { data: pecas } = await supabase
     .from("pecas_teste")
@@ -20,21 +24,33 @@ export async function getOSStatsServer(supabase: any) {
     concluidasHoje: os.filter((o: any) => o.finalizado_em?.startsWith(today)).length,
     atrasadas: 0,
     pecasVencendo: pecas?.filter((p: any) => p.status === 'em_teste' && new Date(p.vencimento_em) < now).length || 0,
-  };
+    };
+  } catch (err) {
+    console.error("Critical error in getOSStatsServer:", err);
+    return { noPatio: 0, entraramHoje: 0, concluidasHoje: 0, atrasadas: 0, pecasVencendo: 0 };
+  }
 }
 
 export async function getOSListServer(supabase: any) {
-  const { data, error } = await supabase
-    .from("ordens_servico")
-    .select(`
-      *,
-      cliente:clientes(nome),
-      veiculo:veiculos(placa_cavalo, modelo_cavalo)
-    `)
-    .order('criado_em', { ascending: false });
-    
-  if (error) throw new Error(error.message);
-  return data;
+  try {
+    const { data, error } = await supabase
+      .from("ordens_servico")
+      .select(`
+        *,
+        cliente:clientes(nome),
+        veiculo:veiculos(placa_cavalo, modelo_cavalo)
+      `)
+      .order('criado_em', { ascending: false });
+      
+    if (error) {
+      console.error("Error fetching OS list:", error);
+      return [];
+    }
+    return data || [];
+  } catch (err) {
+    console.error("Critical error in getOSListServer:", err);
+    return [];
+  }
 }
 export async function getReportsDataServer(supabase: any, filters: any) {
   let query = supabase.from("ordens_servico").select(`id, protocolo, status, valor_pecas, valor_servico, criado_em, cliente:clientes(nome)`);
