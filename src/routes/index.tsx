@@ -136,7 +136,7 @@ function Dashboard() {
                   <OSKanbanCard 
                     key={os.id} 
                     os={os} 
-                    onNextStatus={updateStatus}
+                    onNextStatus={(os_id, novo_status) => updateStatus({ os_id, novo_status })}
                     nextStatus={STATUS_FLOW[STATUS_FLOW.indexOf(status as any) + 1]}
                   />
                 ))}
