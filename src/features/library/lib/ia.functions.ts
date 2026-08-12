@@ -30,7 +30,7 @@ export const getBaseConhecimento = createServerFn({ method: "GET" })
     marca: z.string().optional(),
     categoria: z.string().optional(),
     query: z.string().optional()
-  }).parse(data))
+  }).optional().parse(data || {}))
   .handler(async ({ data, context }) => {
     return getBaseConhecimentoServer(context.supabase, data);
   });
