@@ -67,64 +67,71 @@ function ReportsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         <Card className="rounded-sm border border-border shadow-xs bg-card">
-          <CardHeader className="py-4 px-4 border-b border-border/50 bg-muted/20">
-            <CardTitle className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Volume Total</CardTitle>
+          <CardHeader className="py-3 px-4 border-b border-border/50 bg-muted/20">
+            <CardTitle className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">VOLUME TOTAL</CardTitle>
           </CardHeader>
-          <CardContent className="py-6 px-4">
+          <CardContent className="py-4 px-4">
             <p className="text-2xl font-semibold text-navy tracking-tight tabular-nums">{reports?.length || 0}</p>
           </CardContent>
         </Card>
-        <Card className="rounded-md border-navy/10 shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-sm font-medium text-muted-foreground uppercase">Ticket Médio (Serviços)</CardTitle>
+        <Card className="rounded-sm border border-border shadow-xs bg-card">
+          <CardHeader className="py-3 px-4 border-b border-border/50 bg-muted/20">
+            <CardTitle className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">TICKET MÉDIO (SERV)</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold text-navy">
+          <CardContent className="py-4 px-4">
+            <p className="text-2xl font-semibold text-navy tracking-tight tabular-nums">
               R$ {(reports?.reduce((acc, curr) => acc + (Number(curr.valor_servico) || 0), 0) / (reports?.length || 1)).toFixed(2)}
             </p>
           </CardContent>
         </Card>
-        <Card className="rounded-md border-navy/10 shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-sm font-medium text-muted-foreground uppercase">Concluídas</CardTitle>
+        <Card className="rounded-sm border border-border shadow-xs bg-card">
+          <CardHeader className="py-3 px-4 border-b border-border/50 bg-muted/20">
+            <CardTitle className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">OS CONCLUÍDAS</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold text-cyan">{reports?.filter(os => os.status === 'concluida').length || 0}</p>
+          <CardContent className="py-4 px-4">
+            <p className="text-2xl font-semibold text-primary tracking-tight tabular-nums">{reports?.filter(os => os.status === 'concluida').length || 0}</p>
           </CardContent>
         </Card>
       </div>
 
-      <div className="bg-white rounded-lg border border-navy/10 shadow-sm overflow-hidden">
-        <Table>
-          <TableHeader className="bg-navy/5">
+      <div className="bg-card rounded-sm border border-border shadow-xs overflow-hidden">
+        <Table className="table-system">
+          <TableHeader>
             <TableRow>
               <TableHead>Protocolo</TableHead>
               <TableHead>Cliente</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Vlr Peças</TableHead>
               <TableHead>Vlr Serviço</TableHead>
-              <TableHead>Data</TableHead>
+              <TableHead className="text-right">Data</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {reports?.map((os) => (
               <TableRow key={os.id}>
-                <TableCell className="font-mono text-xs">{os.protocolo}</TableCell>
-                <TableCell className="font-medium text-navy">{os.cliente?.nome}</TableCell>
+                <TableCell className="font-mono text-xs font-bold opacity-50">{os.protocolo}</TableCell>
+                <TableCell className="font-bold text-navy uppercase tracking-tight">{os.cliente?.nome}</TableCell>
                 <TableCell>
-                  <span className="px-2 py-1 rounded-sm bg-navy/5 text-[10px] uppercase font-bold text-navy">
-                    {os.status}
+                  <span className="bg-navy/5 text-navy border border-navy/10 px-1.5 py-0.5 rounded-xs text-[9px] font-bold uppercase">
+                    {os.status.replace('_', ' ')}
                   </span>
                 </TableCell>
-                <TableCell>R$ {os.valor_pecas || 0}</TableCell>
-                <TableCell>R$ {os.valor_servico || 0}</TableCell>
-                <TableCell className="text-xs text-muted-foreground">
+                <TableCell className="tabular-nums font-medium">R$ {os.valor_pecas || 0}</TableCell>
+                <TableCell className="tabular-nums font-medium">R$ {os.valor_servico || 0}</TableCell>
+                <TableCell className="text-[10px] text-muted-foreground font-bold uppercase text-right">
                   {new Date(os.criado_em).toLocaleDateString()}
                 </TableCell>
               </TableRow>
             ))}
+            {(!reports || reports.length === 0) && (
+              <TableRow>
+                <TableCell colSpan={6} className="h-24 text-center">
+                  <span className="text-[10px] uppercase font-bold text-muted-foreground/30 tracking-widest italic">Nenhum registro encontrado</span>
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>

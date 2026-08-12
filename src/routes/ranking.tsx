@@ -55,26 +55,23 @@ function RankingPage() {
       </div>
 
       {/* Pódio */}
-      <div className="flex flex-col md:flex-row items-end justify-center gap-4 py-8">
+      <div className="flex flex-col md:flex-row items-end justify-center gap-6 py-12">
         {/* 2nd Place */}
         {topThree[1] && (
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col items-center gap-2"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex flex-col items-center"
           >
-            <div className="w-24 h-24 rounded-full bg-slate-100 border-4 border-slate-300 flex items-center justify-center relative">
-              <span className="text-2xl font-bold text-slate-400">2</span>
-              <div className="absolute -top-2 -right-2 bg-white rounded-full p-1 shadow-xs">
-                {getMedal(1)}
+            <div className="text-center mb-4">
+              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1">2º LUGAR</p>
+              <p className="font-bold text-navy uppercase">{topThree[1].email.split('@')[0]}</p>
+              <p className="text-xl font-semibold text-primary tabular-nums tracking-tight">{topThree[1].points} PTS</p>
+            </div>
+            <div className="w-32 h-32 bg-muted/30 border-x border-t border-border rounded-t-sm flex items-start justify-center pt-4 relative">
+              <div className="bg-card border border-border rounded-sm p-2 shadow-xs">
+                <Medal className="w-8 h-8 text-slate-400" />
               </div>
-            </div>
-            <div className="text-center">
-              <p className="font-bold text-navy">{topThree[1].email.split('@')[0]}</p>
-              <p className="text-xl font-semibold text-orange">{topThree[1].points} pts</p>
-            </div>
-            <div className="w-32 h-24 bg-navy/5 rounded-t-3xl border-x border-t border-navy/10 flex items-end justify-center pb-2">
-              <Medal className="w-6 h-6 text-slate-400" />
             </div>
           </motion.div>
         )}
@@ -82,23 +79,20 @@ function RankingPage() {
         {/* 1st Place */}
         {topThree[0] && (
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="flex flex-col items-center gap-2"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.1 }}
+            className="flex flex-col items-center"
           >
-            <div className="w-32 h-32 rounded-full bg-yellow-50 border-4 border-yellow-400 flex items-center justify-center relative">
-              <span className="text-xl font-bold text-yellow-600">1</span>
-              <div className="absolute -top-4 -right-2 bg-white rounded-full p-1 shadow-xs">
-                {getMedal(0)}
+            <div className="text-center mb-4">
+              <p className="text-[10px] font-bold text-orange uppercase tracking-[0.2em] mb-1">CAMPEÃO</p>
+              <p className="text-lg font-bold text-navy uppercase">{topThree[0].email.split('@')[0]}</p>
+              <p className="text-2xl font-semibold text-primary tabular-nums tracking-tight">{topThree[0].points} PTS</p>
+            </div>
+            <div className="w-40 h-44 bg-navy/5 border-x border-t border-navy/20 rounded-t-sm flex items-start justify-center pt-6 relative">
+              <div className="bg-card border border-navy/20 rounded-sm p-3 shadow-md">
+                <Trophy className="w-12 h-12 text-yellow-500" />
               </div>
-            </div>
-            <div className="text-center">
-              <p className="text-lg font-bold text-navy">{topThree[0].email.split('@')[0]}</p>
-              <p className="text-xl font-semibold text-orange">{topThree[0].points} pts</p>
-            </div>
-            <div className="w-40 h-32 bg-navy/10 rounded-t-3xl border-x border-t border-navy/20 flex items-end justify-center pb-4">
-              <Trophy className="w-10 h-10 text-yellow-500" />
             </div>
           </motion.div>
         )}
@@ -106,23 +100,20 @@ function RankingPage() {
         {/* 3rd Place */}
         {topThree[2] && (
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="flex flex-col items-center gap-2"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+            className="flex flex-col items-center"
           >
-            <div className="w-20 h-20 rounded-full bg-amber-50 border-4 border-amber-600 flex items-center justify-center relative">
-              <span className="text-xl font-bold text-amber-700">3</span>
-              <div className="absolute -top-2 -right-2 bg-white rounded-full p-1 shadow-xs">
-                {getMedal(2)}
+            <div className="text-center mb-4">
+              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1">3º LUGAR</p>
+              <p className="font-bold text-navy uppercase">{topThree[2].email.split('@')[0]}</p>
+              <p className="text-xl font-semibold text-primary tabular-nums tracking-tight">{topThree[2].points} PTS</p>
+            </div>
+            <div className="w-32 h-24 bg-muted/30 border-x border-t border-border rounded-t-sm flex items-start justify-center pt-4 relative">
+              <div className="bg-card border border-border rounded-sm p-2 shadow-xs">
+                <Medal className="w-8 h-8 text-amber-700" />
               </div>
-            </div>
-            <div className="text-center">
-              <p className="font-bold text-navy">{topThree[2].email.split('@')[0]}</p>
-              <p className="text-lg font-semibold text-orange">{topThree[2].points} pts</p>
-            </div>
-            <div className="w-28 h-16 bg-navy/5 rounded-t-3xl border-x border-t border-navy/10 flex items-end justify-center pb-2">
-              <Medal className="w-6 h-6 text-amber-700" />
             </div>
           </motion.div>
         )}
