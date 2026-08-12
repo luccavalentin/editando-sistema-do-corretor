@@ -53,7 +53,7 @@ export default function AppConfigPage() {
   const getOmieStatus = useServerFn(checkOmieStatus);
   const { data: omieStatus } = useQuery({
     queryKey: ['omie_status'],
-    queryFn: () => getOmieStatus()
+    queryFn: () => getOmieStatus({ data: undefined })
   });
 
   const syncClientes = useServerFn(syncClientesOmie);
