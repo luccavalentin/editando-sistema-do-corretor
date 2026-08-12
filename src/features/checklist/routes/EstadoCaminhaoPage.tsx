@@ -9,7 +9,7 @@ import { SignaturePad } from '../components/SignaturePad';
 import { toast } from 'sonner';
 import { Camera, ArrowRight, ArrowLeft, CheckCircle2, Loader2 } from 'lucide-react';
 import { useServerFn } from '@tanstack/react-start';
-import { saveChecklist } from '../lib/checklist.functions';
+import { saveChecklist } from '../services/checklist.functions';
 
 export function EstadoCaminhaoPage() {
   const [selectedOS, setSelectedOS] = useState<string | null>(null);
