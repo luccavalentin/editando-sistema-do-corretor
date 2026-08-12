@@ -77,6 +77,84 @@ export default function AppConfigPage() {
     onError: (error: any) => toast.error(`Erro ao sincronizar estoque: ${error.message}`)
   });
 
+  const [showValues, setShowValues] = useState<Record<string, boolean>>({});
+  const getSecrets = useServerFn(getSecretsStatus);
+  const { data: secretsStatus, refetch: refetchSecrets } = useQuery({
+    queryKey: ['secrets_status'],
+    queryFn: () => getSecrets()
+  });
+
+  const saveSecretFn = useServerFn(saveSecret);
+  const secretMutation = useMutation({
+    mutationFn: (data: { key: string, value: string }) => saveSecretFn(data),
+    onSuccess: (res) => {
+      if (res.success) {
+        toast.success("Segredo atualizado");
+        refetchSecrets();
+      } else {
+        toast.info(res.message, { duration: 6000 });
+      }
+    }
+  });
+
+  const toggleShow = (key: string) => {
+    setShowValues(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const SecretInput = ({ label, secretKey, category }: { label: string, secretKey: string, category: string }) => {
+    const isSet = secretsStatus?.[secretKey];
+    const [val, setVal] = useState("");
+
+    return (
+      <div className="p-4 rounded border border-border bg-card space-y-3">
+        <div className="flex justify-between items-center">
+          <div className="space-y-0.5">
+            <Label className="text-[10px] font-bold uppercase tracking-widest text-navy flex items-center gap-1.5">
+              <Lock className="w-3 h-3 text-primary/60" />
+              {label}
+            </Label>
+            <div className="flex items-center gap-2">
+              <Badge variant="outline" className="text-[8px] px-1 py-0 border-primary/20 text-primary/70">{category}</Badge>
+              {isSet ? (
+                <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-200/50 text-[8px] px-1 py-0 uppercase">Configurado</Badge>
+              ) : (
+                <Badge className="bg-amber-500/10 text-amber-600 border-amber-200/50 text-[8px] px-1 py-0 uppercase">Pendente</Badge>
+              )}
+            </div>
+          </div>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => toggleShow(secretKey)}
+            className="h-8 w-8 p-0"
+          >
+            {showValues[secretKey] ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+          </Button>
+        </div>
+        <div className="flex gap-2">
+          <Input 
+            type={showValues[secretKey] ? "text" : "password"} 
+            placeholder={isSet ? "••••••••••••••••" : "Insira a chave..."}
+            value={val}
+            onChange={(e) => setVal(e.target.value)}
+            className="h-9 text-xs"
+          />
+          <Button 
+            className="bg-navy text-white h-9 px-4 text-[10px] font-bold uppercase tracking-widest"
+            onClick={() => {
+              if (!val) return;
+              secretMutation.mutate({ key: secretKey, value: val });
+              setVal("");
+            }}
+            disabled={secretMutation.isPending || !val}
+          >
+            Salvar
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2 border-b border-border pb-4">
