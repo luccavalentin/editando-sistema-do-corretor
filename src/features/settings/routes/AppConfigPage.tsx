@@ -360,6 +360,38 @@ export default function AppConfigPage() {
               </div>
             </CardContent>
           </Card>
+        <TabsContent value="secrets" className="space-y-4">
+          <Card className="rounded-sm border border-border shadow-xs bg-card">
+            <CardHeader className="bg-muted/30 border-b border-border py-4">
+              <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-navy">
+                <Lock className="w-4 h-4 text-primary" />
+                CENTRAL DE SEGREDOS & CHAVES API
+              </CardTitle>
+              <CardDescription className="text-[10px] uppercase font-semibold text-muted-foreground/60 tracking-wider">
+                Gerencie as chaves de integração do sistema. As chaves são protegidas e nunca expostas no cliente.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <SecretInput label="Omie App Key" secretKey="OMIE_APP_KEY" category="ERP" />
+                <SecretInput label="Omie App Secret" secretKey="OMIE_APP_SECRET" category="ERP" />
+                <SecretInput label="Gemini API Key" secretKey="GEMINI_API_KEY" category="IA" />
+                <SecretInput label="OpenAI API Key" secretKey="OPENAI_API_KEY" category="IA" />
+                <SecretInput label="Anthropic API Key" secretKey="ANTHROPIC_API_KEY" category="IA" />
+                <SecretInput label="WhatsApp Token" secretKey="WHATSAPP_API_TOKEN" category="WhatsApp" />
+              </div>
+              
+              <div className="mt-8 p-4 rounded border border-primary/20 bg-primary/5 space-y-2">
+                <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-primary">
+                  <ShieldCheck className="w-4 h-4" />
+                  Segurança & Persistência
+                </div>
+                <p className="text-[11px] font-medium leading-relaxed text-muted-foreground">
+                  Para máxima proteção e persistência garantida, recomendamos que as chaves sejam inseridas diretamente no painel do <strong>Lovable Cloud</strong> (Settings → Environment/Secrets). A interface acima serve para monitorar quais chaves estão ativas no servidor.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>
