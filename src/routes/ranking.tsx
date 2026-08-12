@@ -41,13 +41,16 @@ function RankingPage() {
   };
 
   return (
-    <div className="p-5 space-y-5">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold font-heading text-navy">Ranking Tecnoar</h1>
-        <div className="flex bg-navy/5 p-1 rounded-md">
-          <button className="px-4 py-2 rounded-lg bg-white shadow-sm text-xs font-bold text-navy">Geral</button>
-          <button className="px-4 py-2 rounded-lg text-xs font-bold text-muted-foreground">Mensal</button>
-          <button className="px-4 py-2 rounded-lg text-xs font-bold text-muted-foreground">Semanal</button>
+    <div className="p-6 space-y-6 bg-background min-h-screen">
+      <div className="flex justify-between items-end border-b border-border pb-4">
+        <div>
+          <h1 className="text-lg font-bold font-heading text-navy uppercase tracking-tight text-primary">RANKING DE PERFORMANCE</h1>
+          <p className="text-[11px] text-muted-foreground mt-0.5 font-medium uppercase tracking-wider">Indicadores de excelência e produtividade técnica</p>
+        </div>
+        <div className="flex bg-muted/50 p-1 border border-border rounded-sm h-10">
+          <button className="px-4 py-1.5 rounded-xs bg-card shadow-xs text-[10px] font-bold text-navy uppercase tracking-wider border border-border">Geral</button>
+          <button className="px-4 py-1.5 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Mensal</button>
+          <button className="px-4 py-1.5 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Semanal</button>
         </div>
       </div>
 
@@ -126,18 +129,18 @@ function RankingPage() {
       </div>
 
       {/* Tabela de Classificação */}
-      <Card className="rounded-lg border-navy/10 shadow-sm overflow-hidden">
-        <CardHeader className="bg-navy text-white px-8 py-6">
+      <Card className="rounded-sm border border-border shadow-xs overflow-hidden">
+        <CardHeader className="bg-muted/30 border-b border-border py-4 px-6">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-xl font-heading flex items-center gap-2">
-              <TrendingUp className="w-6 h-6" /> Classificação Completa
+            <CardTitle className="text-sm font-bold uppercase tracking-[0.2em] text-navy flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-primary" /> CLASSIFICAÇÃO GERAL
             </CardTitle>
-            <Star className="w-6 h-6 text-orange fill-orange" />
+            <Star className="w-4 h-4 text-orange" />
           </div>
         </CardHeader>
         <CardContent className="p-0">
-          <Table>
-            <TableHeader className="bg-navy/5">
+          <Table className="table-system">
+            <TableHeader>
               <TableRow>
                 <TableHead className="w-[100px] pl-8">Posição</TableHead>
                 <TableHead>Colaborador</TableHead>
