@@ -15,7 +15,7 @@ export function RequireRole({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     async function checkAccess() {
-      const userRole = await getCurrentUserRole();
+      const userRole = await getCurrentUserRole().catch(() => null);
       setRole(userRole);
       setLoading(false);
 
