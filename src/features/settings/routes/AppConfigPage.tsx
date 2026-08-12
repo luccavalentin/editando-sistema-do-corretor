@@ -360,6 +360,7 @@ export default function AppConfigPage() {
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
         <TabsContent value="secrets" className="space-y-4">
           <Card className="rounded-sm border border-border shadow-xs bg-card">
             <CardHeader className="bg-muted/30 border-b border-border py-4">
