@@ -60,7 +60,7 @@ export default function AppConfigPage() {
   const syncEstoque = useServerFn(syncEstoqueOmie);
 
   const mutationClientes = useMutation({
-    mutationFn: () => syncClientes(),
+    mutationFn: () => syncClientes({ data: undefined }),
     onSuccess: () => {
       toast.success('Sincronização de clientes iniciada com sucesso');
       queryClient.invalidateQueries({ queryKey: ['omie_sync_logs'] });
