@@ -1,5 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { 
   LayoutDashboard, 
@@ -168,13 +170,36 @@ function Dashboard() {
 
 
 function TVStatCard({ label, value, icon, color, pulse }: any) {
+  const [prevValue, setPrevValue] = useState(value);
+  const [flash, setFlash] = useState(false);
+
+  useEffect(() => {
+    if (value !== prevValue) {
+      setFlash(true);
+      const timer = setTimeout(() => setFlash(false), 1000);
+      setPrevValue(value);
+      return () => clearTimeout(timer);
+    }
+  }, [value, prevValue]);
+
   return (
-    <div className={`bg-white/5 rounded-lg p-4 border border-white/10 flex flex-col gap-2 ${pulse ? 'animate-pulse' : ''}`}>
+    <div className={cn(
+      "bg-white/5 rounded-lg p-4 border border-white/10 flex flex-col gap-2 transition-all duration-500",
+      pulse ? 'animate-pulse' : '',
+      flash && "bg-white/10 border-cyan/30"
+    )}>
       <div className="flex justify-between items-start">
         <div className="p-2 bg-white/5 rounded-md text-white/40">
           {icon}
         </div>
-        <span className={`text-2xl font-semibold ${color}`}>{value}</span>
+        <motion.span 
+          key={value}
+          initial={{ opacity: 0.5, y: 5 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={cn("text-2xl font-semibold tabular-nums", color)}
+        >
+          {value}
+        </motion.span>
       </div>
       <span className="text-xs font-bold uppercase tracking-widest text-white/40">{label}</span>
     </div>
