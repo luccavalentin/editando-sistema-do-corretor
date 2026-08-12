@@ -34,21 +34,21 @@ export function ProductionPage() {
   });
 
   return (
-    <div className="p-4 max-w-7xl mx-auto space-y-4">
-      <div className="flex justify-between items-end">
+    <div className="p-6 max-w-7xl mx-auto space-y-6 bg-background min-h-screen">
+      <div className="flex justify-between items-end border-b border-border pb-4">
         <div>
-          <h1 className="text-xl font-bold font-space text-[#001830]">Produção & Histórico</h1>
-          <p className="text-muted-foreground">Gestão de peças em teste e agenda de serviços.</p>
+          <h1 className="text-lg font-bold font-heading text-navy uppercase tracking-tight">PRODUÇÃO E AGENDA</h1>
+          <p className="text-[11px] text-muted-foreground mt-0.5 font-medium uppercase tracking-wider">Gestão técnica e fluxo de testes</p>
         </div>
       </div>
 
       <Tabs defaultValue="pecas" className="w-full">
-        <TabsList className="bg-background border">
-          <TabsTrigger value="pecas" className="gap-2">
-            <Package className="w-4 h-4" /> Peças em Teste
+        <TabsList className="bg-muted/50 p-1 border border-border rounded-sm h-10">
+          <TabsTrigger value="pecas" className="gap-2 text-[11px] font-bold uppercase tracking-wider rounded-xs px-4">
+            <Package className="w-3.5 h-3.5" /> PEÇAS EM TESTE
           </TabsTrigger>
-          <TabsTrigger value="agenda" className="gap-2">
-            <Calendar className="w-4 h-4" /> Agenda de Serviços
+          <TabsTrigger value="agenda" className="gap-2 text-[11px] font-bold uppercase tracking-wider rounded-xs px-4">
+            <Calendar className="w-3.5 h-3.5" /> AGENDA TÉCNICA
           </TabsTrigger>
         </TabsList>
 
@@ -59,20 +59,20 @@ export function ProductionPage() {
               const isUrgent = horasRestantes < 12;
 
               return (
-                <Card key={peca.id} className="p-4 flex flex-col justify-between border-l-4 border-l-orange-500">
+                <Card key={peca.id} className="rounded-sm border border-border shadow-xs bg-card p-4 flex flex-col justify-between border-l-2 border-l-primary/30">
                   <div className="space-y-3">
                     <div className="flex justify-between items-start">
-                      <Badge variant="secondary" className="text-[10px] uppercase">
+                      <span className="bg-muted text-muted-foreground px-1.5 py-0.5 rounded-xs text-[9px] font-bold uppercase border border-border tracking-wider">
                         {peca.status.replace('_', ' ')}
-                      </Badge>
+                      </span>
                       {isUrgent && peca.status === 'em_teste' && (
-                        <Badge variant="destructive" className="animate-pulse">URGENTE</Badge>
+                        <span className="bg-orange/10 text-orange border border-orange/20 px-1.5 py-0.5 rounded-xs text-[9px] font-bold uppercase animate-pulse">URGENTE</span>
                       )}
                     </div>
                     
                     <div>
-                      <h3 className="font-bold text-[#001830]">{peca.descricao_peca}</h3>
-                      <p className="text-xs text-muted-foreground">{peca.cliente?.nome}</p>
+                      <h3 className="font-bold text-navy text-sm leading-tight">{peca.descricao_peca}</h3>
+                      <p className="text-[11px] text-muted-foreground font-medium uppercase mt-1">{peca.cliente?.nome}</p>
                     </div>
 
                     <div className="text-xs space-y-1">
@@ -88,17 +88,17 @@ export function ProductionPage() {
 
                   <div className="mt-4 pt-4 border-t flex gap-2">
                     {peca.status === 'recebida' && (
-                      <Button size="sm" className="w-full bg-[#001830]" onClick={() => statusMutation.mutate({ id: peca.id, status: 'em_teste' })}>
-                        Iniciar Teste
+                      <Button size="sm" className="w-full bg-navy text-white hover:bg-navy/90 rounded-sm text-[10px] font-bold uppercase tracking-widest h-8" onClick={() => statusMutation.mutate({ id: peca.id, status: 'em_teste' })}>
+                        INICIAR TESTE
                       </Button>
                     )}
                     {peca.status === 'em_teste' && (
                       <>
-                        <Button size="sm" variant="outline" className="flex-1 text-green-600" onClick={() => statusMutation.mutate({ id: peca.id, status: 'testada_aprovada', removeEtiqueta: true })}>
-                          Aprovar
+                        <Button size="sm" variant="outline" className="flex-1 text-green-700 border-green-200 hover:bg-green-50 rounded-sm text-[10px] font-bold uppercase tracking-widest h-8" onClick={() => statusMutation.mutate({ id: peca.id, status: 'testada_aprovada', removeEtiqueta: true })}>
+                          APROVAR
                         </Button>
-                        <Button size="sm" variant="outline" className="flex-1 text-red-600" onClick={() => statusMutation.mutate({ id: peca.id, status: 'testada_reprovada', removeEtiqueta: true })}>
-                          Reprovar
+                        <Button size="sm" variant="outline" className="flex-1 text-red-700 border-red-200 hover:bg-red-50 rounded-sm text-[10px] font-bold uppercase tracking-widest h-8" onClick={() => statusMutation.mutate({ id: peca.id, status: 'testada_reprovada', removeEtiqueta: true })}>
+                          REPROVAR
                         </Button>
                       </>
                     )}

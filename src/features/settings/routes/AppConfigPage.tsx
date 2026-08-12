@@ -46,29 +46,29 @@ export default function AppConfigPage() {
   });
 
   return (
-    <div className="space-y-5">
-      <div className="flex items-center gap-3">
-        <Settings className="w-8 h-8 text-orange" />
-        <h2 className="text-xl font-bold text-navy">Configurações do Sistema</h2>
+    <div className="space-y-6">
+      <div className="flex items-center gap-2 border-b border-border pb-4">
+        <Settings className="w-5 h-5 text-primary" />
+        <h2 className="text-lg font-bold text-navy uppercase tracking-tight">CONFIGURAÇÕES TÉCNICAS</h2>
       </div>
 
       <Tabs defaultValue="sla" className="w-full">
-        <TabsList className="bg-navy/5 p-1 rounded-md mb-4">
-          <TabsTrigger value="sla" className="rounded-lg">SLA & Prazos</TabsTrigger>
-          <TabsTrigger value="whatsapp" className="rounded-lg">WhatsApp</TabsTrigger>
-          <TabsTrigger value="omie" className="rounded-lg">Logs Omie</TabsTrigger>
+        <TabsList className="bg-muted/50 p-1 border border-border rounded-sm h-10 mb-6">
+          <TabsTrigger value="sla" className="rounded-xs text-[11px] font-bold uppercase tracking-wider px-4">SLA & PRAZOS</TabsTrigger>
+          <TabsTrigger value="whatsapp" className="rounded-xs text-[11px] font-bold uppercase tracking-wider px-4">WHATSAPP</TabsTrigger>
+          <TabsTrigger value="omie" className="rounded-xs text-[11px] font-bold uppercase tracking-wider px-4">LOGS OMIE</TabsTrigger>
         </TabsList>
 
         <TabsContent value="sla" className="space-y-4">
-          <Card className="rounded-md border-none shadow-xs shadow-navy/5 bg-white">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Clock className="w-5 h-5 text-cyan" />
-                SLA de Fases (Horas)
+          <Card className="rounded-sm border border-border shadow-xs bg-card">
+            <CardHeader className="bg-muted/30 border-b border-border py-4">
+              <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-navy">
+                <Clock className="w-4 h-4 text-primary" />
+                LIMITES OPERACIONAIS (HORAS)
               </CardTitle>
-              <CardDescription>Defina os limites de tempo para alertas amarelo/vermelho por fase.</CardDescription>
+              <CardDescription className="text-[10px] uppercase font-semibold text-muted-foreground/60 tracking-wider">Defina os thresholds de tempo para alertas e SLA por fase.</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="p-6 space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <Label>Prazo Peça em Teste (Horas)</Label>

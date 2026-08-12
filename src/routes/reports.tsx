@@ -51,26 +51,29 @@ function ReportsPage() {
   if (isLoading) return <div className="p-5">Carregando relatórios...</div>;
 
   return (
-    <div className="p-5 space-y-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold font-heading text-navy">Relatórios de OS</h1>
+    <div className="p-6 space-y-6 bg-background min-h-screen">
+      <div className="flex justify-between items-end border-b border-border pb-4">
+        <div>
+          <h1 className="text-lg font-bold font-heading text-navy uppercase tracking-tight">RELATÓRIOS E ANALYTICS</h1>
+          <p className="text-[11px] text-muted-foreground mt-0.5 font-medium uppercase tracking-wider">Consolidado de ordens de serviço e indicadores financeiros</p>
+        </div>
         <div className="flex gap-2">
-          <Button variant="outline" className="rounded-md">
-            <Filter className="w-4 h-4 mr-2" /> Filtrar
+          <Button variant="outline" size="sm" className="h-8 rounded-sm text-[10px] font-bold uppercase tracking-widest border-border hover:bg-muted/50">
+            <Filter className="w-3.5 h-3.5" /> FILTRAR
           </Button>
-          <Button onClick={exportToCSV} className="bg-orange hover:bg-orange/90 text-white rounded-md">
-            <Download className="w-4 h-4 mr-2" /> Exportar CSV
+          <Button onClick={exportToCSV} size="sm" className="bg-navy text-white hover:bg-navy/90 h-8 rounded-sm text-[10px] font-bold uppercase tracking-widest px-4">
+            <Download className="w-3.5 h-3.5 mr-2" /> EXPORTAR CSV
           </Button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="rounded-md border-navy/10 shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-sm font-medium text-muted-foreground uppercase">Volume Total</CardTitle>
+        <Card className="rounded-sm border border-border shadow-xs bg-card">
+          <CardHeader className="py-4 px-4 border-b border-border/50 bg-muted/20">
+            <CardTitle className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Volume Total</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold text-navy">{reports?.length || 0}</p>
+          <CardContent className="py-6 px-4">
+            <p className="text-2xl font-semibold text-navy tracking-tight tabular-nums">{reports?.length || 0}</p>
           </CardContent>
         </Card>
         <Card className="rounded-md border-navy/10 shadow-sm">

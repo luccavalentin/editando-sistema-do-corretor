@@ -44,10 +44,10 @@ export function SidebarContainer({ children }: { children: React.ReactNode }) {
   if (!context) throw new Error("SidebarContainer must be used within SidebarProvider")
   
   return (
-    <div className="flex min-h-screen bg-muted/30">
+    <div className="flex min-h-screen bg-background">
       <Sidebar />
       <main className={cn(
-        "flex-1 transition-all duration-300 ease-in-out",
+        "flex-1 transition-all duration-200 ease-in-out",
         context.expanded ? "pl-64" : "pl-20"
       )}>
         {children}
@@ -94,45 +94,45 @@ function Sidebar() {
 
   return (
     <aside className={cn(
-      "fixed left-0 top-0 h-full bg-[#001830] text-white transition-all duration-300 ease-in-out z-40 flex flex-col",
+      "fixed left-0 top-0 h-full bg-navy text-white transition-all duration-200 ease-in-out z-40 flex flex-col border-r border-white/5",
       expanded ? "w-64" : "w-20"
     )}>
       {/* Header / Logo */}
       <div className="h-20 flex items-center px-6 border-b border-white/10 overflow-hidden">
         {expanded ? (
           <div className="flex items-center gap-3">
-             <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shrink-0">
-               <span className="text-[#001830] font-black">TF</span>
+             <div className="w-8 h-8 bg-white rounded-sm flex items-center justify-center shrink-0">
+               <span className="text-navy font-black text-xs">TF</span>
              </div>
              <div className="flex flex-col">
-               <span className="font-space font-bold leading-none text-orange">TECNOAR</span>
-               <span className="text-[10px] font-bold text-cyan">FREIOS</span>
+               <span className="font-heading font-bold leading-none text-orange text-sm tracking-tight">TECNOAR</span>
+               <span className="text-[9px] font-bold text-cyan tracking-widest uppercase">FREIOS</span>
              </div>
           </div>
         ) : (
-          <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center mx-auto shrink-0">
-            <span className="text-[#001830] font-black text-xs">TF</span>
+          <div className="w-8 h-8 bg-white rounded-sm flex items-center justify-center mx-auto shrink-0">
+            <span className="text-navy font-black text-[10px]">TF</span>
           </div>
         )}
       </div>
 
       {/* Navigation */}
-      <div className="flex-1 overflow-y-auto py-6 space-y-8 px-3">
+      <div className="flex-1 overflow-y-auto py-4 space-y-6 px-3">
         {menuGroups.map((group, idx) => (
-          <div key={idx} className="space-y-2">
-            {expanded && React.createElement('h4', { className: 'px-3 text-[10px] uppercase font-bold tracking-widest text-white/30' }, group.label)}
-            <div className="space-y-1">
+          <div key={idx} className="space-y-1">
+            {expanded && <h4 className="px-3 text-[9px] uppercase font-bold tracking-[0.2em] text-white/20 mb-2">{group.label}</h4>}
+            <div className="space-y-0.5">
               {group.items.map((item) => (
                 <Link
                   key={item.href}
                   to={item.href}
                   className={cn(
-                    "flex items-center gap-3 px-3 py-2 rounded-xl transition-all hover:bg-white/5",
-                    location.pathname === item.href ? "bg-[#f06000] text-white shadow-lg shadow-[#f06000]/20" : "text-white/70"
+                    "flex items-center gap-3 px-3 py-2 rounded-sm transition-all hover:bg-white/5",
+                    location.pathname === item.href ? "bg-white/10 text-orange border-l-2 border-orange font-semibold" : "text-white/60"
                   )}
                 >
-                  <item.icon className="w-5 h-5 shrink-0" />
-                  {expanded && <span className="text-sm font-medium">{item.label}</span>}
+                  <item.icon className="w-4 h-4 shrink-0" />
+                  {expanded && <span className="text-[13px]">{item.label}</span>}
                 </Link>
               ))}
             </div>
@@ -141,17 +141,17 @@ function Sidebar() {
       </div>
 
       {/* Footer / Toggle */}
-      <div className="p-3 border-t border-white/10 space-y-2">
+      <div className="p-2 border-t border-white/5 space-y-1">
         <button
           onClick={() => setExpanded(!expanded)}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-white/70 hover:bg-white/5 transition-all"
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-sm text-white/40 hover:bg-white/5 transition-all"
         >
-          {expanded ? <ChevronLeft className="w-5 h-5" /> : <ChevronRight className="w-5 h-5 mx-auto" />}
-          {expanded && <span className="text-sm font-medium">Recolher</span>}
+          {expanded ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4 mx-auto" />}
+          {expanded && <span className="text-[12px] font-medium uppercase tracking-wider">Recolher</span>}
         </button>
-        <button className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-red-400 hover:bg-red-400/5 transition-all">
-          <LogOut className="w-5 h-5 shrink-0" />
-          {expanded && <span className="text-sm font-medium">Sair</span>}
+        <button className="w-full flex items-center gap-3 px-3 py-2 rounded-sm text-red-400/60 hover:bg-red-400/5 transition-all">
+          <LogOut className="w-4 h-4 shrink-0" />
+          {expanded && <span className="text-[12px] font-medium uppercase tracking-wider">Sair</span>}
         </button>
       </div>
     </aside>

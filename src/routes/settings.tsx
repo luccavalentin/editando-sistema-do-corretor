@@ -34,25 +34,29 @@ function SettingsPage() {
   };
 
   return (
-    <div className='p-5 space-y-5'>
-      <h1 className='text-xl font-bold font-heading text-navy'>Configurações</h1>
+    <div className='p-6 space-y-6 bg-background min-h-screen'>
+      <div className="border-b border-border pb-4">
+        <h1 className='text-lg font-bold font-heading text-navy uppercase tracking-tight'>CONFIGURAÇÕES E INTEGRAÇÕES</h1>
+        <p className="text-[11px] text-muted-foreground mt-0.5 font-medium uppercase tracking-wider">Painel administrativo e controle de sistemas externos</p>
+      </div>
+
       <Tabs defaultValue="integracoes" className="w-full">
-        <TabsList className="bg-navy/5 p-1 rounded-md mb-4">
-          <TabsTrigger value="integracoes" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-navy">Integrações</TabsTrigger>
-          <TabsTrigger value="config" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-navy">Sistema</TabsTrigger>
-          <TabsTrigger value="processos" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-navy">Processos</TabsTrigger>
-          <TabsTrigger value="usuarios" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-navy">Usuários</TabsTrigger>
+        <TabsList className="bg-muted/50 p-1 border border-border rounded-sm h-10 mb-6">
+          <TabsTrigger value="integracoes" className="rounded-xs text-[11px] font-bold uppercase tracking-wider px-4">INTEGRAÇÕES</TabsTrigger>
+          <TabsTrigger value="config" className="rounded-xs text-[11px] font-bold uppercase tracking-wider px-4">SISTEMA</TabsTrigger>
+          <TabsTrigger value="processos" className="rounded-xs text-[11px] font-bold uppercase tracking-wider px-4">PROCESSOS</TabsTrigger>
+          <TabsTrigger value="usuarios" className="rounded-xs text-[11px] font-bold uppercase tracking-wider px-4">USUÁRIOS</TabsTrigger>
         </TabsList>
         <TabsContent value="integracoes" className="space-y-4">
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            <Card className="rounded-md border-none shadow-xs shadow-navy/5 bg-white overflow-hidden group">
-              <CardHeader className="p-4">
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+            <Card className="rounded-sm border border-border shadow-xs bg-card overflow-hidden">
+              <CardHeader className="bg-muted/30 border-b border-border py-4 px-4">
                 <div className="flex justify-between items-center">
-                  <Database className="w-8 h-8 text-cyan" />
-                  <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                  <Database className="w-4 h-4 text-primary" />
+                  <div className="h-1.5 w-1.5 rounded-full bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.5)]" />
                 </div>
-                <CardTitle className="mt-4">Sincronização de Dados</CardTitle>
-                <CardDescription>Clientes e Estoque da Tecnoar (Omie)</CardDescription>
+                <CardTitle className="mt-3 text-xs font-bold uppercase tracking-widest text-navy">SINCRONIZAÇÃO OMIE</CardTitle>
+                <CardDescription className="text-[10px] uppercase font-semibold text-muted-foreground/60 tracking-wider">Clientes e Estoque em tempo real</CardDescription>
               </CardHeader>
               <CardContent className="p-4 space-y-4">
                 <Button 

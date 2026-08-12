@@ -27,15 +27,15 @@ export const Route = createFileRoute('/')({
 
 function StatCard({ title, value, icon: Icon, color }: any) {
   return (
-    <Card className="rounded-md border-none shadow-xs shadow-navy/5 overflow-hidden group hover:shadow-sm transition-all">
+    <Card className="rounded-sm border border-border shadow-xs bg-card overflow-hidden group hover:border-border/80 transition-all">
       <CardContent className="p-4">
-        <div className="flex justify-between items-start">
-          <div className={`p-3 rounded-md bg-muted group-hover:bg-white transition-colors ${color.replace('text-', 'bg-')}/10`}>
-            <Icon className={`w-6 h-6 ${color}`} />
-          </div>
-          <span className={`text-2xl font-semibold font-heading ${color}`}>{value}</span>
+        <div className="flex justify-between items-start mb-4">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{title}</p>
+          <Icon className={`w-4 h-4 ${color} opacity-70`} />
         </div>
-        <p className="mt-4 text-xs font-bold uppercase tracking-widest text-muted-foreground">{title}</p>
+        <div className="flex items-baseline gap-2">
+          <span className="text-2xl font-semibold font-sans tracking-tight text-foreground">{value}</span>
+        </div>
       </CardContent>
     </Card>
   );
@@ -149,31 +149,32 @@ function Dashboard() {
   }
 
   return (
-    <div className="p-5 space-y-5 bg-navy/5 min-h-screen">
-      <div className="flex justify-between items-center">
+    <div className="p-6 space-y-6 bg-background min-h-screen">
+      <div className="flex justify-between items-end border-b border-border pb-4">
         <div>
-          <h1 className="text-xl font-bold font-heading text-navy flex items-center gap-3">
-            <LayoutDashboard className="w-8 h-8 text-orange" />
-            Painel Operacional
+          <h1 className="text-lg font-bold font-heading text-navy flex items-center gap-2">
+            <LayoutDashboard className="w-5 h-5 text-primary" />
+            PAINEL OPERACIONAL
           </h1>
-          <p className="text-muted-foreground mt-1">Gestão de prontos-socorro da oficina</p>
+          <p className="text-[11px] text-muted-foreground mt-0.5 font-medium uppercase tracking-wider">Monitoramento de fluxo de oficina em tempo real</p>
         </div>
-        <div className="flex gap-4">
-          <Button variant="outline" className="rounded-sm gap-2 border-navy/10 hover:bg-navy/5">
-            <Filter className="w-4 h-4" />
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" className="rounded-sm h-8 text-[11px] font-bold uppercase tracking-wider border-border hover:bg-muted/50">
+            <Filter className="w-3.5 h-3.5" />
             Filtros
           </Button>
           <Button 
             onClick={() => setViewMode('tv')} 
-            className="bg-navy text-white hover:bg-navy/90 rounded-sm gap-2 px-6 shadow-sm shadow-navy/20"
+            size="sm"
+            className="bg-navy text-white hover:bg-navy/90 rounded-sm h-8 text-[11px] font-bold uppercase tracking-wider gap-2 px-4"
           >
-            <Tv className="w-4 h-4 text-cyan" />
-            Modo TV
+            <Tv className="w-3.5 h-3.5 text-cyan" />
+            MODO TV
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
         <StatCard title="No pátio agora" value={stats?.noPatio || 0} icon={Truck} color="text-cyan-600" />
         <StatCard title="Entraram hoje" value={stats?.entraramHoje || 0} icon={PlusCircle} color="text-orange-500" />
         <StatCard title="Concluídas hoje" value={stats?.concluidasHoje || 0} icon={CheckCircle2} color="text-green-500" />
@@ -186,19 +187,19 @@ function Dashboard() {
         {STATUS_FLOW.map(status => {
           const items = osList.filter((o: any) => o.status === status);
           return (
-            <div key={status} className="space-y-4">
-              <div className="flex justify-between items-center px-2">
-                <h3 className="font-bold text-navy text-sm uppercase tracking-wider flex items-center gap-2">
-                  <div className={`w-2 h-2 rounded-full ${items.length > 0 ? 'bg-orange animate-pulse' : 'bg-navy/20'}`} />
+            <div key={status} className="flex flex-col gap-2 bg-muted/20 p-2 rounded-sm border border-border/50">
+              <div className="flex justify-between items-center px-1 mb-1">
+                <h3 className="font-bold text-navy text-[10px] uppercase tracking-widest flex items-center gap-1.5">
+                  <div className={`w-1.5 h-1.5 rounded-full ${items.length > 0 ? 'bg-orange shadow-[0_0_5px_rgba(240,96,0,0.5)]' : 'bg-muted-foreground/30'}`} />
                   {STATUS_LABELS[status]}
                 </h3>
-                <span className="bg-navy/10 text-navy px-2 py-0.5 rounded-sm text-[10px] font-bold">{items.length}</span>
+                <span className="bg-navy/5 text-navy px-1.5 py-0.5 rounded-xs text-[9px] font-bold tabular-nums border border-navy/10">{items.length}</span>
               </div>
               
-                    <div className="space-y-3 min-h-[200px]">
-                      {(items as any[]).map((os: any) => (
-                        <Card key={os.id} className="rounded-md border-none shadow-xs shadow-navy/5 bg-white group hover:ring-2 hover:ring-orange/20 transition-all">
-                    <CardContent className="p-4 space-y-3">
+              <div className="space-y-2 flex-1">
+                {(items as any[]).map((os: any) => (
+                  <Card key={os.id} className="rounded-sm border border-border shadow-xs bg-card group hover:border-primary/30 transition-colors">
+                    <CardContent className="p-3 space-y-2">
                       <div className="flex justify-between items-start">
                         <span className="text-xs font-mono font-bold text-navy/40">{os.protocolo}</span>
                         <Clock className="w-3 h-3 text-muted-foreground" />
@@ -209,16 +210,17 @@ function Dashboard() {
                         <p className="text-[10px] text-muted-foreground font-medium uppercase">{os.veiculo?.placa_cavalo} • {os.veiculo?.modelo_cavalo}</p>
                       </div>
 
-                      <div className="flex justify-between items-center pt-2 border-t border-navy/5">
-                        <div className="flex -space-x-2">
-                          <div className="w-6 h-6 rounded-full bg-navy/5 border-2 border-white flex items-center justify-center">
-                            <User className="w-3 h-3 text-navy/40" />
+                      <div className="flex justify-between items-center pt-2 border-t border-border/50">
+                        <div className="flex items-center gap-1.5">
+                          <div className="w-5 h-5 rounded-sm bg-muted flex items-center justify-center border border-border">
+                            <User className="w-2.5 h-2.5 text-muted-foreground" />
                           </div>
+                          <span className="text-[9px] font-bold text-muted-foreground uppercase">{os.tecnico?.nome?.split(' ')[0] || 'S/T'}</span>
                         </div>
                         <Button 
                           size="sm" 
                           variant="ghost"
-                          className="h-8 rounded-sm text-[10px] font-bold uppercase text-orange hover:bg-orange/5 gap-1"
+                          className="h-6 px-2 rounded-xs text-[9px] font-bold uppercase text-primary hover:bg-primary/5 gap-1 border border-transparent hover:border-primary/20"
                           onClick={() => {
                             const nextIndex = STATUS_FLOW.indexOf(status) + 1;
                             if (nextIndex < STATUS_FLOW.length) {
@@ -229,15 +231,17 @@ function Dashboard() {
                             }
                           }}
                         >
-                          Assumir
-                          <ArrowRight className="w-3 h-3" />
+                          PRÓXIMA
+                          <ArrowRight className="w-2.5 h-2.5" />
                         </Button>
                       </div>
                     </CardContent>
                   </Card>
                 ))}
                 {items.length === 0 && (
-                  <div className="h-20 border-2 border-dashed border-navy/5 rounded-md" />
+                  <div className="h-12 border border-dashed border-border/40 rounded-sm flex items-center justify-center">
+                    <span className="text-[9px] uppercase font-bold text-muted-foreground/30 tracking-widest italic">Vazio</span>
+                  </div>
                 )}
               </div>
             </div>

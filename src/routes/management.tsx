@@ -58,13 +58,16 @@ function ManagementPage() {
   };
 
   return (
-    <div className="p-5 max-w-5xl mx-auto space-y-5 print:p-0">
-      <div className="flex justify-between items-center print:hidden">
-        <h1 className="text-xl font-bold font-heading text-navy">Gestão de OS</h1>
+    <div className="p-6 max-w-7xl mx-auto space-y-6 bg-background min-h-screen print:p-0">
+      <div className="flex justify-between items-end border-b border-border pb-4 print:hidden">
+        <div>
+          <h1 className="text-lg font-bold font-heading text-navy uppercase tracking-tight">GESTÃO DE ORDENS DE SERVIÇO</h1>
+          <p className="text-[11px] text-muted-foreground mt-0.5 font-medium uppercase tracking-wider">Abertura e controle de fluxo operacional</p>
+        </div>
         <div className="flex gap-2">
-          <div className="flex items-center gap-2 bg-navy/5 px-4 py-2 rounded-sm text-sm font-medium">
-            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-            Léo (Admin ADM)
+          <div className="flex items-center gap-2 bg-muted/50 border border-border px-3 py-1.5 rounded-sm text-[11px] font-bold text-navy uppercase">
+            <div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.5)]" />
+            Operador: Léo
           </div>
         </div>
       </div>
@@ -98,23 +101,25 @@ function ManagementPage() {
           </div>
         </div>
 
-        <div className="border border-navy/20 rounded-lg overflow-hidden mb-5">
-          <table className="w-full text-sm">
-            <thead className="bg-navy/5">
+        <div className="border border-navy overflow-hidden mb-6">
+          <table className="w-full text-xs table-fixed">
+            <thead className="bg-navy/5 text-navy border-b border-navy">
               <tr>
-                <th className="text-left p-2 border-b border-navy/20">Descrição do Serviço</th>
-                <th className="text-right p-2 border-b border-navy/20">Qtd</th>
-                <th className="text-right p-2 border-b border-navy/20">Unit</th>
-                <th className="text-right p-2 border-b border-navy/20">Total</th>
+                <th className="text-left p-3 border-r border-navy font-bold uppercase tracking-wider w-[60%]">Descrição do Serviço / Peça</th>
+                <th className="text-right p-3 border-r border-navy font-bold uppercase tracking-wider w-[10%]">Qtd</th>
+                <th className="text-right p-3 border-r border-navy font-bold uppercase tracking-wider w-[15%]">Unit (R$)</th>
+                <th className="text-right p-3 font-bold uppercase tracking-wider w-[15%]">Total (R$)</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className="p-2 border-b border-navy/10 italic text-muted-foreground">Nenhum serviço registrado ainda</td>
-                <td className="p-2 border-b border-navy/10 text-right">-</td>
-                <td className="p-2 border-b border-navy/10 text-right">-</td>
-                <td className="p-2 border-b border-navy/10 text-right">-</td>
-              </tr>
+              {[...Array(8)].map((_, i) => (
+                <tr key={i} className="h-8 border-b border-navy/20">
+                  <td className="p-2 border-r border-navy/20"></td>
+                  <td className="p-2 border-r border-navy/20"></td>
+                  <td className="p-2 border-r border-navy/20"></td>
+                  <td className="p-2"></td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -126,39 +131,39 @@ function ManagementPage() {
       </div>
 
       {/* Workflow UI */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 print:hidden">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-2 print:hidden">
         {[1, 2, 3, 4].map((s) => (
-          <div key={s} className={`h-1.5 rounded-sm transition-all ${s <= step ? 'bg-orange' : 'bg-navy/10'}`} />
+          <div key={s} className={`h-1 rounded-full transition-all ${s <= step ? 'bg-orange' : 'bg-muted'}`} />
         ))}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 print:hidden">
-        <div className="md:col-span-2 space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 print:hidden">
+        <div className="md:col-span-2 lg:col-span-3 space-y-6">
           {step === 1 && (
-            <Card className="rounded-lg border-none shadow-sm shadow-navy/5 bg-white overflow-hidden">
-              <CardHeader className="bg-navy text-white">
-                <CardTitle className="flex items-center gap-2">
-                  <UserPlus className="w-5 h-5 text-cyan" />
-                  Identificação do Cliente
+            <Card className="rounded-sm border border-border shadow-xs bg-card overflow-hidden">
+              <CardHeader className="bg-muted/30 border-b border-border py-4">
+                <CardTitle className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-navy">
+                  <UserPlus className="w-4 h-4 text-primary" />
+                  1. Identificação do Cliente
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-5 space-y-4">
+              <CardContent className="p-6 space-y-6">
                 <div className="flex gap-2">
                   <Input 
                     placeholder="Buscar por CNPJ ou Nome..." 
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="rounded-md h-12 border-navy/10 focus:ring-orange"
+                    className="rounded-sm h-10 border-border bg-background focus:ring-1 focus:ring-primary text-sm"
                   />
-                  <Button onClick={handleSearch} className="h-12 w-12 rounded-md bg-navy hover:bg-navy/90">
-                    <Search className="w-5 h-5" />
+                  <Button onClick={handleSearch} className="h-10 px-6 rounded-sm bg-navy text-white hover:bg-navy/90 font-bold text-xs uppercase tracking-widest">
+                    BUSCAR
                   </Button>
                 </div>
-                <div className="p-5 border-2 border-dashed border-navy/10 rounded-md flex flex-col items-center justify-center text-center text-muted-foreground">
-                  <UserPlus className="w-12 h-12 mb-4 opacity-20 text-navy" />
-                  <p>Ou cadastre um novo cliente se não existir local ou na Omie.</p>
-                  <Button variant="outline" className="mt-4 rounded-sm border-orange text-orange hover:bg-orange/5">
-                    Novo Cadastro Manual
+                <div className="p-8 border border-dashed border-border rounded-sm flex flex-col items-center justify-center text-center bg-muted/10">
+                  <UserPlus className="w-8 h-8 mb-3 opacity-20 text-navy" />
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider max-w-xs">Cliente não encontrado localmente ou na Omie?</p>
+                  <Button variant="outline" size="sm" className="mt-4 rounded-sm border-primary text-primary hover:bg-primary/5 text-[10px] font-bold uppercase tracking-[0.2em] h-8">
+                    NOVO CADASTRO MANUAL
                   </Button>
                 </div>
               </CardContent>
@@ -280,14 +285,14 @@ function ManagementPage() {
         </div>
 
         <div className="space-y-4 print:hidden">
-          <Card className="rounded-lg border-none shadow-sm shadow-navy/5 bg-white overflow-hidden">
-            <CardHeader className="bg-navy/5 border-b border-navy/5">
-              <CardTitle className="text-lg font-heading text-navy">Resumo da OS</CardTitle>
+          <Card className="rounded-sm border border-border shadow-xs bg-card overflow-hidden">
+            <CardHeader className="bg-muted/30 border-b border-border py-4 px-4">
+              <CardTitle className="text-xs font-bold uppercase tracking-widest text-navy">RESUMO DA OS</CardTitle>
             </CardHeader>
-            <CardContent className="p-4 space-y-4">
-              <div className="flex justify-between items-start">
-                <div className="text-xs uppercase font-bold text-muted-foreground">Status</div>
-                <div className="bg-green-100 text-green-700 px-3 py-1 rounded-sm text-[10px] font-bold uppercase">Nova OS</div>
+            <CardContent className="p-4 space-y-5">
+              <div className="flex justify-between items-center">
+                <div className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Status</div>
+                <div className="bg-green-500/10 text-green-700 border border-green-500/20 px-2 py-0.5 rounded-xs text-[9px] font-bold uppercase">NOVA OS</div>
               </div>
               
               {selectedCliente && (

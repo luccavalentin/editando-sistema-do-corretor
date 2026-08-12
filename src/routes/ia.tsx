@@ -77,31 +77,33 @@ function IAModule() {
   };
 
   return (
-    <div className="flex h-screen bg-navy/5 overflow-hidden">
+    <div className="flex h-screen bg-background overflow-hidden">
       {/* Sidebar do Módulo */}
-      <div className="w-64 bg-navy p-4 flex flex-col gap-4">
-        <div className="flex items-center gap-3 mb-5">
-          <Bot className="w-8 h-8 text-orange" />
-          <h1 className="text-white font-heading font-bold text-xl">IA Tecnoar</h1>
+      <div className="w-60 bg-navy flex flex-col border-r border-white/5">
+        <div className="p-6 border-b border-white/5 mb-2">
+          <div className="flex items-center gap-3">
+            <Bot className="w-5 h-5 text-cyan" />
+            <h1 className="text-white font-heading font-bold text-sm uppercase tracking-widest">CENTRO IA</h1>
+          </div>
         </div>
         
-        <Tabs value={activeTab} onValueChange={setActiveTab} orientation="vertical" className="w-full">
-          <TabsList className="flex flex-col h-auto bg-transparent gap-2">
-            <TabsTrigger value="chat" className="w-full justify-start gap-3 rounded-md data-[state=active]:bg-orange data-[state=active]:text-white text-white/60">
-              <Bot className="w-4 h-4" /> Chat Técnico
-            </TabsTrigger>
-            <TabsTrigger value="library" className="w-full justify-start gap-3 rounded-md data-[state=active]:bg-orange data-[state=active]:text-white text-white/60">
-              <Library className="w-4 h-4" /> Biblioteca
-            </TabsTrigger>
-            <TabsTrigger value="followup" className="w-full justify-start gap-3 rounded-md data-[state=active]:bg-orange data-[state=active]:text-white text-white/60">
-              <MessageCircle className="w-4 h-4" /> Follow-up IA
-            </TabsTrigger>
-            <TabsTrigger value="history" className="w-full justify-start gap-3 rounded-md data-[state=active]:bg-orange data-[state=active]:text-white text-white/60">
-              <History className="w-4 h-4" /> Histórico
-            </TabsTrigger>
-            <TabsTrigger value="settings" className="w-full justify-start gap-3 rounded-md data-[state=active]:bg-orange data-[state=active]:text-white text-white/60">
-              <Settings className="w-4 h-4" /> Configurações
-            </TabsTrigger>
+        <Tabs value={activeTab} onValueChange={setActiveTab} orientation="vertical" className="w-full flex-1">
+          <TabsList className="flex flex-col h-auto bg-transparent gap-0.5 px-2">
+            {[
+              { value: 'chat', label: 'Chat Técnico', icon: Bot },
+              { value: 'library', label: 'Biblioteca', icon: Library },
+              { value: 'followup', label: 'Follow-up', icon: MessageCircle },
+              { value: 'history', label: 'Histórico', icon: History },
+              { value: 'settings', label: 'Configurações', icon: Settings },
+            ].map(tab => (
+              <TabsTrigger 
+                key={tab.value}
+                value={tab.value} 
+                className="w-full justify-start gap-3 rounded-sm py-2 px-3 text-[12px] font-bold uppercase tracking-wider transition-all data-[state=active]:bg-white/10 data-[state=active]:text-orange data-[state=active]:border-l-2 data-[state=active]:border-orange text-white/50 hover:bg-white/5"
+              >
+                <tab.icon className="w-4 h-4" /> {tab.label}
+              </TabsTrigger>
+            ))}
           </TabsList>
         </Tabs>
       </div>
@@ -110,24 +112,25 @@ function IAModule() {
       <div className="flex-1 flex flex-col overflow-hidden">
         <Tabs value={activeTab} className="h-full">
           <TabsContent value="chat" className="h-full m-0 flex flex-col">
-            <div className="p-4 border-b bg-white flex justify-between items-center">
+            <div className="p-4 border-b bg-muted/20 flex justify-between items-end">
               <div>
-                <h2 className="text-xl font-bold text-navy">Chat Inteligente</h2>
-                <p className="text-sm text-muted-foreground">Especialista em Freios a Ar e Diagnóstico</p>
+                <h2 className="text-sm font-bold text-navy uppercase tracking-widest">DIAGNÓSTICO TÉCNICO IA</h2>
+                <p className="text-[10px] text-muted-foreground font-medium uppercase mt-0.5 tracking-wider">Especialista em Freios a Ar e Pneumática</p>
               </div>
-              <Badge variant="outline" className="text-orange border-orange/20 px-3 py-1">
-                {config?.provider_ativo?.toUpperCase() || 'GEMINI'}
-              </Badge>
+              <span className="bg-navy/5 text-navy border border-navy/10 px-2 py-0.5 rounded-xs text-[9px] font-bold uppercase tracking-widest">
+                MODO: {config?.provider_ativo?.toUpperCase() || 'GEMINI'}
+              </span>
             </div>
 
             <ScrollArea className="flex-1 p-5">
               <div className="max-w-3xl mx-auto space-y-4">
                 <div className="flex gap-4">
-                  <div className="w-10 h-10 rounded-full bg-orange flex items-center justify-center shrink-0">
-                    <Bot className="w-6 h-6 text-white" />
+                  <div className="w-8 h-8 rounded-sm bg-navy flex items-center justify-center shrink-0 border border-white/10">
+                    <Bot className="w-4 h-4 text-cyan" />
                   </div>
-                  <div className="bg-white p-4 rounded-md rounded-tl-none shadow-sm border border-navy/5 max-w-[80%]">
-                    <p className="text-navy">Olá! Sou o assistente técnico da Tecnoar. Como posso ajudar com o diagnóstico hoje?</p>
+                  <div className="bg-muted/50 p-4 rounded-sm rounded-tl-none border border-border max-w-[85%]">
+                    <p className="text-xs font-medium leading-relaxed text-navy uppercase tracking-wider mb-2 opacity-60">Assistente Tecnoar</p>
+                    <p className="text-sm text-navy font-medium">Olá! Sou o assistente técnico da Tecnoar. Como posso ajudar com o diagnóstico hoje?</p>
                     <div className="mt-4 flex flex-wrap gap-2">
                       <Button variant="outline" size="sm" className="rounded-sm text-xs" onClick={() => setMessage('Como diagnosticar vazamento na válvula APU?')}>Vazamento APU</Button>
                       <Button variant="outline" size="sm" className="rounded-sm text-xs" onClick={() => setMessage('Esquema elétrico do ABS Knorr-Bremse')}>ABS Knorr</Button>
@@ -147,10 +150,10 @@ function IAModule() {
 
             <div className="p-4 bg-white border-t">
               <div className="max-w-3xl mx-auto flex gap-4 items-end">
-                <div className="flex-1 bg-navy/5 rounded-lg px-6 py-3 flex items-center gap-3">
+                <div className="flex-1 bg-muted/50 border border-border rounded-sm px-4 py-2 flex items-center gap-3">
                   <Input 
                     placeholder="Descreva o problema ou envie uma foto..." 
-                    className="border-none bg-transparent shadow-none focus-visible:ring-0 p-0 text-navy"
+                    className="border-none bg-transparent shadow-none focus-visible:ring-0 p-0 text-sm text-navy font-medium"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSend()}
@@ -170,9 +173,9 @@ function IAModule() {
                 <Button 
                   onClick={handleSend}
                   disabled={!message.trim() || chatMutation.isPending}
-                  className="bg-orange hover:bg-orange/90 text-white rounded-md h-12 w-12 flex items-center justify-center p-0 shadow-sm shadow-orange/20"
+                  className="bg-navy hover:bg-navy/90 text-white rounded-sm h-11 w-11 flex items-center justify-center p-0 shadow-xs"
                 >
-                  <Send className="w-5 h-5" />
+                  <Send className="w-4 h-4" />
                 </Button>
               </div>
             </div>
