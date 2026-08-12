@@ -21,12 +21,13 @@ interface ChecklistDiarioItemProps {
 
 export function ChecklistDiarioItem({ label, itemId, value, onChange, tipo = 'dual' }: ChecklistDiarioItemProps) {
   const updateStatus = (field: 'ok_abertura' | 'ok_fechamento', currentVal?: boolean) => {
+    const nextVal = currentVal === undefined ? true : !currentVal;
+    
     onChange({
       item_id: itemId,
-      ok_abertura: value?.ok_abertura,
-      ok_fechamento: value?.ok_fechamento,
-      observacao: value?.observacao || '',
-      [field]: currentVal === undefined ? true : !currentVal
+      ok_abertura: field === 'ok_abertura' ? nextVal : value?.ok_abertura,
+      ok_fechamento: field === 'ok_fechamento' ? nextVal : value?.ok_fechamento,
+      observacao: value?.observacao || ''
     });
   };
 
@@ -42,6 +43,7 @@ export function ChecklistDiarioItem({ label, itemId, value, onChange, tipo = 'du
             <div className="flex flex-col items-center gap-1">
               <span className="text-[8px] font-bold text-muted-foreground uppercase opacity-50">AB</span>
               <button
+                type="button"
                 className={cn(
                   "w-10 h-8 flex items-center justify-center rounded-sm border transition-all cursor-pointer",
                   value?.ok_abertura 
@@ -59,6 +61,7 @@ export function ChecklistDiarioItem({ label, itemId, value, onChange, tipo = 'du
             <div className="flex flex-col items-center gap-1">
               <span className="text-[8px] font-bold text-muted-foreground uppercase opacity-50">FC</span>
               <button
+                type="button"
                 className={cn(
                   "w-10 h-8 flex items-center justify-center rounded-sm border transition-all cursor-pointer",
                   value?.ok_fechamento 
@@ -78,7 +81,12 @@ export function ChecklistDiarioItem({ label, itemId, value, onChange, tipo = 'du
         <Textarea
           placeholder="Ocorrências / Observações..."
           value={value?.observacao || ''}
-          onChange={(e) => onChange({ ...value!, item_id: itemId, observacao: e.target.value })}
+          onChange={(e) => onChange({ 
+            item_id: itemId, 
+            ok_abertura: value?.ok_abertura,
+            ok_fechamento: value?.ok_fechamento,
+            observacao: e.target.value 
+          })}
           className="rounded-sm text-[11px] min-h-[40px] border-border bg-background focus:ring-1 focus:ring-primary placeholder:text-muted-foreground/30"
         />
       </div>
