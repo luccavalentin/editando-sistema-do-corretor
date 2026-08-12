@@ -59,17 +59,17 @@ function ManagementPage() {
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6 bg-background min-h-screen print:p-0">
-      <div className="flex justify-between items-center border-b border-border pb-6 print:hidden">
-        <div>
-          <h1 className="text-2xl font-semibold font-heading text-primary uppercase tracking-tight">
+      <div className="flex justify-between items-end border-b border-border pb-6 print:hidden">
+        <div className="space-y-1">
+          <h1 className="text-xl font-semibold text-primary uppercase tracking-tight">
             Gestão Operacional
           </h1>
-          <p className="text-[11px] text-muted-foreground mt-1.5 font-medium uppercase tracking-widest opacity-80">
+          <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-[0.1em] opacity-60">
             Abertura de Ordens de Serviço • Central Léo
           </p>
         </div>
         <div className="flex gap-4">
-          <div className="flex items-center gap-3 bg-muted/30 border border-border px-4 py-2 rounded-md text-[11px] font-medium text-primary uppercase tracking-wider shadow-sm">
+          <div className="flex items-center gap-3 bg-muted/30 border border-border px-3 py-1.5 rounded text-[10px] font-semibold text-primary uppercase tracking-wider shadow-none">
             <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)] animate-pulse" />
             Léo • Master Op
           </div>
@@ -137,21 +137,21 @@ function ManagementPage() {
       {/* Workflow UI */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-2 print:hidden">
         {[1, 2, 3, 4].map((s) => (
-          <div key={s} className={`h-1 rounded-full transition-all ${s <= step ? 'bg-orange' : 'bg-muted'}`} />
+          <div key={s} className={`h-1 rounded transition-all ${s <= step ? 'bg-orange' : 'bg-muted'}`} />
         ))}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 print:hidden">
         <div className="md:col-span-2 lg:col-span-3 space-y-6">
           {step === 1 && (
-            <Card className="rounded border border-border bg-card overflow-hidden shadow-sm">
-              <CardHeader className="bg-muted/30 border-b border-border py-4 px-6">
-                <CardTitle className="flex items-center gap-2.5 text-[13px] font-semibold uppercase tracking-wider text-primary">
-                  <UserPlus className="w-4 h-4 text-orange" />
+            <Card className="card-system group">
+              <CardHeader className="bg-muted/30 border-b border-border py-3 px-4">
+                <CardTitle className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-primary">
+                  <UserPlus className="w-3.5 h-3.5 text-orange" />
                   1. Identificação do Cliente
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-6 space-y-6">
+              <CardContent className="p-4 space-y-4">
                 <div className="flex gap-3">
                   <Input 
                     placeholder="Buscar por CNPJ ou Nome..." 
@@ -159,14 +159,14 @@ function ManagementPage() {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="h-10 focus-visible:ring-primary/30"
                   />
-                  <Button onClick={handleSearch} className="h-10 px-6 bg-primary text-white hover:bg-primary/90 font-semibold text-[11px] uppercase tracking-wider rounded">
+                  <Button onClick={handleSearch} className="h-9 px-6 bg-primary text-white hover:bg-primary/90 font-semibold text-[10px] uppercase tracking-wider rounded">
                     Buscar
                   </Button>
                 </div>
-                <div className="p-8 border border-dashed border-border rounded flex flex-col items-center justify-center text-center bg-muted/5 group hover:bg-muted/10 transition-colors">
+                <div className="p-6 border border-dashed border-border rounded flex flex-col items-center justify-center text-center bg-muted/5 group hover:bg-muted/10 transition-colors">
                   <UserPlus className="w-10 h-10 mb-4 opacity-20 text-primary group-hover:scale-110 transition-transform" />
-                  <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-widest max-w-xs">Cliente não encontrado localmente ou na Omie?</p>
-                  <Button variant="outline" size="sm" className="mt-5 h-9 px-6 rounded-md border-primary text-primary hover:bg-primary/5 text-[11px] font-semibold uppercase tracking-wider transition-all">
+                  <p className="text-[9px] font-medium text-muted-foreground uppercase tracking-widest max-w-xs">Cliente não encontrado localmente ou na Omie?</p>
+                  <Button variant="outline" size="sm" className="mt-4 h-8 px-5 rounded border-primary/20 text-primary hover:bg-primary/5 text-[9px] font-semibold uppercase tracking-wider transition-all">
                     Novo Cadastro Manual
                   </Button>
                 </div>
@@ -175,30 +175,30 @@ function ManagementPage() {
           )}
 
           {step === 2 && (
-            <Card className="rounded-lg border-none shadow-sm shadow-navy/5 bg-white overflow-hidden">
-              <CardHeader className="bg-navy text-white">
-                <CardTitle className="flex items-center gap-2">
-                  <Truck className="w-5 h-5 text-cyan" />
-                  Veículo do Cliente
+            <Card className="card-system group">
+              <CardHeader className="bg-navy text-white p-3">
+                <CardTitle className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider">
+                  <Truck className="w-3.5 h-3.5 text-cyan" />
+                  2. Veículo do Cliente
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-5 space-y-4">
+              <CardContent className="p-4 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Mock veículos para o protótipo UI */}
                   <div 
                     onClick={() => { setSelectedVeiculo({id: '1', placa_cavalo: 'ABC-1234'}); setStep(3); }}
-                    className="p-4 border-2 border-navy/5 hover:border-orange rounded-md cursor-pointer transition-all group"
+                    className="p-3 border border-border hover:border-orange rounded cursor-pointer transition-all group bg-muted/5 hover:bg-white"
                   >
-                    <p className="text-[10px] uppercase font-bold text-muted-foreground group-hover:text-orange">Placa</p>
-                    <p className="text-2xl font-mono font-bold text-navy">ABC-1234</p>
-                    <p className="text-sm text-muted-foreground">Scania R450 - Azul</p>
+                    <p className="text-[8px] uppercase font-semibold text-muted-foreground/60 group-hover:text-orange">Placa</p>
+                    <p className="text-xl font-mono font-semibold text-navy">ABC-1234</p>
+                    <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-tight">Scania R450 - Azul</p>
                   </div>
-                  <div className="p-4 border-2 border-dashed border-navy/10 hover:border-orange rounded-md cursor-pointer flex flex-col items-center justify-center text-center group">
-                    <Plus className="w-8 h-8 text-navy/20 group-hover:text-orange mb-2" />
-                    <p className="text-sm font-medium text-navy/40 group-hover:text-orange">Novo Veículo</p>
+                  <div className="p-3 border border-dashed border-border hover:border-orange rounded cursor-pointer flex flex-col items-center justify-center text-center group bg-muted/5">
+                    <Plus className="w-6 h-6 text-navy/20 group-hover:text-orange mb-1.5" />
+                    <p className="text-[9px] font-semibold text-navy/40 uppercase tracking-wider group-hover:text-orange">Novo Veículo</p>
                   </div>
                 </div>
-                <Button variant="ghost" onClick={() => setStep(1)} className="text-muted-foreground">Voltar</Button>
+                <Button variant="ghost" size="sm" onClick={() => setStep(1)} className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground hover:bg-muted/10 h-8">Voltar</Button>
               </CardContent>
             </Card>
           )}
@@ -289,35 +289,35 @@ function ManagementPage() {
         </div>
 
         <div className="space-y-4 print:hidden">
-          <Card className="rounded border border-border bg-card overflow-hidden shadow-sm">
-            <CardHeader className="bg-muted/30 border-b border-border py-4 px-5">
-              <CardTitle className="text-[11px] font-semibold uppercase tracking-widest text-primary">Resumo da OS</CardTitle>
+          <Card className="card-system">
+            <CardHeader className="bg-muted/30 border-b border-border py-3 px-4">
+              <CardTitle className="text-[10px] font-semibold uppercase tracking-widest text-primary">Resumo da OS</CardTitle>
             </CardHeader>
             <CardContent className="p-4 space-y-4">
               <div className="flex justify-between items-center">
-                <div className="text-[11px] uppercase font-medium text-muted-foreground tracking-wider">Status</div>
-                <div className="bg-emerald-500/10 text-emerald-700 border border-emerald-500/20 px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider">Nova OS</div>
+                <div className="text-[9px] uppercase font-semibold text-muted-foreground/60 tracking-wider">Status</div>
+                <div className="bg-emerald-500/10 text-emerald-700 border border-emerald-500/20 px-1.5 py-0.5 rounded text-[9px] font-semibold uppercase tracking-wider">Nova OS</div>
               </div>
               
               {selectedCliente && (
                 <div className="space-y-1">
-                  <div className="text-[11px] uppercase font-medium text-muted-foreground tracking-wider">Cliente</div>
-                  <div className="text-sm font-semibold text-primary">{selectedCliente.nome}</div>
-                  <div className="text-[11px] text-muted-foreground font-medium">{selectedCliente.documento}</div>
+                  <div className="text-[9px] uppercase font-semibold text-muted-foreground/60 tracking-wider">Cliente</div>
+                  <div className="text-[13px] font-semibold text-primary">{selectedCliente.nome}</div>
+                  <div className="text-[10px] text-muted-foreground font-medium uppercase tracking-tight">{selectedCliente.documento}</div>
                 </div>
               )}
 
               {selectedVeiculo && (
-                <div className="space-y-1 border-t border-border pt-5">
-                  <div className="text-[11px] uppercase font-medium text-muted-foreground tracking-wider">Veículo</div>
-                  <div className="text-sm font-semibold text-primary">{selectedVeiculo.placa_cavalo}</div>
+                <div className="space-y-1 border-t border-border/50 pt-4">
+                  <div className="text-[9px] uppercase font-semibold text-muted-foreground/60 tracking-wider">Veículo</div>
+                  <div className="text-[13px] font-semibold text-primary uppercase">{selectedVeiculo.placa_cavalo}</div>
                 </div>
               )}
 
               {osData.box && (
-                <div className="flex justify-between items-center border-t border-border pt-5">
-                  <div className="text-[11px] uppercase font-medium text-muted-foreground tracking-wider">Box</div>
-                  <div className="text-sm font-semibold text-primary">{osData.box}</div>
+                <div className="flex justify-between items-center border-t border-border/50 pt-4">
+                  <div className="text-[9px] uppercase font-semibold text-muted-foreground/60 tracking-wider">Box</div>
+                  <div className="text-[13px] font-semibold text-primary uppercase">{osData.box}</div>
                 </div>
               )}
             </CardContent>
