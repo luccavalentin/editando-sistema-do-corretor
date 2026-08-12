@@ -10,12 +10,12 @@ interface StatCardProps {
 
 export function StatCard({ title, value, icon: Icon, color }: StatCardProps) {
   return (
-    <Card className="rounded border border-border bg-card p-0 shadow-sm">
+    <Card className="card-system">
       <CardContent className="p-4 space-y-3">
         <div className="flex justify-between items-start">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{title}</span>
-          <div className={`p-2 rounded-md bg-muted/50 ${color}`}>
-            <Icon className="w-4 h-4" />
+          <span className="label-premium">{title}</span>
+          <div className={`p-1.5 rounded bg-muted/50 ${color}`}>
+            <Icon className="w-3.5 h-3.5" />
           </div>
         </div>
         <div className="flex items-baseline">
