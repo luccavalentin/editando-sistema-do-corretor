@@ -113,27 +113,34 @@ export function ProductionPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {['eletrica', 'socorro', 'troca_cuicas_aparelho_diag', 'teste_valvulas', 'troca_valvulas', 'vazamentos_ar'].map((esp) => (
               <div key={esp} className="space-y-3">
-                <h3 className="font-bold font-space text-lg border-b pb-2 flex items-center justify-between">
-                  <span className="capitalize">{esp.replace(/_/g, ' ')}</span>
-                  <Badge variant="outline">{agenda.filter((a: any) => a.especialidade === esp).length}</Badge>
-                </h3>
+              <div className="space-y-3">
+                <div className="px-1 border-b border-border pb-2">
+                  <h3 className="font-bold text-navy text-[10px] uppercase tracking-widest flex items-center justify-between">
+                    {esp.replace(/_/g, ' ')}
+                    <span className="bg-muted px-1.5 py-0.5 rounded-xs text-[9px] font-bold text-muted-foreground tabular-nums">
+                      {agenda.filter((a: any) => a.especialidade === esp).length}
+                    </span>
+                  </h3>
+                </div>
                 <div className="space-y-2">
                   {agenda.filter((a: any) => a.especialidade === esp).map((item: any) => (
-                    <Card key={item.id} className="p-3 bg-white/50 border-dashed">
-                      <div className="flex justify-between items-start">
-                        <div className="font-bold text-sm text-[#001830]">{item.os.protocolo}</div>
-                        <Badge variant="outline" className="text-[10px]">{item.status}</Badge>
+                    <div key={item.id} className="p-3 bg-card border border-border rounded-sm shadow-xs">
+                      <div className="flex justify-between items-start mb-1">
+                        <div className="font-bold text-xs text-navy font-mono">{item.os.protocolo}</div>
+                        <span className="text-[9px] font-bold text-muted-foreground uppercase">{item.status}</span>
                       </div>
-                      <div className="text-xs text-muted-foreground mt-1">
-                        {item.os.clientes.nome} • {item.os.veiculos.placa_cavalo}
+                      <div className="text-[10px] font-bold text-muted-foreground uppercase">{item.os.clientes.nome}</div>
+                      <div className="text-[10px] font-medium text-muted-foreground">{item.os.veiculos.placa_cavalo}</div>
+                      <div className="mt-2 text-[9px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
+                        <Clock className="w-3 h-3" />
+                        {format(new Date(item.data_prevista), "dd/MM HH:mm", { locale: ptBR })}
                       </div>
-                      <div className="mt-2 text-[10px] font-medium text-cyan-600">
-                        {format(new Date(item.data_prevista), "dd/MM 'às' HH:mm", { locale: ptBR })}
-                      </div>
-                    </Card>
+                    </div>
                   ))}
                   {agenda.filter((a: any) => a.especialidade === esp).length === 0 && (
-                    <div className="text-xs text-muted-foreground py-4 text-center italic">Nenhum serviço agendado</div>
+                    <div className="text-[9px] uppercase font-bold text-muted-foreground/40 py-4 text-center italic border border-dashed border-border rounded-sm">
+                      Nenhum serviço
+                    </div>
                   )}
                 </div>
               </div>
