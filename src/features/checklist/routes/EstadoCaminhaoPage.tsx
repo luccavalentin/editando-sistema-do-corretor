@@ -40,7 +40,7 @@ export function EstadoCaminhaoPage() {
       os_id: selectedOS,
       tipo: 'estado_caminhao',
       respostas: [{ item_id: 'geral', status: 'ok', observacao: obs }],
-      assinatura_url: signature,
+      assinatura_url: assinatura,
       finalizado: true
     });
   };
