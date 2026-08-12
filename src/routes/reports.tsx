@@ -50,95 +50,122 @@ function ReportsPage() {
   if (isLoading) return <div className="p-5">Carregando relatórios...</div>;
 
   return (
-    <div className="p-6 space-y-6 bg-background min-h-screen">
-      <div className="flex justify-between items-end border-b border-border pb-6">
-        <div>
-          <h1 className="text-xl font-semibold font-heading text-primary uppercase tracking-tight">Relatórios e Analytics</h1>
-          <p className="text-[11px] text-muted-foreground mt-1.5 font-medium uppercase tracking-widest opacity-80">Consolidado de ordens de serviço e indicadores financeiros</p>
+    <div className="p-8 space-y-10 bg-background min-h-screen">
+      <div className="flex justify-between items-end border-b border-border pb-8">
+        <div className="space-y-2">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-navy flex items-center justify-center shadow-lg shadow-navy/20">
+              <Download className="w-5 h-5 text-cyan" />
+            </div>
+            <h1 className="text-2xl font-bold font-heading text-primary uppercase tracking-tight">
+              Analytics Operacional
+            </h1>
+          </div>
+          <p className="text-[11px] text-muted-foreground font-bold uppercase tracking-[0.2em] opacity-60">
+            Consolidado Financeiro e Indicadores de Produtividade
+          </p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="h-9 px-4 rounded-md border-border hover:bg-muted/50 text-[11px] font-medium uppercase tracking-wider">
-            <Filter className="w-3.5 h-3.5 mr-2" /> Filtrar
+        <div className="flex gap-4">
+          <Button variant="outline" className="h-10 px-6 rounded border-border hover:bg-muted font-bold text-[11px] uppercase tracking-widest transition-all">
+            <Filter className="w-4 h-4 mr-2.5" />
+            Filtrar Período
           </Button>
-          <Button onClick={exportToCSV} size="sm" className="h-9 px-5 bg-primary text-white hover:bg-primary/90 rounded-md text-[11px] font-semibold uppercase tracking-wider">
-            <Download className="w-3.5 h-3.5 mr-2" /> Exportar CSV
+          <Button 
+            onClick={exportToCSV} 
+            className="h-10 px-8 bg-navy hover:bg-navy/90 text-white rounded shadow-xl shadow-navy/20 gap-3 transition-all text-[11px] font-bold uppercase tracking-widest"
+          >
+            <Download className="w-4 h-4 text-cyan" />
+            Exportar CSV
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="elevation-1 bg-card">
-          <CardHeader className="py-4 px-5 border-b border-border/50 bg-muted/20">
-            <CardTitle className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Volume Total</CardTitle>
-          </CardHeader>
-          <CardContent className="py-6 px-5">
-            <p className="text-3xl font-semibold text-primary tracking-tight tabular-nums">{reports?.length || 0}</p>
-          </CardContent>
-        </Card>
-        <Card className="elevation-1 bg-card">
-          <CardHeader className="py-4 px-5 border-b border-border/50 bg-muted/20">
-            <CardTitle className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Ticket Médio (Serv)</CardTitle>
-          </CardHeader>
-          <CardContent className="py-6 px-5">
-            <p className="text-3xl font-semibold text-primary tracking-tight tabular-nums">
-              R$ {(reports?.reduce((acc: number, curr: any) => acc + (Number(curr.valor_servico) || 0), 0) / (reports?.length || 1)).toFixed(2)}
-            </p>
-          </CardContent>
-        </Card>
-        <Card className="elevation-1 bg-card">
-          <CardHeader className="py-4 px-5 border-b border-border/50 bg-muted/20">
-            <CardTitle className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">OS Concluídas</CardTitle>
-          </CardHeader>
-          <CardContent className="py-6 px-5">
-            <p className="text-3xl font-semibold text-primary tracking-tight tabular-nums">{reports?.filter((os: any) => os.status === 'concluida').length || 0}</p>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <StatCard title="Volume Total" value={reports?.length || 0} icon={Download} color="text-navy" />
+        <StatCard 
+          title="Ticket Médio" 
+          value={`R$ ${(reports?.reduce((acc: number, curr: any) => acc + (Number(curr.valor_servico) || 0), 0) / (reports?.length || 1)).toFixed(0)}`} 
+          icon={Download} 
+          color="text-cyan" 
+        />
+        <StatCard 
+          title="OS Concluídas" 
+          value={reports?.filter((os: any) => os.status === 'concluida').length || 0} 
+          icon={Download} 
+          color="text-emerald-500" 
+        />
       </div>
 
-      <Card className="elevation-1 overflow-hidden bg-card">
-        <CardHeader className="bg-muted/30 border-b border-border py-4 px-6">
-          <CardTitle className="text-[11px] font-semibold uppercase tracking-widest text-primary">Detalhamento Operacional</CardTitle>
-        </CardHeader>
-        <CardContent className="p-0">
-          <Table className="table-system">
-            <TableHeader>
-              <TableRow>
-                <TableHead className="pl-8">Protocolo</TableHead>
-                <TableHead>Cliente</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Peças</TableHead>
-                <TableHead className="text-right">Serviço</TableHead>
-                <TableHead className="text-right pr-8">Data</TableHead>
+      <Card className="card-system overflow-hidden">
+        <div className="bg-muted/30 border-b border-border py-5 px-8 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="p-2 rounded bg-navy/5">
+              <TrendingUp className="w-4 h-4 text-navy" />
+            </div>
+            <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-primary">
+              Detalhamento Operacional por Protocolo
+            </h3>
+          </div>
+        </div>
+        <Table className="table-system">
+          <TableHeader>
+            <TableRow className="hover:bg-transparent">
+              <TableHead className="pl-8">Protocolo</TableHead>
+              <TableHead>Cliente</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead className="text-right">Peças</TableHead>
+              <TableHead className="text-right">Serviço</TableHead>
+              <TableHead className="text-right pr-8">Data</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {reports?.map((os: any) => (
+              <TableRow key={os.id} className="interactive-item">
+                <TableCell className="pl-8">
+                  <span className="font-mono text-[11px] font-black text-navy tracking-wider uppercase">
+                    {os.protocolo}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-col">
+                    <span className="font-bold text-primary uppercase tracking-tight">{os.cliente?.nome}</span>
+                    <span className="text-[9px] font-bold text-muted-foreground/60 uppercase tracking-widest">Tecnoar Cliente</span>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <span className="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase border border-navy/10 bg-navy/5 text-navy">
+                    {os.status.replace('_', ' ')}
+                  </span>
+                </TableCell>
+                <TableCell className="text-right font-black tabular-nums text-primary/80">
+                  R$ {os.valor_pecas?.toLocaleString() || '0,00'}
+                </TableCell>
+                <TableCell className="text-right font-black tabular-nums text-navy">
+                  R$ {os.valor_servico?.toLocaleString() || '0,00'}
+                </TableCell>
+                <TableCell className="text-right pr-8">
+                  <span className="text-[10px] text-muted-foreground font-black uppercase tracking-tighter opacity-60">
+                    {new Date(os.criado_em).toLocaleDateString('pt-BR')}
+                  </span>
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {reports?.map((os: any) => (
-                <TableRow key={os.id} className="interactive-item">
-                  <TableCell className="pl-8 font-mono text-[11px] font-semibold text-primary">{os.protocolo}</TableCell>
-                  <TableCell className="font-semibold text-primary uppercase tracking-tight">{os.cliente?.nome}</TableCell>
-                  <TableCell>
-                    <span className="bg-primary/5 text-primary border border-primary/10 px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider">
-                      {os.status.replace('_', ' ')}
-                    </span>
-                  </TableCell>
-                  <TableCell className="text-right tabular-nums font-medium">R$ {os.valor_pecas?.toLocaleString() || '0,00'}</TableCell>
-                  <TableCell className="text-right tabular-nums font-medium">R$ {os.valor_servico?.toLocaleString() || '0,00'}</TableCell>
-                  <TableCell className="text-[10px] text-muted-foreground font-semibold uppercase text-right pr-8">
-                    {new Date(os.criado_em).toLocaleDateString()}
-                  </TableCell>
-                </TableRow>
-              ))}
-              {(!reports || reports.length === 0) && (
-                <TableRow>
-                  <TableCell colSpan={6} className="h-24 text-center">
-                    <span className="text-[10px] uppercase font-bold text-muted-foreground/30 tracking-widest italic">Nenhum registro encontrado</span>
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
+            ))}
+            {(!reports || reports.length === 0) && (
+              <TableRow>
+                <TableCell colSpan={6} className="h-32 text-center">
+                  <div className="flex flex-col items-center justify-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-muted/20 flex items-center justify-center">
+                      <Filter className="w-4 h-4 text-muted-foreground/20" />
+                    </div>
+                    <span className="text-[10px] uppercase font-bold text-muted-foreground/20 tracking-[0.2em]">Sem registros</span>
+                  </div>
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
       </Card>
     </div>
+
   );
 }
