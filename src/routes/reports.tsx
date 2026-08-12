@@ -23,7 +23,7 @@ function ReportsPage() {
     if (!reports || reports.length === 0) return;
     
     const headers = ['ID', 'Protocolo', 'Cliente', 'Status', 'Valor Peças', 'Valor Serviço', 'Criado Em'];
-    const rows = reports.map(os => [
+    const rows = (reports as any[]).map((os: any) => [
       os.id,
       os.protocolo,
       os.cliente?.nome,
@@ -35,7 +35,7 @@ function ReportsPage() {
 
     const csvContent = [
       headers.join(','),
-      ...rows.map(row => row.map(v => `"${v || ''}"`).join(','))
+      ...rows.map((row: any[]) => row.map((v: any) => `"${v || ''}"`).join(','))
     ].join('\n');
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -82,7 +82,7 @@ function ReportsPage() {
           </CardHeader>
           <CardContent className="py-4 px-4">
             <p className="text-2xl font-semibold text-navy tracking-tight tabular-nums">
-              R$ {(reports?.reduce((acc, curr) => acc + (Number(curr.valor_servico) || 0), 0) / (reports?.length || 1)).toFixed(2)}
+              R$ {(reports?.reduce((acc: number, curr: any) => acc + (Number(curr.valor_servico) || 0), 0) / (reports?.length || 1)).toFixed(2)}
             </p>
           </CardContent>
         </Card>
@@ -91,7 +91,7 @@ function ReportsPage() {
             <CardTitle className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">OS CONCLUÍDAS</CardTitle>
           </CardHeader>
           <CardContent className="py-4 px-4">
-            <p className="text-2xl font-semibold text-primary tracking-tight tabular-nums">{reports?.filter(os => os.status === 'concluida').length || 0}</p>
+            <p className="text-2xl font-semibold text-primary tracking-tight tabular-nums">{reports?.filter((os: any) => os.status === 'concluida').length || 0}</p>
           </CardContent>
         </Card>
       </div>
@@ -109,7 +109,7 @@ function ReportsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {reports?.map((os) => (
+            {reports?.map((os: any) => (
               <TableRow key={os.id}>
                 <TableCell className="font-mono text-xs font-bold opacity-50">{os.protocolo}</TableCell>
                 <TableCell className="font-bold text-navy uppercase tracking-tight">{os.cliente?.nome}</TableCell>

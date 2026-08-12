@@ -140,11 +140,11 @@ export function ChecklistPage() {
 
   const handleFinalize = async (signature: string) => {
     const templates = mode === 'tecnico' ? tecnicoTemplates : diarioTemplates;
-    const allItensIds = templates.flatMap(t => (t.itens as any[]).map(i => i.id));
+    const allItensIds = templates.flatMap((t: any) => (t.itens as any[]).map((i: any) => i.id));
     const currentResponses = Array.from(responsesMap.values());
     
     if (mode === 'tecnico') {
-      const faltam = allItensIds.filter(id => !responsesMap.has(id));
+      const faltam = allItensIds.filter((id: string) => !responsesMap.has(id));
       if (faltam.length > 0) {
         toast.error(`Responda todos os itens (${faltam.length} pendentes)`);
         return;
@@ -236,7 +236,7 @@ export function ChecklistPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {osList?.filter(os => os.status === 'aberta' || os.status === 'checklist_diagnostico').map(os => (
+          {osList?.filter((os: any) => os.status === 'aberta' || os.status === 'checklist_diagnostico').map((os: any) => (
             <Card key={os.id} className="rounded-sm border border-border shadow-xs bg-card p-4 hover:border-primary/40 cursor-pointer transition-colors group" onClick={() => setSelectedOS(os.id)}>
               <div className="flex justify-between items-start">
                 <div className="space-y-1">
@@ -282,7 +282,7 @@ export function ChecklistPage() {
     );
   }
 
-  const currentOS = mode === 'tecnico' ? osList?.find(os => os.id === selectedOS) : null;
+  const currentOS = mode === 'tecnico' ? osList?.find((os: any) => os.id === selectedOS) : null;
   const templates = mode === 'tecnico' ? tecnicoTemplates : diarioTemplates;
 
   return (
@@ -330,7 +330,7 @@ export function ChecklistPage() {
       <div className="p-4 max-w-4xl mx-auto space-y-4">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="w-full grid grid-cols-3 sm:grid-cols-7 h-auto p-1 bg-muted/50 border border-border/50 rounded-lg mb-6 shadow-sm">
-            {templates.map((t, idx) => (
+            {templates.map((t: any, idx: number) => (
               <TabsTrigger key={t.id} value={idx.toString()} className="text-[10px] font-bold uppercase tracking-tighter py-2 rounded-xs px-1 overflow-hidden text-ellipsis whitespace-nowrap">
                 {t.secao.split(' ')[0]}
               </TabsTrigger>
