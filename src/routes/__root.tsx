@@ -110,6 +110,7 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body className="selection:bg-orange/20 selection:text-navy">
+        <Toaster position="top-right" closeButton richColors />
         {children}
         <Scripts />
       </body>
@@ -135,7 +136,6 @@ function RootComponent() {
           </RequireRole>
         )}
       </SidebarProvider>
-      <Toaster position="top-right" closeButton richColors />
     </QueryClientProvider>
   );
 }
