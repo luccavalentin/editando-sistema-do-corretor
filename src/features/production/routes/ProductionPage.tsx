@@ -35,10 +35,10 @@ export function ProductionPage() {
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6 bg-background min-h-screen">
-      <div className="flex justify-between items-end border-b border-border pb-4">
+      <div className="flex justify-between items-end border-b border-border pb-6">
         <div>
-          <h1 className="text-lg font-bold font-heading text-navy uppercase tracking-tight">PRODUÇÃO E AGENDA</h1>
-          <p className="text-[11px] text-muted-foreground mt-0.5 font-medium uppercase tracking-wider">Gestão técnica e fluxo de testes</p>
+          <h1 className="text-xl font-semibold font-heading text-primary uppercase tracking-tight">Produção e Agenda</h1>
+          <p className="text-[11px] text-muted-foreground mt-1.5 font-medium uppercase tracking-widest opacity-80">Gestão técnica e fluxo de testes</p>
         </div>
       </div>
 

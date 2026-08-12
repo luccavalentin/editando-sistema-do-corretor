@@ -42,19 +42,19 @@ function RankingPage() {
 
   return (
     <div className="p-8 space-y-8 bg-background min-h-screen">
-      <div className="flex justify-between items-center border-b border-border/50 pb-8">
+      <div className="flex justify-between items-center border-b border-border pb-6">
         <div>
-          <h1 className="text-2xl font-black font-heading text-navy uppercase tracking-tighter text-primary">
-            ELITE TECNOAR
+          <h1 className="text-2xl font-semibold font-heading text-primary uppercase tracking-tight">
+            Elite Tecnoar
           </h1>
-          <p className="text-xs text-muted-foreground mt-2 font-bold uppercase tracking-[0.2em] opacity-70">
+          <p className="text-[11px] text-muted-foreground mt-1.5 font-medium uppercase tracking-widest opacity-80">
             Performance Técnica e Reconhecimento Profissional
           </p>
         </div>
-        <div className="flex bg-primary/5 p-1 border border-primary/10 rounded-lg h-12">
-          <button className="px-6 py-1.5 rounded-md bg-white shadow-md text-[10px] font-black text-navy uppercase tracking-widest border border-primary/5 transition-all">Geral</button>
-          <button className="px-6 py-1.5 text-[10px] font-black text-white/30 hover:text-white/60 uppercase tracking-widest transition-all">Mensal</button>
-          <button className="px-6 py-1.5 text-[10px] font-black text-white/30 hover:text-white/60 uppercase tracking-widest transition-all">Semanal</button>
+        <div className="flex bg-muted/30 p-1 border border-border rounded-md h-10">
+          <button className="px-5 py-1 rounded bg-card shadow-sm text-[11px] font-semibold text-primary uppercase tracking-wider transition-all">Geral</button>
+          <button className="px-5 py-1 text-[11px] font-medium text-muted-foreground hover:text-primary uppercase tracking-wider transition-all">Mensal</button>
+          <button className="px-5 py-1 text-[11px] font-medium text-muted-foreground hover:text-primary uppercase tracking-wider transition-all">Semanal</button>
         </div>
       </div>
 

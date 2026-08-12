@@ -52,17 +52,17 @@ function ReportsPage() {
 
   return (
     <div className="p-6 space-y-6 bg-background min-h-screen">
-      <div className="flex justify-between items-end border-b border-border pb-4">
+      <div className="flex justify-between items-end border-b border-border pb-6">
         <div>
-          <h1 className="text-lg font-bold font-heading text-navy uppercase tracking-tight">RELATÓRIOS E ANALYTICS</h1>
-          <p className="text-[11px] text-muted-foreground mt-0.5 font-medium uppercase tracking-wider">Consolidado de ordens de serviço e indicadores financeiros</p>
+          <h1 className="text-xl font-semibold font-heading text-primary uppercase tracking-tight">Relatórios e Analytics</h1>
+          <p className="text-[11px] text-muted-foreground mt-1.5 font-medium uppercase tracking-widest opacity-80">Consolidado de ordens de serviço e indicadores financeiros</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="h-8 rounded-sm text-[10px] font-bold uppercase tracking-widest border-border hover:bg-muted/50">
-            <Filter className="w-3.5 h-3.5" /> FILTRAR
+          <Button variant="outline" size="sm" className="h-9 px-4 rounded-md border-border hover:bg-muted/50 text-[11px] font-medium uppercase tracking-wider">
+            <Filter className="w-3.5 h-3.5 mr-2" /> Filtrar
           </Button>
-          <Button onClick={exportToCSV} size="sm" className="bg-navy text-white hover:bg-navy/90 h-8 rounded-sm text-[10px] font-bold uppercase tracking-widest px-4">
-            <Download className="w-3.5 h-3.5 mr-2" /> EXPORTAR CSV
+          <Button onClick={exportToCSV} size="sm" className="h-9 px-5 bg-primary text-white hover:bg-primary/90 rounded-md text-[11px] font-semibold uppercase tracking-wider">
+            <Download className="w-3.5 h-3.5 mr-2" /> Exportar CSV
           </Button>
         </div>
       </div>

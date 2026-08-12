@@ -85,26 +85,26 @@ function Dashboard() {
 
   return (
     <div className="p-8 space-y-8 bg-background min-h-screen">
-      <div className="flex justify-between items-center border-b border-border/50 pb-6">
+      <div className="flex justify-between items-center border-b border-border pb-6">
         <div>
-          <h1 className="text-2xl font-black font-heading text-navy flex items-center gap-3 uppercase tracking-tighter">
+          <h1 className="text-2xl font-semibold font-heading text-primary flex items-center gap-3 uppercase tracking-tight">
             <LayoutDashboard className="w-6 h-6 text-orange" />
-            CENTRAL DE OPERAÇÕES
+            Central de Operações
           </h1>
-          <p className="text-xs text-muted-foreground mt-2 font-bold uppercase tracking-[0.2em] opacity-70">Monitoramento Dinâmico de Pátio • Fluxo em Tempo Real</p>
+          <p className="text-[11px] text-muted-foreground mt-1.5 font-medium uppercase tracking-widest opacity-80">Monitoramento Dinâmico de Pátio • Fluxo em Tempo Real</p>
         </div>
         <div className="flex gap-3">
-          <Button variant="outline" size="sm" className="rounded-md border-primary/10 hover:border-primary/30">
-            <Filter className="w-4 h-4" />
-            FILTRAR VISÃO
+          <Button variant="outline" size="sm" className="h-9 px-4 rounded-md border-border hover:bg-muted/50 transition-all font-medium text-xs uppercase tracking-wider">
+            <Filter className="w-3.5 h-3.5 mr-2" />
+            Filtrar Visão
           </Button>
           <Button 
             onClick={() => setViewMode('tv')} 
             size="sm"
-            className="bg-navy hover:bg-navy/80 rounded-md gap-3 px-6 shadow-md"
+            className="h-9 px-5 bg-primary hover:bg-primary/90 rounded-md gap-2.5 shadow-sm transition-all text-xs font-semibold uppercase tracking-wider"
           >
-            <Tv className="w-4 h-4 text-cyan" />
-            EXIBIÇÃO TV
+            <Tv className="w-3.5 h-3.5 text-cyan" />
+            Exibição TV
           </Button>
         </div>
       </div>

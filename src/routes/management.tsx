@@ -58,19 +58,19 @@ function ManagementPage() {
   };
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-10 bg-background min-h-screen print:p-0">
-      <div className="flex justify-between items-center border-b border-border/50 pb-8 print:hidden">
+    <div className="p-8 max-w-7xl mx-auto space-y-8 bg-background min-h-screen print:p-0">
+      <div className="flex justify-between items-center border-b border-border pb-6 print:hidden">
         <div>
-          <h1 className="text-2xl font-black font-heading text-navy uppercase tracking-tighter">
-            GESTÃO OPERACIONAL
+          <h1 className="text-2xl font-semibold font-heading text-primary uppercase tracking-tight">
+            Gestão Operacional
           </h1>
-          <p className="text-xs text-muted-foreground mt-2 font-bold uppercase tracking-[0.2em] opacity-70">
+          <p className="text-[11px] text-muted-foreground mt-1.5 font-medium uppercase tracking-widest opacity-80">
             Abertura de Ordens de Serviço • Central Léo
           </p>
         </div>
         <div className="flex gap-4">
-          <div className="flex items-center gap-3 bg-primary/5 border border-primary/10 px-4 py-2 rounded-lg text-[10px] font-black text-navy uppercase tracking-widest shadow-sm">
-            <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] animate-pulse" />
+          <div className="flex items-center gap-3 bg-muted/30 border border-border px-4 py-2 rounded-md text-[11px] font-medium text-primary uppercase tracking-wider shadow-sm">
+            <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)] animate-pulse" />
             Léo • Master Op
           </div>
         </div>

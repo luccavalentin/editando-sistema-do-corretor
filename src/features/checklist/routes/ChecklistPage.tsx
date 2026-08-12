@@ -172,11 +172,11 @@ export function ChecklistPage() {
   if (mode === 'selection') {
     return (
       <div className="p-10 max-w-5xl mx-auto space-y-12 bg-background min-h-screen">
-        <div className="border-b border-border/50 pb-8 text-center sm:text-left">
-          <h1 className="text-3xl font-black font-heading text-navy uppercase tracking-tighter">
-            CENTRAL DE QUALIDADE
+        <div className="border-b border-border pb-8 text-center sm:text-left">
+          <h1 className="text-3xl font-semibold font-heading text-primary uppercase tracking-tight">
+            Central de Qualidade
           </h1>
-          <p className="text-xs text-muted-foreground mt-3 font-bold uppercase tracking-[0.3em] opacity-70">
+          <p className="text-[11px] text-muted-foreground mt-2 font-medium uppercase tracking-widest opacity-80">
             Inspeções Técnicas & Gestão 5S • Tecnoar Freios
           </p>
         </div>
