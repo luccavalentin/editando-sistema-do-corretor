@@ -33,14 +33,14 @@ export const getSecretsStatus = createServerFn({ method: "GET" })
 export const saveSecret = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((data: any) => z.object({
-    key: z.string(),
-    value: z.string()
+    data: z.object({
+      key: z.string(),
+      value: z.string()
+    })
   }).parse(data))
   .handler(async ({ data }) => {
     // SECURITY: This is a simulation. In Lovable, secrets are managed via Lovable Cloud UI.
-    // Directly updating process.env at runtime is not persistent in serverless environments.
-    // We inform the user they should use the Lovable Cloud UI for security and persistence.
-    console.log(`User attempted to set secret: ${data.key}`);
+    console.log(`User attempted to set secret: ${data.data.key}`);
     
     return { 
       success: false, 
