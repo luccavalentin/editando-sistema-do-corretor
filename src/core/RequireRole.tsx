@@ -44,7 +44,10 @@ export function RequireRole({ children }: { children: React.ReactNode }) {
           .single();
 
         if (roleError || !roleData) {
-          console.error("User has no role assigned:", roleError);
+          console.error("Auth: User has no role assigned or RLS blocked read:", {
+            error: roleError,
+            userId: session.user.id
+          });
           if (isMounted) {
             toast.error("Usuário sem permissões atribuídas. Contate o administrador.");
             setRole(null);
