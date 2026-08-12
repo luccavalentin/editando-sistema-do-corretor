@@ -111,16 +111,16 @@ function ReportsPage() {
           <TableBody>
             {reports?.map((os: any) => (
               <TableRow key={os.id} className="interactive-item">
-                <TableCell className="font-mono text-xs font-medium text-muted-foreground">{os.protocolo}</TableCell>
+                <TableCell className="pl-8 font-mono text-[11px] font-semibold text-primary">{os.protocolo}</TableCell>
                 <TableCell className="font-semibold text-primary uppercase tracking-tight">{os.cliente?.nome}</TableCell>
                 <TableCell>
-                  <span className="bg-muted text-muted-foreground border border-border px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider">
+                  <span className="bg-primary/5 text-primary border border-primary/10 px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider">
                     {os.status.replace('_', ' ')}
                   </span>
                 </TableCell>
-                <TableCell className="text-right tabular-nums font-medium">R$ {os.valor_pecas || 0}</TableCell>
-                <TableCell className="text-right tabular-nums font-medium">R$ {os.valor_servico || 0}</TableCell>
-                <TableCell className="text-[11px] text-muted-foreground font-medium uppercase text-right pr-6">
+                <TableCell className="text-right tabular-nums font-medium">R$ {os.valor_pecas?.toLocaleString() || '0,00'}</TableCell>
+                <TableCell className="text-right tabular-nums font-medium">R$ {os.valor_servico?.toLocaleString() || '0,00'}</TableCell>
+                <TableCell className="text-[10px] text-muted-foreground font-semibold uppercase text-right pr-8">
                   {new Date(os.criado_em).toLocaleDateString()}
                 </TableCell>
               </TableRow>
@@ -131,10 +131,10 @@ function ReportsPage() {
                   <span className="text-[10px] uppercase font-bold text-muted-foreground/30 tracking-widest italic">Nenhum registro encontrado</span>
                 </TableCell>
               </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   );
 }
