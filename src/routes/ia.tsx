@@ -99,7 +99,7 @@ function IAModule() {
               <TabsTrigger 
                 key={tab.value}
                 value={tab.value} 
-                className="w-full justify-start gap-3 rounded-sm py-2 px-3 text-[12px] font-bold uppercase tracking-wider transition-all data-[state=active]:bg-white/10 data-[state=active]:text-orange data-[state=active]:border-l-2 data-[state=active]:border-orange text-white/50 hover:bg-white/5"
+                className="w-full justify-start gap-3 rounded-sm py-2 px-3 text-[12px] font-bold uppercase tracking-wider transition-all data-[state=active]:bg-white/10 data-[state=active]:text-orange data-[state=active]:border-l-2 data-[state=active]:border-orange text-white/80 hover:bg-white/5"
               >
                 <tab.icon className="w-4 h-4" /> {tab.label}
               </TabsTrigger>
@@ -129,7 +129,7 @@ function IAModule() {
                     <Bot className="w-4 h-4 text-cyan" />
                   </div>
                   <div className="bg-muted/50 p-4 rounded-sm rounded-tl-none border border-border max-w-[85%]">
-                    <p className="text-xs font-medium leading-relaxed text-navy uppercase tracking-wider mb-2 opacity-60">Assistente Tecnoar</p>
+                    <p className="text-xs font-medium leading-relaxed text-navy uppercase tracking-wider mb-2 opacity-80">Assistente Tecnoar</p>
                     <p className="text-sm text-navy font-medium">Olá! Sou o assistente técnico da Tecnoar. Como posso ajudar com o diagnóstico hoje?</p>
                     <div className="mt-4 flex flex-wrap gap-2">
                       <Button variant="outline" size="sm" className="rounded-sm text-xs" onClick={() => setMessage('Como diagnosticar vazamento na válvula APU?')}>Vazamento APU</Button>
@@ -250,7 +250,7 @@ function IAModule() {
                   <CardTitle className="flex items-center gap-3">
                     <Settings className="w-6 h-6 text-cyan" /> Provedor Ativo
                   </CardTitle>
-                  <CardDescription className="text-white/60">Escolha o modelo de IA que responderá no chat técnico</CardDescription>
+                  <CardDescription className="text-white/80">Escolha o modelo de IA que responderá no chat técnico</CardDescription>
                 </CardHeader>
                 <CardContent className="p-5 space-y-4">
                   <div className="grid grid-cols-1 gap-4">

@@ -141,12 +141,12 @@ function RankingPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {ranking?.map((user, index) => {
+               {ranking?.map((user, index) => {
                 const level = getLevel(user.points);
                 return (
                   <TableRow key={user.id} className="hover:bg-navy/5 transition-colors">
                     <TableCell className="pl-8 font-semibold text-navy">{index + 1}º</TableCell>
-                    <TableCell className="font-bold text-navy">{user.email.split('@')[0]}</TableCell>
+                    <TableCell className="font-bold text-navy">{user.email?.split('@')[0] || 'Técnico'}</TableCell>
                     <TableCell>
                       <span className="font-semibold text-orange">{user.points}</span>
                     </TableCell>
@@ -156,7 +156,7 @@ function RankingPage() {
                       </span>
                     </TableCell>
                     <TableCell className="pr-8 text-right">
-                      <div className="inline-flex items-center gap-1 text-green-600 font-bold text-xs">
+                      <div className="inline-flex items-center gap-1 text-green-700 font-bold text-xs">
                         <TrendingUp className="w-3 h-3" />
                         +{(user.points * 0.1).toFixed(0)}%
                       </div>

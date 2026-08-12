@@ -56,7 +56,7 @@ function SettingsPage() {
                   <div className="h-1.5 w-1.5 rounded-full bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.5)]" />
                 </div>
                 <CardTitle className="mt-3 text-xs font-bold uppercase tracking-widest text-navy">SINCRONIZAÇÃO OMIE</CardTitle>
-                <CardDescription className="text-[10px] uppercase font-semibold text-muted-foreground/60 tracking-wider">Clientes e Estoque em tempo real</CardDescription>
+                <CardDescription className="text-[10px] uppercase font-semibold text-muted-foreground/80 tracking-wider">Clientes e Estoque em tempo real</CardDescription>
               </CardHeader>
               <CardContent className="p-4 space-y-4">
                 <Button 
