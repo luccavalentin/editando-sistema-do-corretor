@@ -10,6 +10,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 export const getSecretsStatus = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
+  .validator((data: any) => z.void().optional().parse(data))
   .handler(async () => {
     // Only superadmins should see this
     // For now, returning status of known keys
