@@ -35,11 +35,21 @@ function LoginPage() {
         return;
       }
 
-      // Explicitly refresh session to ensure RequireRole gets the new state
-      await supabase.auth.refreshSession();
+      // Force an immediate session refresh to ensure all hooks see the new state
+      const { data: sessionData, error: sessionError } = await supabase.auth.refreshSession();
       
+      if (sessionError || !sessionData.session) {
+        console.error("Session refresh failed after login:", sessionError);
+        toast.error("Erro ao estabelecer sessão segura");
+        return;
+      }
+
       toast.success("Acesso autorizado");
-      navigate({ to: '/' });
+      
+      // Use a small delay to allow session persistence to finish before redirect
+      setTimeout(() => {
+        navigate({ to: '/' });
+      }, 100);
     } catch (err) {
       toast.error("Erro inesperado ao realizar login");
     } finally {
@@ -60,62 +70,91 @@ function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-navy p-6">
-      <div className="w-full max-w-sm bg-card rounded-sm p-8 shadow-2xl border border-white/10">
-        <div className="flex flex-col items-center mb-8">
-          <div className="w-20 h-20 bg-white rounded-sm flex items-center justify-center mb-6 shadow-lg">
-             <div className="text-navy font-black text-center leading-none">
-               <span className="block text-[8px] tracking-[0.3em] font-bold text-navy/60 mb-1 uppercase">SISTEMA</span>
-               <span className="block text-2xl tracking-tighter">TF</span>
-             </div>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#001830] p-6 relative overflow-hidden">
+      {/* Background Decorative Elements */}
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange via-orange/50 to-orange" />
+      <div className="absolute -top-24 -left-24 w-96 h-96 bg-orange/5 rounded-full blur-3xl" />
+      <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-cyan/5 rounded-full blur-3xl" />
+
+      <div className="w-full max-w-md z-10">
+        <div className="bg-[#001d3d] rounded-sm p-10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/5 backdrop-blur-sm">
+          <div className="flex flex-col items-center mb-10">
+            <div className="w-24 h-24 bg-white rounded-sm flex items-center justify-center mb-8 shadow-[0_10px_30px_rgba(255,255,255,0.1)] group transition-transform hover:scale-105">
+               <div className="text-[#001830] font-black text-center leading-none">
+                 <span className="block text-[10px] tracking-[0.4em] font-black text-[#001830]/40 mb-1.5 uppercase">SISTEMA</span>
+                 <span className="block text-3xl tracking-tighter">TF</span>
+               </div>
+            </div>
+            
+            <div className="text-center space-y-3">
+              <h1 className="text-base font-black font-heading text-white uppercase tracking-[0.4em]">PÁTIO INTELIGENTE</h1>
+              <div className="flex items-center justify-center gap-4">
+                <div className="h-[1px] w-8 bg-orange/50" />
+                <p className="text-orange font-black text-[11px] uppercase tracking-[0.25em]">Tecnoar Freios</p>
+                <div className="h-[1px] w-8 bg-orange/50" />
+              </div>
+            </div>
           </div>
-          <h1 className="text-sm font-bold font-heading text-white uppercase tracking-[0.3em]">PÁTIO INTELIGENTE</h1>
-          <p className="text-white/60 text-[10px] font-bold uppercase tracking-widest mt-2">Tecnoar Freios v2.0</p>
+
+          <form className="space-y-8" onSubmit={handleLogin}>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <label className="text-[11px] font-black text-white/80 uppercase tracking-[0.2em] block ml-1">Usuário / E-mail</label>
+              </div>
+              <Input 
+                type="email" 
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full h-14 border-white/10 bg-white/5 text-white text-base focus:ring-2 focus:ring-orange/50 focus:border-orange outline-none transition-all placeholder:text-white/10 px-5 rounded-none"
+                placeholder="nome.sobrenome@tecnoar.com"
+              />
+            </div>
+
+            <div className="space-y-3">
+              <div className="flex justify-between items-center px-1">
+                <label className="text-[11px] font-black text-white/80 uppercase tracking-[0.2em] block">Senha de Acesso</label>
+                <button 
+                  type="button" 
+                  onClick={handleResetPassword}
+                  className="text-[10px] font-black text-orange/60 hover:text-orange uppercase tracking-wider transition-colors"
+                >
+                  Recuperar Senha
+                </button>
+              </div>
+              <Input 
+                type="password" 
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full h-14 border-white/10 bg-white/5 text-white text-base focus:ring-2 focus:ring-orange/50 focus:border-orange outline-none transition-all placeholder:text-white/10 px-5 rounded-none"
+                placeholder="••••••••"
+              />
+            </div>
+
+            <Button 
+              type="submit"
+              disabled={loading}
+              className="w-full bg-orange hover:bg-orange/90 text-white font-black h-16 rounded-none transition-all shadow-[0_10px_20px_rgba(240,96,0,0.2)] mt-6 text-sm uppercase tracking-[0.3em] active:scale-[0.98]"
+            >
+              {loading ? <Loader2 className="w-5 h-5 animate-spin mr-3" /> : null}
+              AUTENTICAR NO SISTEMA
+            </Button>
+          </form>
         </div>
 
-        <form className="space-y-6" onSubmit={handleLogin}>
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold text-white/70 uppercase tracking-widest block">E-mail</label>
-            <Input 
-              type="email" 
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full h-12 border-white/20 bg-white/5 text-white text-sm focus:ring-1 focus:ring-orange outline-none transition-all placeholder:text-white/20"
-              placeholder="seu@email.com"
-            />
+        <div className="mt-12 flex flex-col items-center gap-6">
+          <div className="flex items-center gap-4 opacity-30">
+            <div className="h-[1px] w-12 bg-white" />
+            <div className="w-2 h-2 bg-orange rotate-45" />
+            <div className="h-[1px] w-12 bg-white" />
           </div>
-          <div className="space-y-2">
-            <div className="flex justify-between items-center">
-              <label className="text-[10px] font-bold text-white/70 uppercase tracking-widest block">Senha</label>
-              <button 
-                type="button" 
-                onClick={handleResetPassword}
-                className="text-[9px] font-bold text-orange/80 hover:text-orange uppercase tracking-wider transition-colors"
-              >
-                Esqueci minha senha
-              </button>
-            </div>
-            <Input 
-              type="password" 
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full h-12 border-white/20 bg-white/5 text-white text-sm focus:ring-1 focus:ring-orange outline-none transition-all placeholder:text-white/20"
-              placeholder="••••••••"
-            />
-          </div>
-          <Button 
-            type="submit"
-            disabled={loading}
-            className="w-full bg-orange hover:bg-orange/90 text-white font-bold h-14 rounded-sm transition-all shadow-lg shadow-orange/20 mt-4 text-xs uppercase tracking-[0.2em]"
-          >
-            {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-            INICIAR SESSÃO
-          </Button>
-        </form>
+          <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.4em] text-center leading-relaxed">
+            PÁTIO INTELIGENTE TECNOAR v2.0<br/>
+            UNIDADE IRACEMÁPOLIS-SP • 2026
+          </p>
+        </div>
       </div>
-      <p className="mt-10 text-white/40 text-[9px] font-bold uppercase tracking-[0.3em]">© 2026 TECNOAR FREIOS • IRACEMÁPOLIS-SP</p>
     </div>
   );
 }
