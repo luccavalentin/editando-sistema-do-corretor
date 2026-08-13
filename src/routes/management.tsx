@@ -401,7 +401,21 @@ function ManagementPage() {
               <h1 className="text-xl font-semibold text-primary uppercase tracking-tight">Base de Clientes</h1>
               <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-[0.1em] opacity-60">Sincronizado com Omie ERP</p>
             </div>
-            <Button variant="outline" className="text-[10px] font-bold uppercase tracking-wider gap-2">
+            <Button 
+              variant="outline" 
+              className="text-[10px] font-bold uppercase tracking-wider gap-2"
+              onClick={async () => {
+                const toastId = toast.loading("Sincronizando clientes...");
+                try {
+                  const syncFn = (await import('@/features/omie/services/omie.functions')).syncClientesOmie;
+                  const res = await (syncFn as any)();
+                  toast.success(`${res.count} clientes sincronizados!`, { id: toastId });
+                  window.location.reload();
+                } catch (err) {
+                  toast.error("Erro na sincronização", { id: toastId });
+                }
+              }}
+            >
               <RefreshCw className="w-3.5 h-3.5" /> Sincronizar Agora
             </Button>
           </div>
@@ -409,11 +423,17 @@ function ManagementPage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <Card className="md:col-span-3 card-system">
               <CardContent className="p-4">
-                <div className="relative">
+                <div className="relative mb-4">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/40" />
-                  <Input placeholder="Pesquisar por nome, documento ou código Omie..." className="pl-10 h-10 text-xs" />
+                  <Input 
+                    placeholder="Pesquisar por nome ou documento..." 
+                    className="pl-10 h-10 text-xs" 
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                  />
                 </div>
-                <div className="mt-6 border border-border rounded overflow-hidden">
+                <div className="border border-border rounded overflow-hidden">
                   <table className="w-full text-left text-xs">
                     <thead className="bg-muted/30 border-b border-border text-muted-foreground uppercase font-bold tracking-wider">
                       <tr>
@@ -424,12 +444,28 @@ function ManagementPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border">
-                      <tr className="hover:bg-muted/5">
-                        <td className="p-3 font-semibold">TRANSPORTADORA EXEMPLO LTDA</td>
-                        <td className="p-3">00.000.000/0001-00</td>
-                        <td className="p-3 font-mono text-cyan">1234567</td>
-                        <td className="p-3"><span className="text-[10px] bg-green-500/10 text-green-600 px-1.5 py-0.5 rounded font-bold uppercase">Ativo</span></td>
-                      </tr>
+                      {searchResults.length > 0 ? (
+                        searchResults.map((c) => (
+                          <tr key={c.id || c.omie_codigo_cliente} className="hover:bg-muted/5">
+                            <td className="p-3 font-semibold uppercase">{c.nome || c.razao_social}</td>
+                            <td className="p-3">{c.documento}</td>
+                            <td className="p-3 font-mono text-cyan">{c.omie_codigo_cliente}</td>
+                            <td className="p-3">
+                              {c.is_omie_temp ? (
+                                <Badge variant="outline" className="text-[8px] border-cyan/30 text-cyan uppercase font-bold">OMIE (Temp)</Badge>
+                              ) : (
+                                <span className="text-[10px] bg-green-500/10 text-green-600 px-1.5 py-0.5 rounded font-bold uppercase">Ativo</span>
+                              )}
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr className="hover:bg-muted/5">
+                          <td colSpan={4} className="p-8 text-center text-muted-foreground italic">
+                            Nenhum cliente encontrado. Use a busca acima.
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -445,11 +481,11 @@ function ManagementPage() {
               <CardContent className="p-4 space-y-4">
                 <div className="space-y-1">
                   <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-tight">Total Local</p>
-                  <p className="text-2xl font-bold text-navy">1.248</p>
+                  <p className="text-2xl font-bold text-navy">{searchResults.filter(c => !c.is_omie_temp).length || '...'}</p>
                 </div>
                 <div className="space-y-1 border-t border-border/50 pt-3">
-                  <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-tight">Pendentes Sinc</p>
-                  <p className="text-2xl font-bold text-orange">0</p>
+                  <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-tight">Última Sync</p>
+                  <p className="text-[10px] font-medium text-primary">Sincronizado via Omie API</p>
                 </div>
               </CardContent>
             </Card>
