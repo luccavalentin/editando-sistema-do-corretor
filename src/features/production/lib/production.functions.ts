@@ -45,7 +45,7 @@ export const searchProdutos = createServerFn({ method: "GET" })
     const { data: locais } = await supabase
       .from('pecas_estoque_cache')
       .select('*')
-      .ilike('descricao', `%${data.query}%`)
+      .or(`descricao.ilike.%${data.query}%,codigo_produto.ilike.%${data.query}%`)
       .limit(10);
 
     // 2. Busca em tempo real na Omie se a query for longa
