@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSuspenseQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getPecasTeste, updatePecaStatus, getAgendaServicos, searchProdutos } from '../lib/production.functions';
+import { getProdutoSaldoOmie } from '@/features/omie/services/estoque.functions';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -23,6 +24,24 @@ export function ProductionPage() {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const searchProdFn = useServerFn(searchProdutos);
+  const getSaldoFn = useServerFn(getProdutoSaldoOmie);
+  
+  const [saldosCarregando, setSaldosCarregando] = useState<Record<number, boolean>>({});
+
+  const handleUpdateSaldo = async (codigo: number) => {
+    setSaldosCarregando(prev => ({ ...prev, [codigo]: true }));
+    try {
+      const novoSaldo = await getSaldoFn({ data: { codigo_produto: codigo } });
+      setSearchResults(prev => prev.map(p => 
+        p.omie_codigo_produto === codigo ? { ...p, saldo: novoSaldo } : p
+      ));
+      toast.success("Saldo atualizado");
+    } catch (err) {
+      toast.error("Erro ao atualizar saldo");
+    } finally {
+      setSaldosCarregando(prev => ({ ...prev, [codigo]: false }));
+    }
+  };
   
   const { data: pecas } = useSuspenseQuery({
     queryKey: ['pecas-teste'],
@@ -218,7 +237,22 @@ export function ProductionPage() {
                         <tr key={prod.omie_codigo_produto || prod.id} className="hover:bg-muted/5 transition-colors">
                           <td className="p-3 font-semibold">{prod.descricao}</td>
                           <td className="p-3 font-mono text-cyan">{prod.omie_codigo_produto}</td>
-                          <td className="p-3 text-right font-bold text-navy">{prod.saldo} UN</td>
+                          <td className="p-3 text-right font-bold text-navy">
+                            <div className="flex items-center justify-end gap-2">
+                              {prod.saldo} UN
+                              {prod.is_omie_temp && (
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  className="h-6 w-6" 
+                                  onClick={() => handleUpdateSaldo(prod.omie_codigo_produto)}
+                                  disabled={saldosCarregando[prod.omie_codigo_produto]}
+                                >
+                                  <RefreshCw className={`w-3 h-3 ${saldosCarregando[prod.omie_codigo_produto] ? 'animate-spin' : ''}`} />
+                                </Button>
+                              )}
+                            </div>
+                          </td>
                           <td className="p-3 text-right">
                             {prod.is_omie_temp ? (
                               <Badge variant="outline" className="text-[8px] border-cyan/30 text-cyan uppercase font-bold flex gap-1 items-center justify-end">

@@ -68,7 +68,7 @@ export const searchClienteLocal = createServerFn({ method: "GET" })
     if (data.query.length >= 3) {
       try {
         const { searchClientesOmie } = await import("../../omie/services/omie.functions");
-        const omieResults = await searchClientesOmie({ data: { query: data.query } });
+        const omieResults = await searchClientesOmie({ data: { query: data.query } }) as any[];
         
         // Merge e De-duplicate (prioridade local para campos extras, mas Omie para novos)
         const localIds = new Set(clientesLocais.map(c => c.omie_codigo_cliente));

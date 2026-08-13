@@ -52,7 +52,7 @@ export const searchProdutos = createServerFn({ method: "GET" })
     if (data.query.length >= 3) {
       try {
         const { searchProdutosOmie } = await import("../../omie/services/omie.functions");
-        const omieResults = await searchProdutosOmie({ data: { query: data.query } });
+        const omieResults = await searchProdutosOmie({ data: { query: data.query } }) as any[];
         
         // Mapear para o formato local
         const mapped = (omieResults as any[]).map(p => ({
