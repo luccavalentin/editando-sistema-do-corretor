@@ -175,33 +175,35 @@ export const searchClientesOmie = createServerFn({ method: "POST" })
   .validator((data: any) => z.object({ query: z.string() }).parse(data))
   .handler(async ({ data }) => {
     try {
-      console.log(`[OMIE] Buscando cliente: ${data.query}`);
-      const result = await callOmie("/geral/clientes/", "ListarClientes", {
-        pagina: 1,
-        registros_por_pagina: 50,
-        apenas_importado_api: "N",
-        clientes_filtro: {
-          nome_fantasia: `%${data.query}%`
-        },
-        exibir_obs: "S"
-      });
+      console.log(`[OMIE] Buscando cliente: "${data.query}"`);
       
-      let clientes = result.clientes_cadastro || [];
-      
-      // Se não veio nada pelo nome fantasia, tenta por documento ou razão social se a query parecer um documento
-      if (clientes.length === 0) {
-        const docResult = await callOmie("/geral/clientes/", "ListarClientes", {
+      const cleanDoc = data.query.replace(/\D/g, '');
+      if (cleanDoc.length >= 11) {
+        const resultDoc = await callOmie("/geral/clientes/", "ListarClientes", {
           pagina: 1,
           registros_por_pagina: 50,
-          clientes_filtro: {
-            cnpj_cpf: data.query.replace(/\D/g, '') || data.query
-          }
+          clientes_filtro: { cnpj_cpf: cleanDoc }
         });
-        clientes = docResult.clientes_cadastro || [];
+        if (resultDoc.clientes_cadastro?.length > 0) return resultDoc.clientes_cadastro;
       }
 
-      console.log(`[OMIE] Encontrados ${clientes.length} clientes`);
-      return clientes;
+      const resultNome = await callOmie("/geral/clientes/", "ListarClientes", {
+        pagina: 1,
+        registros_por_pagina: 50,
+        clientes_filtro: { nome_fantasia: `%${data.query}%` },
+        exibir_obs: "S"
+      });
+
+      if (!resultNome.clientes_cadastro || resultNome.clientes_cadastro.length === 0) {
+        const resultRazao = await callOmie("/geral/clientes/", "ListarClientes", {
+          pagina: 1,
+          registros_por_pagina: 50,
+          clientes_filtro: { razao_social: `%${data.query}%` }
+        });
+        return resultRazao.clientes_cadastro || [];
+      }
+
+      return resultNome.clientes_cadastro;
     } catch (error) {
       console.error("[OMIE] Erro na busca de clientes:", error);
       return [];
@@ -213,30 +215,29 @@ export const searchProdutosOmie = createServerFn({ method: "POST" })
   .validator((data: any) => z.object({ query: z.string() }).parse(data))
   .handler(async ({ data }) => {
     try {
-      console.log(`[OMIE] Buscando produto: ${data.query}`);
-      // A Omie às vezes falha com % no ListarProdutos dependendo do campo.
-      // Vamos tentar buscar por descrição simplificada primeiro.
-      const result = await callOmie("/estoque/produto/", "ListarProdutos", {
+      console.log(`[OMIE] Buscando produto: "${data.query}"`);
+      
+      const resultCod = await callOmie("/estoque/produto/", "ListarProdutos", {
         pagina: 1,
         registros_por_pagina: 50,
-        filtrar_apenas_descricao: data.query, // Removendo % manual se o campo já for de filtro
+        filtrar_apenas_codigo: data.query
+      });
+      
+      let produtos = resultCod.produto_servico_cadastro || [];
+
+      const resultDesc = await callOmie("/estoque/produto/", "ListarProdutos", {
+        pagina: 1,
+        registros_por_pagina: 50,
+        filtrar_apenas_descricao: data.query,
         exibir_obs: "S"
       });
       
-      let produtos = result.produto_servico_cadastro || [];
-      
-      // Se não trouxe nada, tenta com o coringa explicitamente ou por código
-      if (produtos.length === 0) {
-         const altResult = await callOmie("/estoque/produto/", "ListarProdutos", {
-            pagina: 1,
-            registros_por_pagina: 50,
-            filtrar_apenas_codigo: data.query
-         });
-         produtos = altResult.produto_servico_cadastro || [];
+      if (resultDesc.produto_servico_cadastro) {
+        produtos = [...produtos, ...resultDesc.produto_servico_cadastro];
       }
 
-      console.log(`[OMIE] Encontrados ${produtos.length} produtos`);
-      return produtos;
+      const uniqueProds = Array.from(new Map(produtos.map((p: any) => [p.codigo_produto, p])).values());
+      return uniqueProds;
     } catch (error) {
       console.error("[OMIE] Erro na busca de produtos:", error);
       return [];

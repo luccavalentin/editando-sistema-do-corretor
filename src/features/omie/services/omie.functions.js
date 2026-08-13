@@ -13,7 +13,7 @@ export const checkOmieStatus = createServerFn({ method: "GET" })
     };
 });
 const OMIE_API_URL = "https://app.omie.com.br/api/v1";
-async function callOmie(endpoint, method, params, retryCount = 0) {
+export async function callOmie(endpoint, method, params, retryCount = 0) {
     const appKey = await getSecretValue('OMIE_APP_KEY');
     const appSecret = await getSecretValue('OMIE_APP_SECRET');
     if (!appKey || !appSecret) {
