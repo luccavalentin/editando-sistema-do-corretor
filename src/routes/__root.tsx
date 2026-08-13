@@ -112,7 +112,7 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body className="selection:bg-orange/20 selection:text-navy">
-        arrume
+        CORRIJA
         <Toaster position="top-right" closeButton richColors />
         {children}
         <Scripts />
