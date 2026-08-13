@@ -7,14 +7,14 @@ import { pushOSOmie } from "../../omie/services/omie.functions";
 
 export const getOSStats = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .validator((data: any) => z.any().optional().parse(data))
+  .validator((data: any) => z.void().optional().parse(data))
   .handler(async ({ context }) => {
     return getOSStatsServer(context.supabase);
   });
 
 export const getOSList = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .validator((data: any) => z.any().optional().parse(data))
+  .validator((data: any) => z.void().optional().parse(data))
   .handler(async ({ context }) => {
     return getOSListServer(context.supabase);
   });

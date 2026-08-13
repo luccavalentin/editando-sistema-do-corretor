@@ -112,10 +112,7 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body className="selection:bg-orange/20 selection:text-navy">
-        For the code present, I get the error below.
-        
-        Please think step-by-step in order to resolve it.
-        {"\n```\nError: OMIE_APP_KEY e OMIE_APP_SECRET não configurados.\n\n{\n  \"timestamp\": 1786632668662,\n  \"error_type\": \"RUNTIME_ERROR\",\n  \"filename\": \"http://localhost:8080/_serverFn/...\",\n  \"lineno\": 0,\n  \"colno\": 0,\n  \"stack\": \"Error: OMIE_APP_KEY e OMIE_APP_SECRET não configurados.\\n    at callOmie (/dev-server/src/features/omie/services/omie.functions.ts:24:11)...\",\n  \"has_blank_screen\": true\n}\n```"}
+        Eu não vou inserir configuração chaves ou API pela LOVABLE! Eu quero inserir direto no banco de dados do meu SUPABASE mas que o usuario possa inserir as chaves direto no sistema e essas chaves de comunicarem com o banco de dados
         <Toaster position="top-right" closeButton richColors />
         {children}
         <Scripts />
