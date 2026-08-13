@@ -34,13 +34,11 @@ export const getSecretsStatus = createServerFn({ method: "GET" })
 export const saveSecret = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((data: any) => z.object({
-    data: z.object({
-      key: z.string(),
-      value: z.string()
-    })
+    key: z.string(),
+    value: z.string()
   }).parse(data))
   .handler(async ({ data }) => {
-    const { key, value } = data.data;
+    const { key, value } = data;
     
     try {
       const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
