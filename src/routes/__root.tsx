@@ -112,40 +112,42 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body className="selection:bg-orange/20 selection:text-navy">
-        For the code present, I get the error below.
-        
-        Please think step-by-step in order to resolve it.
-        ```
-        # Error number 1:
-        #################
-        
-        Error: [object Response]
-        
-        {
-          "timestamp": 1786631948777,
-          "error_type": "RUNTIME_ERROR",
-          "filename": "http://localhost:8080/_serverFn/eyJmaWxlIjoiL3NyYy9mZWF0dXJlcy9vcy9zZXJ2aWNlcy9vcy5mdW5jdGlvbnMudHM_dHNzLXNlcnZlcmZuLXNwbGl0IiwiZXhwb3J0IjoiZ2V0T1NTdGF0c19jcmVhdGVTZXJ2ZXJGbl9oYW5kbGVyIn0",
-          "lineno": 0,
-          "colno": 0,
-          "stack": "Unavailable",
-          "has_blank_screen": true
-        }
-        
-        # Error number 2:
-        #################
-        
-        osList.filter is not a function
-        
-        {
-          "timestamp": 1786631948841,
-          "error_type": "RUNTIME_ERROR",
-          "filename": "/login",
-          "lineno": 0,
-          "colno": 0,
-          "stack": "TypeError: osList.filter is not a function\n    at https://d195e076-d790-43ea-b60d-e44cec708df5.lovableproject.com/src/routes/index.tsx?tsr-split=component:477:27\n    at Array.map (<anonymous>)\n    at Dashboard (https://d195e076-d790-43ea-b60d-e44cec708df5.lovableproject.com/src/routes/index.tsx?tsr-split=component:476:27)\n    at Object.react_stack_bottom_frame (https://d195e076-d790-43ea-b60d-e44cec708df5.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=567d2e8f:12864:12)\n    at renderWithHooks (https://d195e076-d790-43ea-b60d-e44cec708df5.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=567d2e8f:4211:19)\n    at updateFunctionComponent (https://d195e076-d790-43ea-b60d-e44cec708df5.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=567d2e8f:5567:16)\n    at beginWork (https://d195e076-d790-43ea-b60d-e44cec708df5.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=567d2e8f:6138:20)\n    at runWithFiberInDEV (https://d195e076-d790-43ea-b60d-e44cec708df5.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=567d2e8f:850:66)\n    at performUnitOfWork (https://d195e076-d790-43ea-b60d-e44cec708df5.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=567d2e8f:8427:92)\n    at workLoopSync (https://d195e076-d790-43ea-b60d-e44cec708df5.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=567d2e8f:8323:37)",
-          "has_blank_screen": true
-        }
-        ```
+        <div className="hidden">
+          For the code present, I get the error below.
+          
+          Please think step-by-step in order to resolve it.
+          {"```"}
+          # Error number 1:
+          #################
+          
+          Error: [object Response]
+          
+          {"{"}
+            "timestamp": 1786631948777,
+            "error_type": "RUNTIME_ERROR",
+            "filename": "http://localhost:8080/_serverFn/eyJmaWxlIjoiL3NyYy9mZWF0dXJlcy9vcy9zZXJ2aWNlcy9vcy5mdW5jdGlvbnMudHM_dHNzLXNlcnZlcmZuLXNwbGl0IiwiZXhwb3J0IjoiZ2V0T1NTdGF0c19jcmVhdGVTZXJ2ZXJGbl9oYW5kbGVyIn0",
+            "lineno": 0,
+            "colno": 0,
+            "stack": "Unavailable",
+            "has_blank_screen": true
+          {"}"}
+          
+          # Error number 2:
+          #################
+          
+          osList.filter is not a function
+          
+          {"{"}
+            "timestamp": 1786631948841,
+            "error_type": "RUNTIME_ERROR",
+            "filename": "/login",
+            "lineno": 0,
+            "colno": 0,
+            "stack": "TypeError: osList.filter is not a function\n    at https://d195e076-d790-43ea-b60d-e44cec708df5.lovableproject.com/src/routes/index.tsx?tsr-split=component:477:27\n    at Array.map (<anonymous>)\n    at Dashboard (https://d195e076-d790-43ea-b60d-e44cec708df5.lovableproject.com/src/routes/index.tsx?tsr-split=component:476:27)\n    at Object.react_stack_bottom_frame (https://d195e076-d790-43ea-b60d-e44cec708df5.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=567d2e8f:12864:12)\n    at renderWithHooks (https://d195e076-d790-43ea-b60d-e44cec708df5.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=567d2e8f:4211:19)\n    at updateFunctionComponent (https://d195e076-d790-43ea-b60d-e44cec708df5.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=567d2e8f:5567:16)\n    at beginWork (https://d195e076-d790-43ea-b60d-e44cec708df5.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=567d2e8f:6138:20)\n    at runWithFiberInDEV (https://d195e076-d790-43ea-b60d-e44cec708df5.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=567d2e8f:850:66)\n    at performUnitOfWork (https://d195e076-d790-43ea-b60d-e44cec708df5.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=567d2e8f:8427:92)\n    at workLoopSync (https://d195e076-d790-43ea-b60d-e44cec708df5.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=567d2e8f:8323:37)",
+            "has_blank_screen": true
+          {"}"}
+          {"```"}
+        </div>
         <Toaster position="top-right" closeButton richColors />
         {children}
         <Scripts />
