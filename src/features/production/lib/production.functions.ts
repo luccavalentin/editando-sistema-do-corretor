@@ -45,14 +45,14 @@ export const searchProdutos = createServerFn({ method: "GET" })
     const { data: locais } = await supabase
       .from('pecas_estoque_cache')
       .select('*')
-      .or(`descricao.ilike.%${data.query}%,codigo_produto.ilike.%${data.query}%`)
-      .limit(10);
+      .or(`descricao.ilike.%${data.query}%,codigo_produto.ilike.%${data.query}%,omie_codigo_produto.ilike.%${data.query}%`)
+      .limit(20);
 
     // 2. Busca em tempo real na Omie se a query for longa
     if (data.query.length >= 3) {
       try {
         const { searchProdutosOmie } = await import("../../omie/services/omie.functions");
-        const omieResults = await searchProdutosOmie({ data: { query: data.query } });
+        const omieResults = await searchProdutosOmie({ data: { query: data.query } }) as any[];
         
         // Mapear para o formato local
         const mapped = (omieResults as any[]).map(p => ({

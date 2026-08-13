@@ -16,7 +16,7 @@ export const checkOmieStatus = createServerFn({ method: "GET" })
 
 const OMIE_API_URL = "https://app.omie.com.br/api/v1";
 
-async function callOmie(endpoint: string, method: string, params: any, retryCount = 0): Promise<any> {
+export async function callOmie(endpoint: string, method: string, params: any, retryCount = 0): Promise<any> {
   const appKey = await getSecretValue('OMIE_APP_KEY');
   const appSecret = await getSecretValue('OMIE_APP_SECRET');
 
@@ -173,21 +173,39 @@ export const pushOSOmie = createServerFn({ method: "POST" })
 export const searchClientesOmie = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((data: any) => z.object({ query: z.string() }).parse(data))
-  .handler(async ({ data }) => {
+  .handler(async ({ data }): Promise<any[]> => {
     try {
-      const result = await callOmie("/geral/clientes/", "ListarClientes", {
+      console.log(`[OMIE] Buscando cliente: "${data.query}"`);
+      
+      const cleanDoc = data.query.replace(/\D/g, '');
+      if (cleanDoc.length >= 11) {
+        const resultDoc = await callOmie("/geral/clientes/", "ListarClientes", {
+          pagina: 1,
+          registros_por_pagina: 50,
+          clientes_filtro: { cnpj_cpf: cleanDoc }
+        });
+        if (resultDoc.clientes_cadastro?.length > 0) return resultDoc.clientes_cadastro;
+      }
+
+      const resultNome = await callOmie("/geral/clientes/", "ListarClientes", {
         pagina: 1,
-        registros_por_pagina: 20,
-        apenas_importado_api: "N",
-        clientes_filtro: {
-          nome_fantasia: `%${data.query}%`,
-          cnpj_cpf: data.query
-        },
+        registros_por_pagina: 50,
+        clientes_filtro: { nome_fantasia: `%${data.query}%` },
         exibir_obs: "S"
       });
-      return result.clientes_cadastro || [];
+
+      if (!resultNome.clientes_cadastro || resultNome.clientes_cadastro.length === 0) {
+        const resultRazao = await callOmie("/geral/clientes/", "ListarClientes", {
+          pagina: 1,
+          registros_por_pagina: 50,
+          clientes_filtro: { razao_social: `%${data.query}%` }
+        });
+        return resultRazao.clientes_cadastro || [];
+      }
+
+      return resultNome.clientes_cadastro;
     } catch (error) {
-      console.error(error);
+      console.error("[OMIE] Erro na busca de clientes:", error);
       return [];
     }
   });
@@ -195,17 +213,33 @@ export const searchClientesOmie = createServerFn({ method: "POST" })
 export const searchProdutosOmie = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((data: any) => z.object({ query: z.string() }).parse(data))
-  .handler(async ({ data }) => {
+  .handler(async ({ data }): Promise<any[]> => {
     try {
-      const result = await callOmie("/estoque/produto/", "ListarProdutos", {
+      console.log(`[OMIE] Buscando produto: "${data.query}"`);
+      
+      const resultCod = await callOmie("/estoque/produto/", "ListarProdutos", {
         pagina: 1,
-        registros_por_pagina: 20,
-        filtrar_apenas_descricao: `%${data.query}%`,
+        registros_por_pagina: 50,
+        filtrar_apenas_codigo: data.query
+      });
+      
+      let produtos = resultCod.produto_servico_cadastro || [];
+
+      const resultDesc = await callOmie("/estoque/produto/", "ListarProdutos", {
+        pagina: 1,
+        registros_por_pagina: 50,
+        filtrar_apenas_descricao: data.query,
         exibir_obs: "S"
       });
-      return result.produto_servico_cadastro || [];
+      
+      if (resultDesc.produto_servico_cadastro) {
+        produtos = [...produtos, ...resultDesc.produto_servico_cadastro];
+      }
+
+      const uniqueProds = Array.from(new Map(produtos.map((p: any) => [p.codigo_produto, p])).values());
+      return uniqueProds;
     } catch (error) {
-      console.error(error);
+      console.error("[OMIE] Erro na busca de produtos:", error);
       return [];
     }
   });
