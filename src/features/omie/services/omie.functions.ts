@@ -169,3 +169,40 @@ export const pushOSOmie = createServerFn({ method: "POST" })
       throw error;
     }
   });
+
+export const searchClientesOmie = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((data: any) => z.object({ query: z.string() }).parse(data))
+  .handler(async ({ data }) => {
+    try {
+      const result = await callOmie("/geral/clientes/", "ListarClientes", {
+        pagina: 1,
+        registros_por_pagina: 20,
+        apenas_importado_api: "N",
+        clientes_filtro: {
+          nome_fantasia: data.query
+        }
+      });
+      return result.clientes_cadastro || [];
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  });
+
+export const searchProdutosOmie = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((data: any) => z.object({ query: z.string() }).parse(data))
+  .handler(async ({ data }) => {
+    try {
+      const result = await callOmie("/estoque/produto/", "ListarProdutos", {
+        pagina: 1,
+        registros_por_pagina: 20,
+        filtrar_apenas_descricao: data.query
+      });
+      return result.produto_servico_cadastro || [];
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  });
