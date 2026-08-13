@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useSuspenseQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getPecasTeste, updatePecaStatus, getAgendaServicos } from '../lib/production.functions';
+import { getPecasTeste, updatePecaStatus, getAgendaServicos, searchProdutos } from '../lib/production.functions';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Package, Calendar, Clock, CheckCircle2, Database, Search, RefreshCw, BarChart } from 'lucide-react';
+import { Package, Calendar, Clock, CheckCircle2, Database, Search, RefreshCw, BarChart, Loader2 } from 'lucide-react';
 import { format, differenceInHours } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useServerFn } from '@tanstack/react-start';
@@ -19,6 +19,10 @@ export function ProductionPage() {
   const { tab } = Route.useSearch() as any;
   const [activeTab, setActiveTab] = useState(tab || 'pecas');
   const queryClient = useQueryClient();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const searchProdFn = useServerFn(searchProdutos);
   
   const { data: pecas } = useSuspenseQuery({
     queryKey: ['pecas-teste'],
@@ -38,6 +42,19 @@ export function ProductionPage() {
       toast.success("Status atualizado com sucesso!");
     }
   });
+
+  const handleSearch = async () => {
+    if (searchQuery.length < 3) return;
+    setIsSearching(true);
+    try {
+      const results = await searchProdFn({ data: { query: searchQuery } });
+      setSearchResults(results || []);
+    } catch (err) {
+      toast.error("Erro na busca de produtos");
+    } finally {
+      setIsSearching(false);
+    }
+  };
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6 bg-background min-h-screen">
@@ -167,10 +184,21 @@ export function ProductionPage() {
               <div className="flex gap-3">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/40" />
-                  <Input placeholder="Buscar no estoque Omie..." className="pl-10 h-10 text-xs" />
+                  <Input 
+                    placeholder="Buscar no estoque Omie (mín. 3 caracteres)..." 
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                    className="pl-10 h-10 text-xs" 
+                  />
                 </div>
-                <Button className="h-10 bg-navy text-white text-[10px] font-bold uppercase tracking-wider px-6">
-                  <RefreshCw className="w-3.5 h-3.5 mr-2" /> Sincronizar
+                <Button 
+                  onClick={handleSearch} 
+                  disabled={isSearching}
+                  className="h-10 bg-navy text-white text-[10px] font-bold uppercase tracking-wider px-6"
+                >
+                  {isSearching ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-2" /> : <RefreshCw className="w-3.5 h-3.5 mr-2" />} 
+                  Buscar
                 </Button>
               </div>
 
@@ -181,22 +209,37 @@ export function ProductionPage() {
                       <th className="p-3">Peça / Produto</th>
                       <th className="p-3">Código Omie</th>
                       <th className="p-3 text-right">Saldo</th>
-                      <th className="p-3 text-right">Valor Unit.</th>
+                      <th className="p-3 text-right">Fonte</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
-                    <tr className="hover:bg-muted/5">
-                      <td className="p-3 font-semibold">CÚICA DE FREIO 24X30</td>
-                      <td className="p-3 font-mono text-cyan">PRD00123</td>
-                      <td className="p-3 text-right font-bold text-navy">42 UN</td>
-                      <td className="p-3 text-right">R$ 489,00</td>
-                    </tr>
-                    <tr className="hover:bg-muted/5 bg-orange/[0.02]">
-                      <td className="p-3 font-semibold">VÁLVULA PROTETORA 4 CIRCUITOS</td>
-                      <td className="p-3 font-mono text-cyan">PRD00456</td>
-                      <td className="p-3 text-right font-bold text-orange">2 UN</td>
-                      <td className="p-3 text-right">R$ 1.250,00</td>
-                    </tr>
+                    {searchResults.length > 0 ? (
+                      searchResults.map((prod) => (
+                        <tr key={prod.omie_codigo_produto || prod.id} className="hover:bg-muted/5 transition-colors">
+                          <td className="p-3 font-semibold">{prod.descricao}</td>
+                          <td className="p-3 font-mono text-cyan">{prod.omie_codigo_produto}</td>
+                          <td className="p-3 text-right font-bold text-navy">{prod.saldo} UN</td>
+                          <td className="p-3 text-right">
+                            {prod.is_omie_temp ? (
+                              <Badge variant="outline" className="text-[8px] border-cyan/30 text-cyan uppercase font-bold flex gap-1 items-center justify-end">
+                                <Database className="w-2.5 h-2.5" /> OMIE
+                              </Badge>
+                            ) : (
+                              <Badge variant="outline" className="text-[8px] border-primary/20 text-primary uppercase font-bold">Local</Badge>
+                            )}
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr className="hover:bg-muted/5">
+                        <td className="p-3 font-semibold">CÚICA DE FREIO 24X30</td>
+                        <td className="p-3 font-mono text-cyan">PRD00123</td>
+                        <td className="p-3 text-right font-bold text-navy">42 UN</td>
+                        <td className="p-3 text-right">
+                           <Badge variant="outline" className="text-[8px] border-primary/20 text-primary uppercase font-bold">Demo</Badge>
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>

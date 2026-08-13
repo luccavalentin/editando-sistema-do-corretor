@@ -110,6 +110,32 @@ export const getVeiculosByCliente = createServerFn({ method: "GET" })
     return veiculos;
   });
 
+export const upsertClienteFromOmie = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((data: any) => z.object({ cliente_omie: z.any() }).parse(data))
+  .handler(async ({ data, context }) => {
+    const { supabase } = context;
+    const { data: cliente, error } = await supabase
+      .from('clientes')
+      .upsert({
+        omie_codigo_cliente: data.cliente_omie.omie_codigo_cliente,
+        nome: data.cliente_omie.nome,
+        documento: data.cliente_omie.documento,
+        telefone: data.cliente_omie.telefone,
+        email: data.cliente_omie.email,
+        endereco_rua: data.cliente_omie.endereco_rua,
+        endereco_bairro: data.cliente_omie.endereco_bairro,
+        endereco_cidade: data.cliente_omie.endereco_cidade,
+        endereco_uf: data.cliente_omie.endereco_uf,
+        endereco_cep: data.cliente_omie.endereco_cep,
+        ativo: true
+      }, { onConflict: 'omie_codigo_cliente' })
+      .select('id')
+      .single();
+    if (error) throw new Error(error.message);
+    return cliente;
+  });
+
 export const openOS = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((data: any) => z.object({
