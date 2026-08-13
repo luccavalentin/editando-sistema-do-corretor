@@ -531,6 +531,33 @@ export type Database = {
         }
         Relationships: []
       }
+      omie_sync_config: {
+        Row: {
+          active: boolean | null
+          created_at: string | null
+          id: string
+          last_sync_clientes: string | null
+          last_sync_estoque: string | null
+          sync_interval_minutes: number | null
+        }
+        Insert: {
+          active?: boolean | null
+          created_at?: string | null
+          id?: string
+          last_sync_clientes?: string | null
+          last_sync_estoque?: string | null
+          sync_interval_minutes?: number | null
+        }
+        Update: {
+          active?: boolean | null
+          created_at?: string | null
+          id?: string
+          last_sync_clientes?: string | null
+          last_sync_estoque?: string | null
+          sync_interval_minutes?: number | null
+        }
+        Relationships: []
+      }
       omie_sync_log: {
         Row: {
           criado_em: string | null
