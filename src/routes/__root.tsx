@@ -112,7 +112,7 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body className="selection:bg-orange/20 selection:text-navy">
-        Eu não vou inserir configuração chaves ou API pela LOVABLE! Eu quero inserir direto no banco de dados do meu SUPABASE mas que o usuario possa inserir as chaves direto no sistema e essas chaves de comunicarem com o banco de dados
+        arrume
         <Toaster position="top-right" closeButton richColors />
         {children}
         <Scripts />
