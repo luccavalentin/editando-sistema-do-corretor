@@ -34,14 +34,18 @@ export const getSecretsStatus = createServerFn({ method: "GET" })
 export const saveSecret = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((data: any) => {
-    // TanStack Start v1 wraps data in a 'data' property if it's an object,
-    // but some environments might pass it differently.
-    // We handle both { data: { key, value } } and { key, value }
+    console.log('Validando dados recebidos:', data);
     const input = data?.data || data;
-    return z.object({
+    const schema = z.object({
       key: z.string(),
       value: z.string()
-    }).parse(input);
+    });
+    const result = schema.safeParse(input);
+    if (!result.success) {
+      console.error('Falha na validação Zod:', result.error.format());
+      throw result.error;
+    }
+    return result.data;
   })
   .handler(async ({ data }) => {
     const { key, value } = data;
