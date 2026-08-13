@@ -22,7 +22,12 @@ export async function getOSStatsServer(supabase: any) {
     noPatio: os.filter((o: any) => o.status !== 'concluida' && o.status !== 'cancelada').length,
     entraramHoje: os.filter((o: any) => o.criado_em.startsWith(today)).length,
     concluidasHoje: os.filter((o: any) => o.finalizado_em?.startsWith(today)).length,
-    atrasadas: 0,
+    atrasadas: os.filter((o: any) => {
+      if (o.status === 'concluida' || o.status === 'cancelada') return false;
+      const criado = new Date(o.criado_em);
+      const diffHours = (now.getTime() - criado.getTime()) / (1000 * 60 * 60);
+      return diffHours > 4; // SLA de 4 horas para início de atendimento
+    }).length,
     pecasVencendo: pecas?.filter((p: any) => p.status === 'em_teste' && new Date(p.vencimento_em) < now).length || 0,
     };
   } catch (err) {
