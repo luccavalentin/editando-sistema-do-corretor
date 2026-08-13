@@ -28,7 +28,15 @@ export const Route = createFileRoute('/')({
 
 function Dashboard() {
   const [viewMode, setViewMode] = useState<'operacional' | 'tv'>('operacional');
-  const { stats, osList, updateStatus } = useOSDashboard();
+  const { stats, osList, updateStatus, isLoading } = useOSDashboard();
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-background">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-navy/10 border-t-orange" />
+      </div>
+    );
+  }
 
   if (viewMode === 'tv') {
     return (
