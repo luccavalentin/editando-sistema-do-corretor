@@ -86,9 +86,12 @@ export default function AppConfigPage() {
 
   const saveSecretFn = useServerFn(saveSecret);
   const secretMutation = useMutation({
-    mutationFn: (data: { key: string, value: string }) => saveSecretFn({ data }),
+    mutationFn: (data: { key: string, value: string }) => {
+      console.log('Disparando mutação para salvar segredo:', data);
+      return saveSecretFn({ data });
+    },
     onSuccess: (res) => {
-      if (res.success) {
+      if (res && (res as any).success) {
         toast.success("Segredo atualizado");
         refetchSecrets();
       } else {
