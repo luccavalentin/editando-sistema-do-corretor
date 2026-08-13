@@ -6,7 +6,7 @@ import { searchProdutosOmie } from "@/features/omie/services/omie.functions";
 export const getProdutoSaldoOmie = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((data: any) => z.object({ codigo_produto: z.number() }).parse(data))
-  .handler(async ({ data }) => {
+  .handler(async ({ data }): Promise<number> => {
     try {
       // Importação dinâmica para evitar ciclos se houver
       const { callOmie } = await import("@/features/omie/services/omie.functions");

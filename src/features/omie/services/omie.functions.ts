@@ -173,7 +173,7 @@ export const pushOSOmie = createServerFn({ method: "POST" })
 export const searchClientesOmie = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((data: any) => z.object({ query: z.string() }).parse(data))
-  .handler(async ({ data }) => {
+  .handler(async ({ data }): Promise<any[]> => {
     try {
       console.log(`[OMIE] Buscando cliente: "${data.query}"`);
       
@@ -213,7 +213,7 @@ export const searchClientesOmie = createServerFn({ method: "POST" })
 export const searchProdutosOmie = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((data: any) => z.object({ query: z.string() }).parse(data))
-  .handler(async ({ data }) => {
+  .handler(async ({ data }): Promise<any[]> => {
     try {
       console.log(`[OMIE] Buscando produto: "${data.query}"`);
       
