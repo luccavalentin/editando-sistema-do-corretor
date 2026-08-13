@@ -14,6 +14,8 @@ import { Toaster } from "sonner";
 import { SidebarProvider, SidebarContainer } from "@/components/ui/sidebar";
 import { RequireRole } from "@/core/RequireRole";
 import { AuthProvider } from "@/core/AuthProvider";
+import { useServerFn } from "@tanstack/react-start";
+import { runAutoSync } from "@/features/omie/services/omie-cron.functions";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
