@@ -145,7 +145,11 @@ export default function AppConfigPage() {
           <Button 
             className="bg-navy text-white h-9 px-4 text-[10px] font-bold uppercase tracking-widest"
             onClick={() => {
-              if (!val) return;
+              console.log('Botão SALVAR clicado para chave:', secretKey, 'valor:', val);
+              if (!val) {
+                console.warn('Valor vazio, ignorando...');
+                return;
+              }
               secretMutation.mutate({ key: secretKey, value: val });
               setVal("");
             }}
