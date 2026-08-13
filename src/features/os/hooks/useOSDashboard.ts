@@ -12,13 +12,21 @@ export function useOSDashboard() {
 
   const statsQuery = useQuery({
     queryKey: ['os-stats'],
-    queryFn: () => getStatsFn(),
+    queryFn: async () => {
+      const result = await getStatsFn();
+      if (result instanceof Response) throw result;
+      return result;
+    },
     initialData: { noPatio: 0, entraramHoje: 0, concluidasHoje: 0, atrasadas: 0, pecasVencendo: 0 } as any
   });
 
   const listQuery = useQuery({
     queryKey: ['os-list'],
-    queryFn: () => getListFn(),
+    queryFn: async () => {
+      const result = await getListFn();
+      if (result instanceof Response) throw result;
+      return Array.isArray(result) ? result : [];
+    },
     initialData: [] as any[]
   });
 
@@ -30,7 +38,10 @@ export function useOSDashboard() {
       queryClient.invalidateQueries({ queryKey: ['os-stats'] });
       toast.success("Status atualizado");
     },
-    onError: (error: any) => toast.error(error.message)
+    onError: (error: any) => {
+      console.error("Dashboard Mutation Error:", error);
+      toast.error(error instanceof Response ? "Erro de autenticação" : error.message);
+    }
   });
 
   return {

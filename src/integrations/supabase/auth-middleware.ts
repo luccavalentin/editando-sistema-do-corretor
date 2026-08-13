@@ -9,7 +9,7 @@ export const requireSupabaseAuth = createMiddleware().server(async ({ next, requ
   const token = authHeader?.replace('Bearer ', '');
 
   if (!token) {
-    throw new Response('Unauthorized', { status: 401 });
+    throw new Response('Unauthorized - Missing Token', { status: 401 });
   }
 
   // Criar um cliente autenticado com o token do usuário para que o RLS funcione corretamente
@@ -28,7 +28,7 @@ export const requireSupabaseAuth = createMiddleware().server(async ({ next, requ
   const { data: { user }, error } = await supabase.auth.getUser();
   
   if (error || !user) {
-    throw new Response('Unauthorized', { status: 401 });
+    throw new Response('Unauthorized - Invalid Session', { status: 401 });
   }
 
   return next({
