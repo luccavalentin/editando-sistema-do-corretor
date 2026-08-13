@@ -1,18 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSuspenseQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getPecasTeste, updatePecaStatus, getAgendaServicos } from '../lib/production.functions';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Package, Calendar, Clock, CheckCircle2, Database, Search, RefreshCw, BarChart } from 'lucide-react';
 import { format, differenceInHours } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useServerFn } from '@tanstack/react-start';
+import { createFileRoute } from '@tanstack/react-router';
 import { toast } from 'sonner';
 
+const Route = createFileRoute('/production')({});
+
 export function ProductionPage() {
-  const { tab } = (Route as any).useSearch();
+  const { tab } = Route.useSearch() as any;
   const [activeTab, setActiveTab] = useState(tab || 'pecas');
   const queryClient = useQueryClient();
   

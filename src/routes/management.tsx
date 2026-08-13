@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 
 export const Route = createFileRoute('/management')({
   validateSearch: (search: Record<string, unknown>) => ({
-    tab: search.tab as string | undefined,
+    tab: search['tab'] as string | undefined,
   }),
   component: ManagementPage,
 });
