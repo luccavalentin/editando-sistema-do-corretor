@@ -113,23 +113,37 @@ export const syncEstoqueOmie = createServerFn({ method: "POST" })
   .handler(async ({ context }) => {
     const { supabase } = context;
     try {
+      console.log("[OMIE] Iniciando sincronização de estoque...");
       const result = await callOmie("/estoque/resumo/", "ListarResumoEstoque", {
         pagina: 1,
         registros_por_pagina: 100
       });
 
+      console.log(`[OMIE] Sincronizando ${result.resumoEstoque?.length || 0} produtos`);
       for (const item of result.resumoEstoque || []) {
         await supabase.from('pecas_estoque_cache').upsert({
           omie_codigo_produto: item.nCodProd,
           descricao: item.cDescricao,
           saldo: item.nSaldo,
+          codigo_produto: String(item.nCodProd), // Garantir que codigo_produto não seja nulo
           atualizado_em: new Date().toISOString()
         }, { onConflict: 'omie_codigo_produto' });
       }
 
-      return { success: true };
+      await supabase.from('omie_sync_log').insert({
+        entidade: 'estoque',
+        status: 'success',
+        mensagem: `Sincronizados ${result.resumoEstoque?.length || 0} produtos`
+      });
+
+      return { success: true, count: result.resumoEstoque?.length || 0 };
     } catch (error: any) {
-      console.error(error);
+      console.error("[OMIE] Erro ao sincronizar estoque:", error);
+      await supabase.from('omie_sync_log').insert({
+        entidade: 'estoque',
+        status: 'error',
+        mensagem: error.message
+      });
       throw error;
     }
   });

@@ -216,8 +216,25 @@ export function ProductionPage() {
                   disabled={isSearching}
                   className="h-10 bg-navy text-white text-[10px] font-bold uppercase tracking-wider px-6"
                 >
-                  {isSearching ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-2" /> : <RefreshCw className="w-3.5 h-3.5 mr-2" />} 
+                  {isSearching ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-2" /> : <Search className="w-3.5 h-3.5 mr-2" />} 
                   Buscar
+                </Button>
+                <Button 
+                  variant="outline"
+                  onClick={async () => {
+                    const toastId = toast.loading("Sincronizando estoque Omie...");
+                    try {
+                      const syncFn = (await import('@/features/omie/services/omie.functions')).syncEstoqueOmie;
+                      const res = await (syncFn as any)();
+                      toast.success(`${res.count} produtos sincronizados!`, { id: toastId });
+                      queryClient.invalidateQueries({ queryKey: ['pecas-teste'] });
+                    } catch (err) {
+                      toast.error("Erro na sincronização", { id: toastId });
+                    }
+                  }}
+                  className="h-10 text-[10px] font-bold uppercase tracking-wider px-4 border-primary/20"
+                >
+                  <RefreshCw className="w-3.5 h-3.5 mr-2" /> Sync Bulk
                 </Button>
               </div>
 
