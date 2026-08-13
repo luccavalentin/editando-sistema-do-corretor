@@ -200,7 +200,7 @@ export const searchProdutosOmie = createServerFn({ method: "POST" })
       const result = await callOmie("/estoque/produto/", "ListarProdutos", {
         pagina: 1,
         registros_por_pagina: 20,
-        filtrar_apenas_descricao: data.query,
+        filtrar_apenas_descricao: `%${data.query}%`,
         exibir_obs: "S"
       });
       return result.produto_servico_cadastro || [];
