@@ -1,5 +1,6 @@
-
 import { IAProvider, IAProviderOptions, IAProviderResponse } from "./ia-types";
+import { getSecretValue } from "@/features/settings/services/secrets.server";
+
 
 async function withFallback<T>(
   providers: IAProvider[],
@@ -39,7 +40,7 @@ async function callAI(url: string, headers: any, body: any) {
 export class GeminiProvider implements IAProvider {
   name = 'gemini' as const;
   async generateAnswer(options: IAProviderOptions): Promise<IAProviderResponse> {
-    const apiKey = process.env['GEMINI_API_KEY'];
+    const apiKey = await getSecretValue('GEMINI_API_KEY');
     if (!apiKey) throw new Error("GEMINI_API_KEY não configurada");
     
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
@@ -61,7 +62,7 @@ export class GeminiProvider implements IAProvider {
 export class OpenAIProvider implements IAProvider {
   name = 'openai' as const;
   async generateAnswer(options: IAProviderOptions): Promise<IAProviderResponse> {
-    const apiKey = process.env['OPENAI_API_KEY'];
+    const apiKey = await getSecretValue('OPENAI_API_KEY');
     if (!apiKey) throw new Error("OPENAI_API_KEY não configurada");
     
     const data = await callAI("https://api.openai.com/v1/chat/completions", {
@@ -89,7 +90,7 @@ export class OpenAIProvider implements IAProvider {
 export class ClaudeProvider implements IAProvider {
   name = 'claude' as const;
   async generateAnswer(options: IAProviderOptions): Promise<IAProviderResponse> {
-    const apiKey = process.env['ANTHROPIC_API_KEY'];
+    const apiKey = await getSecretValue('ANTHROPIC_API_KEY');
     if (!apiKey) throw new Error("ANTHROPIC_API_KEY não configurada");
     
     const data = await callAI("https://api.anthropic.com/v1/messages", {
@@ -130,17 +131,20 @@ export async function getIAProvider(activeProvider: string): Promise<IAProvider>
 }
 
 export async function generateEmbedding(text: string): Promise<number[]> {
-  const apiKey = process.env['OPENAI_API_KEY'] || process.env['GEMINI_API_KEY'];
+  const openaiKey = await getSecretValue('OPENAI_API_KEY');
+  const geminiKey = await getSecretValue('GEMINI_API_KEY');
+  
+  const apiKey = openaiKey || geminiKey;
   if (!apiKey) {
     console.warn("[IA] Nenhuma API Key configurada para Embeddings. Retornando vetor zero.");
     return new Array(1536).fill(0);
   }
   
   try {
-    if (process.env['OPENAI_API_KEY']) {
+    if (openaiKey) {
       const data = await callAI("https://api.openai.com/v1/embeddings", {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env['OPENAI_API_KEY']}`
+        "Authorization": `Bearer ${openaiKey}`
       }, {
         input: text,
         model: "text-embedding-3-small"
@@ -149,8 +153,8 @@ export async function generateEmbedding(text: string): Promise<number[]> {
     }
     
     // Fallback para Gemini Embeddings se OpenAI não disponível
-    if (process.env['GEMINI_API_KEY']) {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/embedding-001:embedContent?key=${process.env['GEMINI_API_KEY']}`;
+    if (geminiKey) {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/embedding-001:embedContent?key=${geminiKey}`;
       const data = await callAI(url, { "Content-Type": "application/json" }, {
         model: "models/embedding-001",
         content: { parts: [{ text }] }

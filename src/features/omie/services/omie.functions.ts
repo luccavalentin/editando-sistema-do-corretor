@@ -1,13 +1,14 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { getSecretValue } from "@/features/settings/services/secrets.server";
 
 export const checkOmieStatus = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .validator((data: any) => z.void().optional().parse(data))
   .handler(async () => {
-    const appKey = process.env['OMIE_APP_KEY'];
-    const appSecret = process.env['OMIE_APP_SECRET'];
+    const appKey = await getSecretValue('OMIE_APP_KEY');
+    const appSecret = await getSecretValue('OMIE_APP_SECRET');
     return { 
       configured: !!(appKey && appSecret) 
     };
@@ -16,8 +17,8 @@ export const checkOmieStatus = createServerFn({ method: "GET" })
 const OMIE_API_URL = "https://app.omie.com.br/api/v1";
 
 async function callOmie(endpoint: string, method: string, params: any, retryCount = 0): Promise<any> {
-  const appKey = process.env['OMIE_APP_KEY'];
-  const appSecret = process.env['OMIE_APP_SECRET'];
+  const appKey = await getSecretValue('OMIE_APP_KEY');
+  const appSecret = await getSecretValue('OMIE_APP_SECRET');
 
   if (!appKey || !appSecret) {
     throw new Error("OMIE_APP_KEY e OMIE_APP_SECRET não configurados.");

@@ -52,6 +52,27 @@ export type Database = {
           },
         ]
       }
+      app_secrets: {
+        Row: {
+          id: string
+          key: string
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          id?: string
+          key: string
+          updated_at?: string
+          value: string
+        }
+        Update: {
+          id?: string
+          key?: string
+          updated_at?: string
+          value?: string
+        }
+        Relationships: []
+      }
       audit_logs: {
         Row: {
           action: string
@@ -1061,6 +1082,7 @@ export type Database = {
           titulo: string
         }[]
       }
+      get_app_secret: { Args: { _key: string }; Returns: string }
       has_any_role: {
         Args: {
           _roles: Database["public"]["Enums"]["app_role"][]
