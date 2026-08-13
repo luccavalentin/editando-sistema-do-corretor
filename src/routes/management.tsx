@@ -1,13 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useServerFn } from '@tanstack/react-start';
-import { searchClienteLocal, openOS } from '@/features/os/services/os.functions';
+import { searchClienteLocal, openOS, upsertClienteFromOmie } from '@/features/os/services/os.functions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { UserPlus, Truck, Plus, Printer, Camera, Search, RefreshCw, Users as UsersIcon } from 'lucide-react';
+import { UserPlus, Truck, Plus, Printer, Camera, Search, RefreshCw, Users as UsersIcon, Loader2, Database } from 'lucide-react';
 import { toast } from 'sonner';
+import { Badge } from '@/components/ui/badge';
 
 export const Route = createFileRoute('/management')({
   validateSearch: (search: Record<string, unknown>) => ({
