@@ -34,18 +34,13 @@ export const getSecretsStatus = createServerFn({ method: "GET" })
 export const saveSecret = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((data: any) => {
-    console.log('Validando dados recebidos:', data);
+    // Tratamento robusto para a entrada do TanStack Start
     const input = data?.data || data;
-    const schema = z.object({
+    console.log('Validando input:', input);
+    return z.object({
       key: z.string(),
       value: z.string()
-    });
-    const result = schema.safeParse(input);
-    if (!result.success) {
-      console.error('Falha na validação Zod:', result.error.format());
-      throw result.error;
-    }
-    return result.data;
+    }).parse(input);
   })
   .handler(async ({ data }) => {
     const { key, value } = data;
