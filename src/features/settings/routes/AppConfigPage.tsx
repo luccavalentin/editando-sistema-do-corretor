@@ -385,10 +385,10 @@ export default function AppConfigPage() {
               <div className="mt-8 p-4 rounded border border-primary/20 bg-primary/5 space-y-2">
                 <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-primary">
                   <ShieldCheck className="w-4 h-4" />
-                  Segurança & Persistência
+                  Persistência em Banco de Dados
                 </div>
                 <p className="text-[11px] font-medium leading-relaxed text-muted-foreground">
-                  Para máxima proteção e persistência garantida, recomendamos que as chaves sejam inseridas diretamente no painel do <strong>Lovable Cloud</strong> (Settings → Environment/Secrets). A interface acima serve para monitorar quais chaves estão ativas no servidor.
+                  As chaves inseridas acima são armazenadas de forma segura na tabela <strong>app_secrets</strong> do seu Supabase. O sistema prioriza chaves configuradas nas variáveis de ambiente, mas utiliza os valores do banco de dados como fonte persistente caso o ambiente não as forneça.
                 </p>
               </div>
             </CardContent>
