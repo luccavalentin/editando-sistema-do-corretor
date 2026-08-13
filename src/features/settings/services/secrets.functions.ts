@@ -47,6 +47,7 @@ export const saveSecret = createServerFn({ method: "POST" })
     const { key, value } = data;
     
     try {
+      console.log('Iniciando persistência da chave:', key);
       const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
       
       const { error } = await supabaseAdmin
@@ -57,7 +58,12 @@ export const saveSecret = createServerFn({ method: "POST" })
           updated_at: new Date().toISOString() 
         }, { onConflict: 'key' });
         
-      if (error) throw error;
+      if (error) {
+        console.error('Erro retornado pelo Supabase:', error);
+        throw error;
+      }
+      
+      console.log('Chave persistida com sucesso:', key);
       
       return { 
         success: true, 
