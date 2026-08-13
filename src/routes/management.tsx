@@ -338,7 +338,8 @@ function ManagementPage() {
             </CardContent>
           </Card>
         </div>
-      </TabsContent>
+      </div>
+    </TabsContent>
 
       <TabsContent value="clientes">
         <div className="space-y-6">
