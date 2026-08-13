@@ -75,8 +75,8 @@ function Sidebar() {
       items: [
         { icon: LayoutDashboard, label: "Dashboard", href: "/" },
         { icon: Wrench, label: "Gestão", href: "/management" },
-        { icon: Users, label: "Clientes", href: "/management?tab=clientes" },
-        { icon: Package, label: "Estoque", href: "/production?tab=estoque" },
+        { icon: Users, label: "CRM Clientes", href: "/management?tab=clientes" },
+        { icon: Package, label: "Consulta Estoque", href: "/production?tab=estoque" },
         { icon: ClipboardCheck, label: "Checklist", href: "/checklist" },
         { icon: ShieldCheck, label: "Ranking", href: "/ranking" },
       ].filter(item => canAccessRoute(item.href, userRole))
