@@ -34,3 +34,39 @@ export const getAgendaServicos = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     return getAgendaServicosServer(context.supabase);
   });
+
+export const searchProdutos = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .validator((data: any) => z.object({ query: z.string() }).parse(data))
+  .handler(async ({ data, context }) => {
+    const { supabase } = context;
+    
+    // 1. Busca no cache local
+    const { data: locais } = await supabase
+      .from('pecas_estoque_cache')
+      .select('*')
+      .ilike('descricao', `%${data.query}%`)
+      .limit(10);
+
+    // 2. Busca em tempo real na Omie se a query for longa
+    if (data.query.length >= 3) {
+      try {
+        const { searchProdutosOmie } = await import("../../omie/services/omie.functions");
+        const omieResults = await searchProdutosOmie({ data: { query: data.query } });
+        
+        // Mapear para o formato local
+        const mapped = (omieResults as any[]).map(p => ({
+          omie_codigo_produto: p.codigo_produto,
+          descricao: p.descricao,
+          saldo: 0, 
+          is_omie_temp: true
+        }));
+
+        return [...(locais || []), ...mapped];
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    return locais || [];
+  });

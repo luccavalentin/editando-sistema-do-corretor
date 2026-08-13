@@ -51,13 +51,51 @@ export const searchClienteLocal = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .validator((data: any) => z.object({ query: z.string() }).parse(data))
   .handler(async ({ data, context }) => {
-    const { data: clientes, error } = await context.supabase
+    const { supabase } = context;
+    
+    // 1. Tentar busca local
+    const { data: clientesLocais, error: localError } = await supabase
       .from("clientes")
       .select("*")
       .or(`documento.ilike.%${data.query}%,nome.ilike.%${data.query}%`)
       .limit(10);
-    if (error) throw new Error(error.message);
-    return clientes;
+    
+    if (localError) throw new Error(localError.message);
+
+    // 2. Se não encontrou nada ou se o usuário estiver digitando (busca proativa na Omie)
+    // Para simplificar, se local trouxer pouco resultado ou o termo for específico, buscamos na Omie
+    // Aqui implementamos a busca em tempo real na Omie se configurado
+    if (data.query.length >= 3) {
+      try {
+        const { searchClientesOmie } = await import("../../omie/services/omie.functions");
+        const omieResults = await searchClientesOmie({ data: { query: data.query } });
+        
+        // Merge e De-duplicate (prioridade local para campos extras, mas Omie para novos)
+        const localIds = new Set(clientesLocais.map(c => c.omie_codigo_cliente));
+        const newFromOmie = (omieResults as any[]).filter(c => !localIds.has(c.codigo_cliente_omie));
+
+        // Mapear Omie para o formato local da tabela 'clientes'
+        const mappedOmie = newFromOmie.map(c => ({
+          omie_codigo_cliente: c.codigo_cliente_omie,
+          nome: c.nome_fantasia || c.razao_social,
+          documento: c.cnpj_cpf,
+          telefone: (c.telefone1_ddd || '') + (c.telefone1_numero || ''),
+          email: c.email,
+          endereco_rua: c.endereco,
+          endereco_bairro: c.bairro,
+          endereco_cidade: c.cidade,
+          endereco_uf: c.estado,
+          endereco_cep: c.cep,
+          is_omie_temp: true // Flag para UI saber que veio da Omie agora
+        }));
+
+        return [...clientesLocais, ...mappedOmie];
+      } catch (err) {
+        console.error("[SEARCH] Erro ao buscar na Omie:", err);
+      }
+    }
+
+    return clientesLocais;
   });
 
 export const getVeiculosByCliente = createServerFn({ method: "GET" })
