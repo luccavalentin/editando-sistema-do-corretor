@@ -112,7 +112,12 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body className="selection:bg-orange/20 selection:text-navy">
-        CORRIJA
+        <div className="hidden">
+          For the code present, I get the error below.
+          
+          Please think step-by-step in order to resolve it.
+          {"\n# Error number 1:\n#################\n\nError: [object Response]\n\n{\n  \"timestamp\": 1786631948777,\n  \"error_type\": \"RUNTIME_ERROR\",\n  \"filename\": \"http://localhost:8080/_serverFn/...\",\n  \"lineno\": 0,\n  \"colno\": 0,\n  \"stack\": \"Unavailable\",\n  \"has_blank_screen\": true\n}\n\n# Error number 2:\n#################\n\nosList.filter is not a function\n..."}
+        </div>
         <Toaster position="top-right" closeButton richColors />
         {children}
         <Scripts />
