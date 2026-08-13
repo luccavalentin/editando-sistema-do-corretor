@@ -180,7 +180,7 @@ export const searchClientesOmie = createServerFn({ method: "POST" })
         registros_por_pagina: 20,
         apenas_importado_api: "N",
         clientes_filtro: {
-          nome_fantasia: data.query,
+          nome_fantasia: `%${data.query}%`,
           cnpj_cpf: data.query
         },
         exibir_obs: "S"
