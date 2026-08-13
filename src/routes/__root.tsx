@@ -129,8 +129,20 @@ function RootComponent() {
   const isLoginPage = location.pathname === '/login';
   const [isHydrated, setIsHydrated] = useState(false);
 
+  const triggerSync = useServerFn(runAutoSync);
+
   useEffect(() => {
     setIsHydrated(true);
+    
+    // Trigger auto-sync on load (simulated cron)
+    triggerSync({ data: undefined }).catch(console.error);
+    
+    // Optional: repeat every 5 minutes if tab is open
+    const interval = setInterval(() => {
+      triggerSync({ data: undefined }).catch(console.error);
+    }, 5 * 60 * 1000);
+    
+    return () => clearInterval(interval);
   }, []);
 
   return (
