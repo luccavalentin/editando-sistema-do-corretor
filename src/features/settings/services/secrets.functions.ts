@@ -33,14 +33,18 @@ export const getSecretsStatus = createServerFn({ method: "GET" })
 
 export const saveSecret = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((data: any) => z.object({
-    data: z.object({
+  .validator((data: any) => {
+    // TanStack Start v1 wraps data in a 'data' property if it's an object,
+    // but some environments might pass it differently.
+    // We handle both { data: { key, value } } and { key, value }
+    const input = data?.data || data;
+    return z.object({
       key: z.string(),
       value: z.string()
-    })
-  }).parse(data))
+    }).parse(input);
+  })
   .handler(async ({ data }) => {
-    const { key, value } = data.data;
+    const { key, value } = data;
     
     try {
       const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
