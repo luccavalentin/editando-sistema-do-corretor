@@ -57,7 +57,7 @@ export const searchClienteLocal = createServerFn({ method: "GET" })
     const { data: clientesLocais, error: localError } = await supabase
       .from("clientes")
       .select("*")
-      .or(`documento.ilike.%${data.query}%,nome.ilike.%${data.query}%`)
+      .or(`documento.ilike.%${data.query}%,nome.ilike.%${data.query}%,nome_fantasia.ilike.%${data.query}%,razao_social.ilike.%${data.query}%`)
       .limit(10);
     
     if (localError) throw new Error(localError.message);
