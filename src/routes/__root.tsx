@@ -112,22 +112,13 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body className="selection:bg-orange/20 selection:text-navy">
-        For the code present, I get the error below.
+        This page didn't load
         
-        Please think step-by-step in order to resolve it.
-        ```
-        Error: OMIE_APP_KEY e OMIE_APP_SECRET não configurados.
+        Something went wrong on our end. You can try refreshing or head back home.
         
-        {"{"}
-          "timestamp": 1786556880356,
-          "error_type": "RUNTIME_ERROR",
-          "filename": "http://localhost:8080/_serverFn/eyJmaWxlIjoiL3NyYy9mZWF0dXJlcy9vbWllL3NlcnZpY2VzL29taWUuZnVuY3Rpb25zLnRzP3Rzcy1zZXJ2ZXJmbi1zcGxpdCIsImV4cG9ydCI6InN5bmNDbGllbnRlc09taWVfY3JlYXRlU2VydmVyRm5faGFuZGxlciJ9",
-          "lineno": 0,
-          "colno": 0,
-          "stack": "Error: OMIE_APP_KEY e OMIE_APP_SECRET não configurados.\\n    at callOmie (/dev-server/src/features/omie/services/omie.functions.ts:23:11)\\n    at Object.accept (/dev-server/src/features/omie/services/omie.functions.ts:67:28)\\n    at server (/dev-server/node_modules/@tanstack/start-client-core/src/createServerFn.ts:944:38)\\n    at callNextMiddleware (/dev-server/node_modules/@tanstack/start-client-core/src/createServerFn.ts:322:30)\\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\\n    at async userNext (/dev-server/node_modules/@tanstack/start-client-core/src/createServerFn.ts:312:26)",
-          "has_blank_screen": true
-        {"}"}
-        ```
+        Try againGo home
+        
+        MEU SISTEMA ESTA COM ESSE ERRO CORRIJA
         <Toaster position="top-right" closeButton richColors />
         {children}
         <Scripts />
