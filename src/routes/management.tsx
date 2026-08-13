@@ -72,6 +72,7 @@ function ManagementPage() {
         </TabsList>
         
         <TabsContent value="os" className="space-y-6">
+          <div className="space-y-6">
 
       <div className="flex justify-between items-end border-b border-border pb-6 print:hidden">
         <div className="space-y-1">
