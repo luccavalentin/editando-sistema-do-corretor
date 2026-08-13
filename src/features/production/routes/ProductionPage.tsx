@@ -5,13 +5,15 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Package, Calendar, Clock, CheckCircle2 } from 'lucide-react';
+import { Package, Calendar, Clock, CheckCircle2, Database, Search, RefreshCw, BarChart } from 'lucide-react';
 import { format, differenceInHours } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useServerFn } from '@tanstack/react-start';
 import { toast } from 'sonner';
 
 export function ProductionPage() {
+  const { tab } = (Route as any).useSearch();
+  const [activeTab, setActiveTab] = useState(tab || 'pecas');
   const queryClient = useQueryClient();
   
   const { data: pecas } = useSuspenseQuery({
@@ -42,13 +44,16 @@ export function ProductionPage() {
         </div>
       </div>
 
-      <Tabs defaultValue="pecas" className="w-full">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="bg-muted/50 p-1 border border-border rounded h-9">
           <TabsTrigger value="pecas" className="gap-2 text-[10px] font-semibold uppercase tracking-wider rounded px-4">
             <Package className="w-3 h-3" /> PEÇAS EM TESTE
           </TabsTrigger>
           <TabsTrigger value="agenda" className="gap-2 text-[10px] font-semibold uppercase tracking-wider rounded px-4">
             <Calendar className="w-3 h-3" /> AGENDA TÉCNICA
+          </TabsTrigger>
+          <TabsTrigger value="estoque" className="gap-2 text-[10px] font-semibold uppercase tracking-wider rounded px-4">
+            <Database className="w-3 h-3" /> ESTOQUE (OMIE)
           </TabsTrigger>
         </TabsList>
 
@@ -149,6 +154,70 @@ export function ProductionPage() {
                 </div>
               </div>
             ))}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="estoque" className="pt-4 space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div className="lg:col-span-3 space-y-4">
+              <div className="flex gap-3">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/40" />
+                  <Input placeholder="Buscar no estoque Omie..." className="pl-10 h-10 text-xs" />
+                </div>
+                <Button className="h-10 bg-navy text-white text-[10px] font-bold uppercase tracking-wider px-6">
+                  <RefreshCw className="w-3.5 h-3.5 mr-2" /> Sincronizar
+                </Button>
+              </div>
+
+              <div className="border border-border rounded overflow-hidden">
+                <table className="w-full text-left text-[11px]">
+                  <thead className="bg-muted/30 border-b border-border text-muted-foreground uppercase font-bold tracking-wider">
+                    <tr>
+                      <th className="p-3">Peça / Produto</th>
+                      <th className="p-3">Código Omie</th>
+                      <th className="p-3 text-right">Saldo</th>
+                      <th className="p-3 text-right">Valor Unit.</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    <tr className="hover:bg-muted/5">
+                      <td className="p-3 font-semibold">CÚICA DE FREIO 24X30</td>
+                      <td className="p-3 font-mono text-cyan">PRD00123</td>
+                      <td className="p-3 text-right font-bold text-navy">42 UN</td>
+                      <td className="p-3 text-right">R$ 489,00</td>
+                    </tr>
+                    <tr className="hover:bg-muted/5 bg-orange/[0.02]">
+                      <td className="p-3 font-semibold">VÁLVULA PROTETORA 4 CIRCUITOS</td>
+                      <td className="p-3 font-mono text-cyan">PRD00456</td>
+                      <td className="p-3 text-right font-bold text-orange">2 UN</td>
+                      <td className="p-3 text-right">R$ 1.250,00</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <Card className="card-system p-4 space-y-4">
+                <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-primary pb-3 border-b border-border">
+                  <BarChart className="w-4 h-4 text-orange" /> Resumo de Inventário
+                </div>
+                <div className="space-y-3 pt-1">
+                  <div>
+                    <p className="text-[9px] text-muted-foreground uppercase font-semibold">Itens Cadastrados</p>
+                    <p className="text-xl font-bold text-navy">2.450</p>
+                  </div>
+                  <div>
+                    <p className="text-[9px] text-muted-foreground uppercase font-semibold">Abaixo do Mínimo</p>
+                    <p className="text-xl font-bold text-orange">18</p>
+                  </div>
+                  <div className="pt-2 border-t border-border/50">
+                    <p className="text-[8px] italic text-muted-foreground">Última sync: há 12 min</p>
+                  </div>
+                </div>
+              </Card>
+            </div>
           </div>
         </TabsContent>
       </Tabs>

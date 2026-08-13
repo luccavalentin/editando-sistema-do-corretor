@@ -114,7 +114,7 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body className="selection:bg-orange/20 selection:text-navy">
-        as chaves de API não estão salvando!!!
+        No menu quero a aba de clientes e estoque (Que deve puxar e enviar para Omie)
         <Toaster position="top-right" closeButton richColors />
         {children}
         <Scripts />
