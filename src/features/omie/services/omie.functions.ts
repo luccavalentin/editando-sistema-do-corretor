@@ -16,7 +16,7 @@ export const checkOmieStatus = createServerFn({ method: "GET" })
 
 const OMIE_API_URL = "https://app.omie.com.br/api/v1";
 
-async function callOmie(endpoint: string, method: string, params: any, retryCount = 0): Promise<any> {
+export async function callOmie(endpoint: string, method: string, params: any, retryCount = 0): Promise<any> {
   const appKey = await getSecretValue('OMIE_APP_KEY');
   const appSecret = await getSecretValue('OMIE_APP_SECRET');
 
