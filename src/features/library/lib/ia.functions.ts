@@ -17,10 +17,13 @@ export const updateIAConfig = createServerFn({ method: "POST" })
   }).parse(data))
   .handler(async ({ data, context }) => {
     const { supabase } = context;
+    const { data: currentConfig } = await supabase.from('ia_config').select('id').single();
+    if (!currentConfig) throw new Error("Configuração de IA não encontrada");
+    
     const { error } = await supabase.from('ia_config').update({ 
       provider_ativo: data.provider_ativo,
       atualizado_em: new Date().toISOString()
-    }).eq('id', (await supabase.from('ia_config').select('id').single()).data?.id);
+    }).eq('id', currentConfig.id);
     if (error) throw new Error(error.message);
     return { success: true };
   });
