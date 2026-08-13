@@ -71,10 +71,14 @@ function ManagementPage() {
 
   const handleFinish = async () => {
     try {
+      if (!selectedCliente?.id) {
+        toast.error("Selecione um cliente primeiro");
+        return;
+      }
       const os = await openOSFn({ 
         data: {
           cliente_id: selectedCliente.id,
-          veiculo_id: selectedVeiculo?.id || '', // Simplificado para o prompt
+          veiculo_id: selectedVeiculo?.id || '',
           ...osData
         }
       });

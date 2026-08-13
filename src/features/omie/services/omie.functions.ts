@@ -121,11 +121,12 @@ export const syncEstoqueOmie = createServerFn({ method: "POST" })
 
       console.log(`[OMIE] Sincronizando ${result.resumoEstoque?.length || 0} produtos`);
       for (const item of result.resumoEstoque || []) {
+        if (!item.nCodProd) continue;
         await supabase.from('pecas_estoque_cache').upsert({
-          omie_codigo_produto: item.nCodProd,
+          omie_codigo_produto: String(item.nCodProd),
           descricao: item.cDescricao,
           saldo: item.nSaldo,
-          codigo_produto: String(item.nCodProd), // Garantir que codigo_produto não seja nulo
+          codigo_produto: item.cCodigo || String(item.nCodProd),
           atualizado_em: new Date().toISOString()
         }, { onConflict: 'omie_codigo_produto' });
       }
