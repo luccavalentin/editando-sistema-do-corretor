@@ -115,27 +115,28 @@ function RootShell({ children }: { children: ReactNode }) {
         For the code present, I get the error below.
         
         Please think step-by-step in order to resolve it.
+        {"\n"}
         ```
         ZodError: [
-          {
+          {"{"}
             "expected": "object",
             "code": "invalid_type",
             "path": [
               "data"
             ],
             "message": "Invalid input: expected object, received undefined"
-          }
+          {"}"}
         ]
         
-        {
+        {"{"}
           "timestamp": 1786633052797,
           "error_type": "RUNTIME_ERROR",
           "filename": "http://localhost:8080/_serverFn/eyJmaWxlIjoiL3NyYy9mZWF0dXJlcy9zZXR0aW5ncy9zZXJ2aWNlcy9zZWNyZXRzLmZ1bmN0aW9ucy50cz90c3Mtc2VydmVyZm4tc3BsaXQiLCJleHBvcnQiOiJzYXZlU2VjcmV0X2NyZWF0ZVNlcnZlckZuX2hhbmRsZXIifQ",
           "lineno": 0,
           "colno": 0,
-          "stack": "ZodError: [\n  {\n    \"expected\": \"object\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"data\"\n    ],\n    \"message\": \"Invalid input: expected object, received undefined\"\n  }\n]\n    at validator (/dev-server/src/features/settings/services/secrets.functions.ts:41:6)\n    at execValidator (/dev-server/node_modules/@tanstack/start-client-core/src/createServerFn.ts:911:12)\n    at callNextMiddleware (/dev-server/node_modules/@tanstack/start-client-core/src/createServerFn.ts:273:26)\n    at userNext (/dev-server/node_modules/@tanstack/start-client-core/src/createServerFn.ts:312:32)\n    at eval (/dev-server/src/integrations/supabase/auth-middleware.ts:34:10)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async callNextMiddleware (/dev-server/node_modules/@tanstack/start-client-core/src/createServerFn.ts:322:24)\n    at async AsyncFunction.__executeServer (/dev-server/node_modules/@tanstack/start-client-core/src/createServerFn.ts:212:20)\n    at async eval (/dev-server/node_modules/@tanstack/start-server-core/src/server-functions-handler.ts:159:16)\n    at async eval (/dev-server/node_modules/@tanstack/start-server-core/src/server-functions-handler.ts:81:17)",
+          "stack": "ZodError: [\n  {"{"}\n    \"expected\": \"object\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"data\"\n    ],\n    \"message\": \"Invalid input: expected object, received undefined\"\n  {"}"}\n]\n    at validator (/dev-server/src/features/settings/services/secrets.functions.ts:41:6)\n    at execValidator (/dev-server/node_modules/@tanstack/start-client-core/src/createServerFn.ts:911:12)\n    at callNextMiddleware (/dev-server/node_modules/@tanstack/start-client-core/src/createServerFn.ts:273:26)\n    at userNext (/dev-server/node_modules/@tanstack/start-client-core/src/createServerFn.ts:312:32)\n    at eval (/dev-server/src/integrations/supabase/auth-middleware.ts:34:10)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async callNextMiddleware (/dev-server/node_modules/@tanstack/start-client-core/src/createServerFn.ts:322:24)\n    at async AsyncFunction.__executeServer (/dev-server/node_modules/@tanstack/start-client-core/src/createServerFn.ts:212:20)\n    at async eval (/dev-server/node_modules/@tanstack/start-server-core/src/server-functions-handler.ts:159:16)\n    at async eval (/dev-server/node_modules/@tanstack/start-server-core/src/server-functions-handler.ts:81:17)",
           "has_blank_screen": true
-        }
+        {"}"}
         ```
         <Toaster position="top-right" closeButton richColors />
         {children}
