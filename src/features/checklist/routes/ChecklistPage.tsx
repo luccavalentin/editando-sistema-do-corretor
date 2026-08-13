@@ -48,10 +48,10 @@ export function ChecklistPage() {
     () => {
       if (mode === 'tecnico') {
         if (!selectedOS) return [];
-        return db.responses.where({ os_id: selectedOS, sincronizado: 0 }).toArray();
+        return db.responses.where('os_id').equals(selectedOS).and(r => r.sincronizado === 0).toArray();
       } else {
         if (!selectedSetor || !today) return [];
-        return db.responses.where({ setor: selectedSetor, data: today, sincronizado: 0 }).toArray();
+        return db.responses.where('setor').equals(selectedSetor).and(r => r.data === today && r.sincronizado === 0).toArray();
       }
     },
     [mode, selectedOS, selectedSetor, today]
@@ -61,10 +61,10 @@ export function ChecklistPage() {
     () => {
       if (mode === 'tecnico') {
         if (!selectedOS) return [];
-        return db.responses.where({ os_id: selectedOS }).toArray();
+        return db.responses.where('os_id').equals(selectedOS).toArray();
       } else {
         if (!selectedSetor || !today) return [];
-        return db.responses.where({ setor: selectedSetor, data: today }).toArray();
+        return db.responses.where('setor').equals(selectedSetor).and(r => r.data === today).toArray();
       }
     },
     [mode, selectedOS, selectedSetor, today]

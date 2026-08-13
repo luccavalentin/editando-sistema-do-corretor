@@ -14,7 +14,10 @@ export function useOSDashboard() {
     queryKey: ['os-stats'],
     queryFn: async () => {
       const result = await getStatsFn();
-      if (result instanceof Response) throw result;
+      if (result instanceof Response) {
+        if (result.status === 401) window.location.href = '/login';
+        throw result;
+      }
       return result;
     },
     initialData: { noPatio: 0, entraramHoje: 0, concluidasHoje: 0, atrasadas: 0, pecasVencendo: 0 } as any
@@ -24,7 +27,10 @@ export function useOSDashboard() {
     queryKey: ['os-list'],
     queryFn: async () => {
       const result = await getListFn();
-      if (result instanceof Response) throw result;
+      if (result instanceof Response) {
+        if (result.status === 401) window.location.href = '/login';
+        throw result;
+      }
       return Array.isArray(result) ? result : [];
     },
     initialData: [] as any[]
