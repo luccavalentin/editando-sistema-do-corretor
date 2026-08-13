@@ -34,10 +34,9 @@ export const getSecretsStatus = createServerFn({ method: "GET" })
 export const saveSecret = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((data: any) => {
-    // TanStack Start v1 wraps data in a 'data' property if it's an object,
-    // but some environments might pass it differently.
-    // We handle both { data: { key, value } } and { key, value }
+    // Tratamento robusto para a entrada do TanStack Start
     const input = data?.data || data;
+    console.log('Validando input:', input);
     return z.object({
       key: z.string(),
       value: z.string()
@@ -47,6 +46,7 @@ export const saveSecret = createServerFn({ method: "POST" })
     const { key, value } = data;
     
     try {
+      console.log('Iniciando persistência da chave:', key);
       const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
       
       const { error } = await supabaseAdmin
@@ -57,7 +57,12 @@ export const saveSecret = createServerFn({ method: "POST" })
           updated_at: new Date().toISOString() 
         }, { onConflict: 'key' });
         
-      if (error) throw error;
+      if (error) {
+        console.error('Erro retornado pelo Supabase:', error);
+        throw error;
+      }
+      
+      console.log('Chave persistida com sucesso:', key);
       
       return { 
         success: true, 

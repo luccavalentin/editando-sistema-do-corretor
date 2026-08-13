@@ -86,9 +86,12 @@ export default function AppConfigPage() {
 
   const saveSecretFn = useServerFn(saveSecret);
   const secretMutation = useMutation({
-    mutationFn: (data: { key: string, value: string }) => saveSecretFn({ data }),
+    mutationFn: (data: { key: string, value: string }) => {
+      console.log('Disparando mutação para salvar segredo:', data);
+      return saveSecretFn({ data });
+    },
     onSuccess: (res) => {
-      if (res.success) {
+      if (res && (res as any).success) {
         toast.success("Segredo atualizado");
         refetchSecrets();
       } else {
@@ -142,7 +145,11 @@ export default function AppConfigPage() {
           <Button 
             className="bg-navy text-white h-9 px-4 text-[10px] font-bold uppercase tracking-widest"
             onClick={() => {
-              if (!val) return;
+              console.log('Botão SALVAR clicado para chave:', secretKey, 'valor:', val);
+              if (!val) {
+                console.warn('Valor vazio, ignorando...');
+                return;
+              }
               secretMutation.mutate({ key: secretKey, value: val });
               setVal("");
             }}
