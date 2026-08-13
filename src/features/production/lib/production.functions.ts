@@ -58,6 +58,7 @@ export const searchProdutos = createServerFn({ method: "GET" })
         const mapped = (omieResults as any[]).map(p => ({
           omie_codigo_produto: p.codigo_produto,
           descricao: p.descricao,
+          codigo_produto: p.codigo_produto,
           saldo: 0, 
           is_omie_temp: true
         }));
