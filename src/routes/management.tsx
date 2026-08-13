@@ -22,6 +22,8 @@ function ManagementPage() {
   const [activeTab, setActiveTab] = useState(tab || 'os');
   const [step, setStep] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
   const [selectedCliente, setSelectedCliente] = useState<any>(null);
   const [selectedVeiculo, setSelectedVeiculo] = useState<any>(null);
   const [osData, setOsData] = useState({
@@ -32,19 +34,38 @@ function ManagementPage() {
   });
 
   const searchFn = useServerFn(searchClienteLocal);
+  const upsertClienteFn = useServerFn(upsertClienteFromOmie);
   const openOSFn = useServerFn(openOS);
 
   const handleSearch = async () => {
+    if (searchQuery.length < 3) {
+      toast.info("Digite pelo menos 3 caracteres");
+      return;
+    }
+    setIsSearching(true);
     try {
       const results = await searchFn({ data: { query: searchQuery } });
-      if (results && results.length > 0) {
-        setSelectedCliente(results[0]);
-        setStep(2);
-      } else {
-        toast.info("Cliente não encontrado localmente. Busca na Omie disponível em breve.");
-      }
+      setSearchResults(results || []);
     } catch (error) {
       toast.error("Erro ao buscar cliente");
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleSelectCliente = async (cliente: any) => {
+    try {
+      if (cliente.is_omie_temp) {
+        const loadingToast = toast.loading("Persistindo cliente da Omie...");
+        const localCliente = await upsertClienteFn({ data: { cliente_omie: cliente } });
+        setSelectedCliente({ ...cliente, id: localCliente.id, is_omie_temp: false });
+        toast.dismiss(loadingToast);
+      } else {
+        setSelectedCliente(cliente);
+      }
+      setStep(2);
+    } catch (error) {
+      toast.error("Erro ao selecionar cliente");
     }
   };
 
@@ -169,22 +190,52 @@ function ManagementPage() {
               </CardHeader>
               <CardContent className="p-4 space-y-4">
                 <div className="flex gap-3">
-                  <Input 
-                    placeholder="CNPJ ou Nome..." 
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="h-9 focus-visible:ring-primary/20 text-[11px] placeholder:text-muted-foreground/40 rounded"
-                  />
-                  <Button onClick={handleSearch} className="h-9 px-6 bg-primary text-white hover:bg-primary/90 font-semibold text-[10px] uppercase tracking-wider rounded">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/40" />
+                    <Input 
+                      placeholder="CNPJ ou Nome (mín. 3 caracteres)..." 
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                      className="pl-10 h-9 focus-visible:ring-primary/20 text-[11px] placeholder:text-muted-foreground/40 rounded"
+                    />
+                  </div>
+                  <Button onClick={handleSearch} disabled={isSearching} className="h-9 px-6 bg-primary text-white hover:bg-primary/90 font-semibold text-[10px] uppercase tracking-wider rounded">
+                    {isSearching ? <Loader2 className="w-3 h-3 animate-spin mr-2" /> : null}
                     Buscar
                   </Button>
                 </div>
-                <div className="p-6 border border-dashed border-border rounded flex flex-col items-center justify-center text-center bg-muted/5 group hover:bg-muted/10 transition-colors">
-                  <UserPlus className="w-10 h-10 mb-4 opacity-20 text-primary group-hover:scale-110 transition-transform" />
-                  <p className="text-[9px] font-medium text-muted-foreground uppercase tracking-widest max-w-xs">Cliente não encontrado localmente ou na Omie?</p>
-                  <Button variant="outline" size="sm" className="mt-4 h-8 px-5 rounded border-primary/20 text-primary hover:bg-primary/5 text-[9px] font-semibold uppercase tracking-wider transition-all">
-                    Novo Cadastro Manual
-                  </Button>
+
+                <div className="space-y-2 mt-4">
+                  {searchResults.map((cliente) => (
+                    <div 
+                      key={cliente.omie_codigo_cliente || cliente.id}
+                      onClick={() => handleSelectCliente(cliente)}
+                      className="p-3 border border-border rounded flex justify-between items-center hover:border-orange cursor-pointer bg-muted/5 hover:bg-white transition-all group"
+                    >
+                      <div>
+                        <p className="text-[11px] font-bold text-primary group-hover:text-orange">{cliente.nome}</p>
+                        <p className="text-[9px] text-muted-foreground">{cliente.documento}</p>
+                      </div>
+                      {cliente.is_omie_temp ? (
+                        <Badge variant="outline" className="text-[8px] border-cyan/30 text-cyan uppercase font-bold flex gap-1 items-center">
+                          <Database className="w-2.5 h-2.5" /> OMIE
+                        </Badge>
+                      ) : (
+                        <Badge variant="outline" className="text-[8px] border-primary/20 text-primary uppercase font-bold">Local</Badge>
+                      )}
+                    </div>
+                  ))}
+
+                  {searchResults.length === 0 && !isSearching && (
+                    <div className="p-6 border border-dashed border-border rounded flex flex-col items-center justify-center text-center bg-muted/5 group hover:bg-muted/10 transition-colors">
+                      <UserPlus className="w-10 h-10 mb-4 opacity-20 text-primary group-hover:scale-110 transition-transform" />
+                      <p className="text-[9px] font-medium text-muted-foreground uppercase tracking-widest max-w-xs">Cliente não encontrado?</p>
+                      <Button variant="outline" size="sm" className="mt-4 h-8 px-5 rounded border-primary/20 text-primary hover:bg-primary/5 text-[9px] font-semibold uppercase tracking-wider transition-all">
+                        Novo Cadastro Manual
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
