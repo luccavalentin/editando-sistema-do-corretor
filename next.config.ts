@@ -45,6 +45,16 @@ const cabecalhosSeguranca = [
 const config: NextConfig = {
   reactStrictMode: true,
 
+  // Usa as variáveis do projeto Supabase conectado (VITE_*) quando as NEXT_PUBLIC_* não existem.
+  env: {
+    NEXT_PUBLIC_SUPABASE_URL:
+      process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.VITE_SUPABASE_URL ?? '',
+    NEXT_PUBLIC_SUPABASE_CHAVE_PUBLICA:
+      process.env.NEXT_PUBLIC_SUPABASE_CHAVE_PUBLICA ??
+      process.env.VITE_SUPABASE_PUBLISHABLE_KEY ??
+      '',
+  },
+
   /**
    * Onde o build é escrito.
    *
