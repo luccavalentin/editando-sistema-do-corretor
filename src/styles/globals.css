@@ -1064,3 +1064,152 @@
     color: #555;
   }
 }
+
+
+/* --------------------------------------------------------------------------
+   TELA DE ENTRADA — REVENUE EXPERIENCE
+   Camada puramente visual. Não altera fluxo, autenticação ou estados do formulário.
+   -------------------------------------------------------------------------- */
+.login-aurora {
+  background:
+    radial-gradient(circle at 78% 18%, color-mix(in oklab, var(--cor-acao) 8%, transparent), transparent 30%),
+    radial-gradient(circle at 68% 82%, color-mix(in oklab, var(--paleta-vermelho-marca) 5%, transparent), transparent 26%);
+}
+
+.login-grade {
+  opacity: 0.24;
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--cor-texto) 4%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--cor-texto) 4%, transparent) 1px, transparent 1px);
+  background-size: 54px 54px;
+  mask-image: linear-gradient(to right, transparent 46%, black 70%);
+}
+
+.login-painel-imagem {
+  transform: scale(1.025);
+  animation: login-respirar 16s ease-in-out infinite alternate;
+}
+
+.login-overlay-imagem {
+  background:
+    linear-gradient(90deg, rgb(0 5 46 / 0.92) 0%, rgb(0 7 63 / 0.72) 52%, rgb(0 5 46 / 0.38) 100%),
+    linear-gradient(180deg, rgb(0 5 46 / 0.16) 0%, rgb(0 5 46 / 0.42) 70%, rgb(0 5 46 / 0.78) 100%);
+}
+
+.login-entrada {
+  animation: login-revelar 700ms var(--ease-saida) both;
+}
+
+.login-beneficio {
+  animation: login-subir 620ms var(--ease-saida) both;
+  animation-delay: var(--login-delay, 0ms);
+  transition:
+    transform 260ms var(--ease-saida),
+    border-color 260ms var(--ease-padrao),
+    background-color 260ms var(--ease-padrao);
+}
+
+.login-beneficio:hover {
+  transform: translate3d(0, -4px, 0);
+  border-color: rgb(255 255 255 / 0.22);
+  background-color: rgb(255 255 255 / 0.11);
+}
+
+.login-campo {
+  animation: login-subir 520ms var(--ease-saida) both;
+}
+
+.login-campo:nth-of-type(2) {
+  animation-delay: 70ms;
+}
+
+.login-botao {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.login-botao::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 18%,
+    rgb(255 255 255 / 0.18) 44%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  transition:
+    transform 620ms var(--ease-saida),
+    opacity 220ms var(--ease-padrao);
+}
+
+.login-botao:hover::before {
+  opacity: 1;
+  transform: translateX(120%);
+}
+
+@keyframes login-revelar {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0) scale(0.988);
+    filter: blur(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes login-subir {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes login-respirar {
+  from {
+    transform: scale(1.025) translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: scale(1.065) translate3d(-0.5%, -0.35%, 0);
+  }
+}
+
+@media (max-width: 1023px) {
+  .login-grade {
+    opacity: 0.16;
+    mask-image: linear-gradient(to bottom, black 0%, transparent 82%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-painel-imagem,
+  .login-entrada,
+  .login-beneficio,
+  .login-campo {
+    animation: none !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .login-beneficio:hover {
+    transform: none !important;
+  }
+
+  .login-botao::before {
+    display: none;
+  }
+}
