@@ -1,32 +1,47 @@
-# Logs
-logs
+# dependências
+node_modules
+.pnp
+.pnp.js
+
+# build
+.next
+out
+build
+dist
+*.tsbuildinfo
+next-env.d.ts
+
+# ambiente — nunca versionar segredos
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+# qualquer cópia/backup de env: um ".env.local.bak" já escapou uma vez
+.env*.bak
+.env*.bak-*
+*.env.backup
+!.env.example
+
+# testes
+coverage
+test-results
+playwright-report
+blob-report
+playwright/.cache
+
+# sistema
+.DS_Store
+Thumbs.db
 *.log
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-.output
-.vinxi
-.tanstack/**
-.nitro
-*.local
+# mídia local de desenvolvimento
+/armazenamento-local
 
-# Wrangler / Cloudflare
-.wrangler/
-.dev.vars
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# A plataforma administrativa é uma aplicação separada: dependências e build
+# dela ficam de fora do repositório, mas o CÓDIGO entra.
+admin/node_modules/
+admin/.next/
+/.next-producao/
+admin/.env.local

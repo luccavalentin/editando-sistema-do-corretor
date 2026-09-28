@@ -1,0 +1,1066 @@
+@import 'tailwindcss';
+
+/* ==========================================================================
+   AGILLIZA — DESIGN SYSTEM
+   Conceito: Command Center. CRM premium + central de operações + plataforma
+   financeira.
+
+   IDENTIDADE VISUAL: as cores vêm dos arquivos oficiais da marca
+   (AGILLIZA TECH - Logos), medidas pixel a pixel no arquivo vetorial:
+     azul      #0B109F
+     vermelho  #F4313F
+
+   O AZUL é o token de ação, menu e foco. O VERMELHO tem uma ressalva que vale
+   ler antes de usar: ele dá 3.87:1 sobre branco e REPROVA em AA para texto.
+   Por isso existem dois vermelhos aqui, e a distinção não é preciosismo:
+
+     --paleta-vermelho-marca (#F4313F) — só para grafismo grande: a logo, o
+       telhado, um traço decorativo. Nunca texto, nunca preenchimento de botão.
+     --paleta-vermelho (#C8102E) — o vermelho FUNCIONAL, de erro e exclusão.
+       Passa em AA nos dois sentidos (5.88:1). É o que aparece em botão de
+       excluir e em mensagem de erro.
+
+   Quem trocar um pelo outro faz o sistema reprovar em acessibilidade sem
+   mudar nada de visível para quem enxerga bem.
+
+     fundo     #FFFFFF, não #F7F8FA
+
+   Três camadas, nesta ordem:
+     1. PALETA      cores da marca, cruas e imutáveis
+     2. SEMÂNTICA   papel de cada cor; é esta camada que troca no tema escuro
+     3. TAILWIND    exposição das utilidades
+
+   REGRA HERDADA DO AGILLIZA: nunca cor crua no .tsx. Proibido `text-white`,
+   `bg-black`, `bg-[#...]`. Sempre token semântico. É o que permite trocar o
+   tema inteiro sem tocar em um único componente.
+   ========================================================================== */
+
+/* Tema escuro por classe: a escolha do usuário vence o sistema operacional. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* --------------------------------------------------------------------------
+   CAMADA 1 — PALETA DA MARCA
+   -------------------------------------------------------------------------- */
+:root {
+  /* Marca — valores medidos no arquivo oficial da logo. */
+  --paleta-azul-profundo: #0b109f; /* ação, menu, foco */
+  --paleta-azul-escuro: #000a70; /* hover e estado ativo */
+  --paleta-azul-noite: #00052e; /* autenticação, landing, base do menu */
+  --paleta-azul-abissal: #00073f; /* base do gradiente do menu */
+  --paleta-azul-nevoa: #eef0ff; /* seleção e informação */
+  --paleta-azul-claro: #93a6ff; /* destaque dentro do menu escuro */
+
+  /* Vermelho da LOGO. Só grafismo grande — reprova em AA como texto. */
+  --paleta-vermelho-marca: #f4313f;
+
+  /* Estado */
+  --paleta-vermelho: #c8102e; /* erro, exclusão, atraso crítico */
+  --paleta-vermelho-escuro: #8a0b20;
+  --paleta-verde: #10a37f; /* aprovado, ativo, concluído */
+  --paleta-ambar: #eab308; /* pendente e risco */
+
+  /* Neutros */
+  --paleta-grafite: #0b0b0f; /* texto principal */
+  --paleta-papel: #ffffff; /* fundo e cartões no tema claro */
+  --paleta-nevoa: #f7f8fa; /* superfície apagada */
+  --paleta-nevoa-2: #f1f2f7; /* superfície secundária */
+  --paleta-cinza-texto: #4b5563; /* texto de apoio */
+  --paleta-cinza-medio: #6b7280;
+  --paleta-cinza-linha: #e5e7eb; /* bordas */
+  --paleta-grafite-superficie: #12131a; /* fundo escuro */
+  --paleta-grafite-cartao: #191a22; /* cartões escuros */
+  --paleta-nuvem: #e6e8f0; /* texto claro */
+
+  /* ------------------------------------------------------------------------
+     DERIVADAS PARA ACESSIBILIDADE
+     Razões medidas, não estimadas — verificadas por tests/unit/contraste.test.ts,
+     que reprova o build se qualquer uma cair abaixo do mínimo.
+
+     O vermelho #C8102E da marca passa em AA com texto branco (5.88:1) e como
+     texto sobre branco (5.88:1). Não precisa de derivada — foi uma escolha
+     melhor que a do documento, cujo #F5333F dá 3.87:1 e reprova.
+
+     O verde e o âmbar precisam:
+       #10A37F com texto branco ....... 3.20:1   reprovado
+       #EAB308 com texto branco ....... 1.92:1   reprovado
+       #10A37F como texto no branco ... 3.20:1   reprovado
+       #EAB308 como texto no branco ... 1.92:1   reprovado
+     O CRM Agilliza declara `--success-foreground: #ffffff` sobre `#10A37F`:
+     é uma falha de contraste herdada, e aqui ela não se repete.
+     ------------------------------------------------------------------------ */
+  --paleta-verde-forte: #0c8164; /* com branco: 4.84:1 — preenchimento */
+  --paleta-verde-texto: #0a7357; /* sobre branco: 5.83:1 — texto */
+  --paleta-ambar-texto: #8a5a06; /* sobre branco: 5.92:1 — texto */
+  --paleta-ambar-contraste: #1a1400; /* sobre âmbar: 9.57:1 — o Agilliza acerta aqui */
+
+  /* Variantes claras, para texto sobre superfície grafite. */
+  --paleta-vermelho-claro: #ff8a91;
+  --paleta-verde-claro: #4ed8b0;
+  --paleta-ambar-claro: #f3ce5c;
+  --paleta-azul-texto-escuro: #8fa0ff;
+
+  /* Lavagens de estado. Tom baixo: informam sem sujar a tela de cor. */
+  --paleta-vermelho-lavagem: #fef2f2;
+  --paleta-verde-lavagem: #ecfdf5;
+  --paleta-ambar-lavagem: #fefce8;
+}
+
+/* --------------------------------------------------------------------------
+   CAMADA 2 — SEMÂNTICA: TEMA CLARO
+   -------------------------------------------------------------------------- */
+:root {
+  /* Superfícies. O Agilliza usa branco puro no conteúdo e reserva o cinza
+     névoa para áreas apagadas — o oposto do que o documento pedia. */
+  --cor-fundo: var(--paleta-papel);
+  --cor-superficie: var(--paleta-papel);
+  --cor-superficie-elevada: var(--paleta-papel);
+  --cor-superficie-afundada: var(--paleta-nevoa);
+  --cor-superficie-secundaria: var(--paleta-nevoa-2);
+  --cor-superficie-hover: var(--paleta-nevoa);
+  --cor-superficie-ativa: var(--paleta-azul-nevoa);
+
+  /* Texto */
+  --cor-texto: var(--paleta-grafite);
+  --cor-texto-secundario: var(--paleta-cinza-texto);
+  --cor-texto-apoio: var(--paleta-cinza-medio);
+  /* Desabilitado é isento pela WCAG 1.4.3, mas texto invisível vira suporte.
+     3.12:1: claramente apagado e ainda legível. */
+  --cor-texto-desabilitado: #8b92a3;
+  --cor-texto-invertido: var(--paleta-papel);
+
+  /* Traços.
+     `borda` e `borda-forte` são separadores decorativos — a WCAG 1.4.11 não
+     exige 3:1 deles, e um divisor de tabela com 3:1 riscaria a tela inteira.
+     `borda-controle` é o limite que IDENTIFICA um campo, seletor ou caixa de
+     marcação: esse precisa de 3:1. Usar `borda` em campo de formulário é bug
+     de acessibilidade, não escolha estética. */
+  --cor-borda: var(--paleta-cinza-linha);
+  --cor-borda-forte: #d1d5db;
+  --cor-borda-sutil: #eef0f4;
+  --cor-borda-controle: #858d9d; /* 3.34:1 sobre branco */
+
+  /* Ação */
+  --cor-acao: var(--paleta-azul-profundo);
+  --cor-acao-hover: var(--paleta-azul-escuro);
+  --cor-acao-ativa: #000850;
+  --cor-acao-texto: var(--paleta-papel);
+  --cor-acao-sutil: var(--paleta-azul-nevoa);
+  --cor-acao-sutil-texto: var(--paleta-azul-profundo);
+  --cor-acao-borda: #c7cdff;
+
+  /* Ação renderizada como TEXTO — link, botão fantasma, nome clicável na
+     tabela. Token próprio porque `--cor-acao` é calibrada para receber texto
+     branco em cima, não para ser lida como texto. No claro coincidem; no
+     escuro, não. */
+  --cor-link: var(--paleta-azul-profundo);
+  --cor-link-hover: var(--paleta-azul-escuro);
+
+  /* Menu. O gradiente fica na utilidade `gradiente-menu`; estes tokens são os
+     valores sólidos usados para contraste e como fallback. */
+  --cor-nav-fundo: var(--paleta-azul-profundo);
+  --cor-nav-texto: var(--paleta-papel);
+  --cor-nav-texto-ativo: var(--paleta-papel);
+  --cor-nav-item-ativo: #1927a8; /* branco a 10% sobre o azul */
+  --cor-nav-item-hover: #0f1da5; /* branco a 6% sobre o azul */
+  --cor-nav-borda: #2836b3;
+  --cor-nav-destaque: var(--paleta-azul-claro);
+
+  /* Estados */
+  --cor-perigo: var(--paleta-vermelho);
+  --cor-perigo-forte: var(--paleta-vermelho);
+  --cor-perigo-texto: var(--paleta-vermelho);
+  --cor-perigo-sutil: var(--paleta-vermelho-lavagem);
+  --cor-perigo-borda: #f4c2ca;
+
+  --cor-sucesso: var(--paleta-verde);
+  --cor-sucesso-forte: var(--paleta-verde-forte);
+  --cor-sucesso-texto: var(--paleta-verde-texto);
+  --cor-sucesso-sutil: var(--paleta-verde-lavagem);
+  --cor-sucesso-borda: #a7f3d0;
+
+  --cor-atencao: var(--paleta-ambar);
+  --cor-atencao-contraste: var(--paleta-ambar-contraste);
+  --cor-atencao-texto: var(--paleta-ambar-texto);
+  --cor-atencao-sutil: var(--paleta-ambar-lavagem);
+  --cor-atencao-borda: #fde68a;
+
+  --cor-info: var(--paleta-azul-profundo);
+  --cor-info-texto: var(--paleta-azul-profundo);
+  --cor-info-sutil: var(--paleta-azul-nevoa);
+  --cor-info-borda: #c7cdff;
+
+  /* Temperatura do cliente. Sempre com rótulo e ícone: a seção 20 proíbe
+     interface que dependa só de cor. */
+  --cor-quente: var(--paleta-vermelho);
+  --cor-quente-texto: var(--paleta-vermelho);
+  --cor-quente-sutil: var(--paleta-vermelho-lavagem);
+  --cor-quente-borda: #f4c2ca;
+  --cor-morno: var(--paleta-ambar);
+  --cor-morno-texto: var(--paleta-ambar-texto);
+  --cor-morno-sutil: var(--paleta-ambar-lavagem);
+  --cor-morno-borda: #fde68a;
+  --cor-frio: #0284c7;
+  --cor-frio-texto: #075985;
+  --cor-frio-sutil: #f0f9ff;
+  --cor-frio-borda: #bae6fd;
+
+  /* Conversa. O Agilliza separa a bolha do cliente da do time por cor. */
+  --cor-bolha-cliente: #e2f4ed;
+  --cor-bolha-cliente-texto: #0b3b2e;
+  --cor-bolha-cliente-borda: #b6e3d3;
+  --cor-bolha-time: var(--paleta-azul-nevoa);
+  --cor-bolha-time-texto: var(--paleta-azul-escuro);
+  --cor-bolha-time-borda: #c7cdff;
+
+  /* Foco — anel visível, obrigatório, nunca removido */
+  --cor-foco: var(--paleta-azul-profundo);
+  --cor-foco-contraste: var(--paleta-papel);
+
+  /* ------------------------------------------------------------------------
+     GRÁFICOS — duas paletas, com propósitos diferentes.
+
+     CATEGÓRICA: para categorias sem significado de estado (origem do lead,
+     banco, corretor, cidade). Não usa nenhuma cor semântica, porque pintar uma
+     categoria qualquer de vermelho ou verde inventa um significado que o dado
+     não tem — e a seção 20 reserva o vermelho para alerta.
+
+     Escolhida por otimização, maximizando a menor distância perceptual em
+     OKLab no PIOR caso entre visão normal, protanopia, deuteranopia e
+     tritanopia. Separação mínima medida:
+       até 4 séries ... 0.1444
+       até 5 séries ... 0.1062   <- teto confortável
+       até 6 séries ... 0.0746   <- aceitável, apertado
+       7 ou mais ...... 0.0656   <- reprovado: exige segundo canal
+
+     Acima de 5 séries o gráfico PRECISA de um segundo canal além da cor:
+     marcador diferente, hachura ou rótulo direto na série. Não é preferência,
+     é a única forma de o gráfico continuar legível para ~8% dos homens.
+     ------------------------------------------------------------------------ */
+  --grafico-1: #0b109f; /* azul da marca, sempre a primeira série */
+  --grafico-2: #b45309;
+  --grafico-3: #0e7490;
+  --grafico-4: #7c2d12;
+  --grafico-5: #6d28d9;
+  --grafico-6: #57534e; /* usar só com segundo canal de distinção */
+
+  /* SEMÂNTICA: quando a série É o estado. Aqui a cor deve ser a do estado,
+     porque o corretor espera ver "perdido" em vermelho — trocar isso por uma
+     cor neutra atrapalharia a leitura em vez de ajudar. */
+  --grafico-ganho: var(--paleta-verde-forte);
+  --grafico-perdido: var(--paleta-vermelho);
+  --grafico-pendente: var(--paleta-ambar);
+  --grafico-andamento: var(--paleta-azul-profundo);
+
+  --grafico-grade: #eef0f4;
+  --grafico-eixo: var(--paleta-cinza-medio);
+
+  /* Esteira do funil — jornada azul para verde, 14 etapas, herdada do
+     Agilliza. Ordinal, não categórica: a ordem carrega significado. */
+  --etapa-1: #4338ca;
+  --etapa-2: #4f46e5;
+  --etapa-3: #4361ee;
+  --etapa-4: #2563eb;
+  --etapa-5: #0284c7;
+  --etapa-6: #0891b2;
+  --etapa-7: #0d9488;
+  --etapa-8: #059669;
+  --etapa-9: #16a34a;
+  --etapa-10: #65a30d;
+  --etapa-11: #a16207;
+  --etapa-12: #ea580c;
+  --etapa-13: #7c3aed;
+  --etapa-14: #0c8164;
+
+  /* Sombras — profundidade sutil. Sombra pesada é proibida pela seção 20. */
+  --sombra-baixa: 0 1px 2px 0 rgb(11 11 15 / 0.04), 0 1px 3px 0 rgb(11 11 15 / 0.06);
+  --sombra-media: 0 2px 4px -1px rgb(11 11 15 / 0.05), 0 4px 12px -2px rgb(11 11 15 / 0.08);
+  --sombra-alta: 0 4px 8px -2px rgb(11 11 15 / 0.06), 0 12px 28px -4px rgb(11 11 15 / 0.12);
+  --sombra-flutuante: 0 8px 16px -4px rgb(11 11 15 / 0.08), 0 24px 48px -8px rgb(11 11 15 / 0.16);
+  --sombra-interna: inset 0 1px 2px 0 rgb(11 11 15 / 0.05);
+  /* Brilho azul sob o cartão de autenticação — assinatura do Agilliza. */
+  --sombra-marca: 0 1px 0 0 rgb(11 11 15 / 0.04),
+    0 24px 60px -30px color-mix(in oklab, var(--paleta-azul-profundo) 45%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+   CAMADA 2 — SEMÂNTICA: TEMA ESCURO
+
+   NOTA DE DIVERGÊNCIA: o CRM Agilliza mantém o conteúdo branco no modo escuro
+   e escurece apenas o menu. A seção 20 do documento do produto exige "suporte
+   completo a tema claro e escuro", que é o requisito mais forte — por isso
+   aqui o tema escuro é real. As cores da marca seguem idênticas; o que muda é
+   a superfície. Se a preferência for repetir o comportamento do Agilliza,
+   basta não aplicar a classe `dark` fora do menu.
+   -------------------------------------------------------------------------- */
+.dark {
+  --cor-fundo: var(--paleta-grafite-superficie);
+  --cor-superficie: var(--paleta-grafite-cartao);
+  --cor-superficie-elevada: #1f202a;
+  --cor-superficie-afundada: #0d0e14;
+  --cor-superficie-secundaria: #1f202a;
+  --cor-superficie-hover: #22232e;
+  --cor-superficie-ativa: #1b1f3d;
+
+  --cor-texto: var(--paleta-nuvem);
+  --cor-texto-secundario: #aab0c2;
+  --cor-texto-apoio: #878da0;
+  --cor-texto-desabilitado: #666c7f; /* 3.31:1 */
+  --cor-texto-invertido: var(--paleta-grafite);
+
+  --cor-borda: #282a36;
+  --cor-borda-forte: #363948;
+  --cor-borda-sutil: #1f212b;
+  --cor-borda-controle: #666d84; /* 3.37:1 sobre o cartão escuro */
+
+  /* O azul da marca é escuro demais para preencher botão legível sobre
+     grafite: sobe de luminosidade preservando a matiz. */
+  --cor-acao: #2c3fd9;
+  --cor-acao-hover: #4152e8;
+  --cor-acao-ativa: #1f2fb8;
+  --cor-acao-texto: var(--paleta-papel);
+  --cor-acao-sutil: #191d45;
+  --cor-acao-sutil-texto: var(--paleta-azul-texto-escuro);
+  --cor-acao-borda: #2a3170;
+
+  /* Aqui os dois se separam: `--cor-acao` sobre grafite daria 2.33:1. */
+  --cor-link: var(--paleta-azul-texto-escuro);
+  --cor-link-hover: #b3bfff;
+
+  /* Menu escuro do Agilliza: #000A6E até #00052E. */
+  --cor-nav-fundo: #000a6e;
+  --cor-nav-texto: var(--paleta-papel);
+  --cor-nav-texto-ativo: var(--paleta-papel);
+  --cor-nav-item-ativo: #1a2280;
+  --cor-nav-item-hover: #0d1675;
+  --cor-nav-borda: #232a7d;
+  --cor-nav-destaque: var(--paleta-azul-claro);
+
+  --cor-perigo: #e8455c;
+  --cor-perigo-forte: var(--paleta-vermelho);
+  --cor-perigo-texto: var(--paleta-vermelho-claro);
+  --cor-perigo-sutil: #2c1416;
+  --cor-perigo-borda: #4d1d21;
+
+  --cor-sucesso: #14b58e;
+  --cor-sucesso-forte: var(--paleta-verde-forte);
+  --cor-sucesso-texto: var(--paleta-verde-claro);
+  --cor-sucesso-sutil: #0c2620;
+  --cor-sucesso-borda: #14483b;
+
+  --cor-atencao: #e3b21c;
+  --cor-atencao-contraste: var(--paleta-ambar-contraste);
+  --cor-atencao-texto: var(--paleta-ambar-claro);
+  --cor-atencao-sutil: #291f08;
+  --cor-atencao-borda: #4a3810;
+
+  --cor-info: #2c3fd9;
+  --cor-info-texto: var(--paleta-azul-texto-escuro);
+  --cor-info-sutil: #191d45;
+  --cor-info-borda: #2a3170;
+
+  --cor-quente: #e8455c;
+  --cor-quente-texto: var(--paleta-vermelho-claro);
+  --cor-quente-sutil: #2c1416;
+  --cor-quente-borda: #4d1d21;
+  --cor-morno: #e3b21c;
+  --cor-morno-texto: var(--paleta-ambar-claro);
+  --cor-morno-sutil: #291f08;
+  --cor-morno-borda: #4a3810;
+  --cor-frio: #38bdf8;
+  --cor-frio-texto: #7dd3fc;
+  --cor-frio-sutil: #0c1f2b;
+  --cor-frio-borda: #164e63;
+
+  --cor-bolha-cliente: #0f2d24;
+  --cor-bolha-cliente-texto: #a7e8d0;
+  --cor-bolha-cliente-borda: #1c4a3c;
+  --cor-bolha-time: #191d45;
+  --cor-bolha-time-texto: var(--paleta-azul-texto-escuro);
+  --cor-bolha-time-borda: #2a3170;
+
+  --cor-foco: var(--paleta-azul-texto-escuro);
+  --cor-foco-contraste: var(--paleta-grafite-superficie);
+
+  /* Séries clareadas: as do tema claro desaparecem sobre grafite. Otimizadas
+     pelo mesmo critério — separação mínima 0.0634 no pior caso. */
+  --grafico-1: #6b7dff;
+  --grafico-2: #fef08a;
+  --grafico-3: #7dd3fc;
+  --grafico-4: #f6a24a;
+  --grafico-5: #a8a29e;
+  --grafico-6: #f9a8d4;
+
+  --grafico-ganho: var(--paleta-verde-claro);
+  --grafico-perdido: var(--paleta-vermelho-claro);
+  --grafico-pendente: var(--paleta-ambar-claro);
+  --grafico-andamento: var(--paleta-azul-texto-escuro);
+
+  --grafico-grade: #262834;
+  --grafico-eixo: #878da0;
+
+  --etapa-1: #818cf8;
+  --etapa-2: #8b93f8;
+  --etapa-3: #7c9cf5;
+  --etapa-4: #60a5fa;
+  --etapa-5: #38bdf8;
+  --etapa-6: #22d3ee;
+  --etapa-7: #2dd4bf;
+  --etapa-8: #34d399;
+  --etapa-9: #4ade80;
+  --etapa-10: #a3e635;
+  --etapa-11: #facc15;
+  --etapa-12: #fb923c;
+  --etapa-13: #c4b5fd;
+  --etapa-14: #4ed8b0;
+
+  /* No escuro a sombra some: a profundidade vem da luminosidade da superfície
+     mais um halo de contorno. */
+  --sombra-baixa: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+  --sombra-media: 0 2px 8px -2px rgb(0 0 0 / 0.5);
+  --sombra-alta: 0 8px 24px -4px rgb(0 0 0 / 0.6);
+  --sombra-flutuante: 0 16px 48px -8px rgb(0 0 0 / 0.7);
+  --sombra-interna: inset 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --sombra-marca: 0 1px 0 0 rgb(0 0 0 / 0.4), 0 24px 60px -30px rgb(0 0 0 / 0.8);
+}
+
+/* --------------------------------------------------------------------------
+   CAMADA 3 — EXPOSIÇÃO PARA O TAILWIND
+   `inline` é obrigatório: faz o Tailwind emitir `var(--cor-x)` em vez de
+   copiar o valor calculado. Sem ele o tema escuro não troca nada.
+   -------------------------------------------------------------------------- */
+@theme inline {
+  --color-fundo: var(--cor-fundo);
+  --color-superficie: var(--cor-superficie);
+  --color-superficie-elevada: var(--cor-superficie-elevada);
+  --color-superficie-afundada: var(--cor-superficie-afundada);
+  --color-superficie-secundaria: var(--cor-superficie-secundaria);
+  --color-superficie-hover: var(--cor-superficie-hover);
+  --color-superficie-ativa: var(--cor-superficie-ativa);
+
+  --color-texto: var(--cor-texto);
+  --color-texto-secundario: var(--cor-texto-secundario);
+  --color-texto-apoio: var(--cor-texto-apoio);
+  --color-texto-desabilitado: var(--cor-texto-desabilitado);
+  --color-texto-invertido: var(--cor-texto-invertido);
+
+  --color-borda: var(--cor-borda);
+  --color-borda-forte: var(--cor-borda-forte);
+  --color-borda-sutil: var(--cor-borda-sutil);
+  --color-borda-controle: var(--cor-borda-controle);
+
+  --color-acao: var(--cor-acao);
+  --color-acao-hover: var(--cor-acao-hover);
+  --color-acao-ativa: var(--cor-acao-ativa);
+  --color-acao-texto: var(--cor-acao-texto);
+  --color-acao-sutil: var(--cor-acao-sutil);
+  --color-acao-sutil-texto: var(--cor-acao-sutil-texto);
+  --color-acao-borda: var(--cor-acao-borda);
+
+  --color-link: var(--cor-link);
+  --color-link-hover: var(--cor-link-hover);
+
+  --color-nav-fundo: var(--cor-nav-fundo);
+  --color-nav-texto: var(--cor-nav-texto);
+  --color-nav-texto-ativo: var(--cor-nav-texto-ativo);
+  --color-nav-item-ativo: var(--cor-nav-item-ativo);
+  --color-nav-item-hover: var(--cor-nav-item-hover);
+  --color-nav-borda: var(--cor-nav-borda);
+  --color-nav-destaque: var(--cor-nav-destaque);
+
+  --color-perigo: var(--cor-perigo);
+  --color-perigo-forte: var(--cor-perigo-forte);
+  --color-perigo-texto: var(--cor-perigo-texto);
+  --color-perigo-sutil: var(--cor-perigo-sutil);
+  --color-perigo-borda: var(--cor-perigo-borda);
+
+  --color-sucesso: var(--cor-sucesso);
+  --color-sucesso-forte: var(--cor-sucesso-forte);
+  --color-sucesso-texto: var(--cor-sucesso-texto);
+  --color-sucesso-sutil: var(--cor-sucesso-sutil);
+  --color-sucesso-borda: var(--cor-sucesso-borda);
+
+  --color-atencao: var(--cor-atencao);
+  --color-atencao-contraste: var(--cor-atencao-contraste);
+  --color-atencao-texto: var(--cor-atencao-texto);
+  --color-atencao-sutil: var(--cor-atencao-sutil);
+  --color-atencao-borda: var(--cor-atencao-borda);
+
+  --color-info: var(--cor-info);
+  --color-info-texto: var(--cor-info-texto);
+  --color-info-sutil: var(--cor-info-sutil);
+  --color-info-borda: var(--cor-info-borda);
+
+  --color-quente: var(--cor-quente);
+  --color-quente-texto: var(--cor-quente-texto);
+  --color-quente-sutil: var(--cor-quente-sutil);
+  --color-quente-borda: var(--cor-quente-borda);
+  --color-morno: var(--cor-morno);
+  --color-morno-texto: var(--cor-morno-texto);
+  --color-morno-sutil: var(--cor-morno-sutil);
+  --color-morno-borda: var(--cor-morno-borda);
+  --color-frio: var(--cor-frio);
+  --color-frio-texto: var(--cor-frio-texto);
+  --color-frio-sutil: var(--cor-frio-sutil);
+  --color-frio-borda: var(--cor-frio-borda);
+
+  --color-bolha-cliente: var(--cor-bolha-cliente);
+  --color-bolha-cliente-texto: var(--cor-bolha-cliente-texto);
+  --color-bolha-cliente-borda: var(--cor-bolha-cliente-borda);
+  --color-bolha-time: var(--cor-bolha-time);
+  --color-bolha-time-texto: var(--cor-bolha-time-texto);
+  --color-bolha-time-borda: var(--cor-bolha-time-borda);
+
+  --color-foco: var(--cor-foco);
+
+  --color-grafico-1: var(--grafico-1);
+  --color-grafico-2: var(--grafico-2);
+  --color-grafico-3: var(--grafico-3);
+  --color-grafico-4: var(--grafico-4);
+  --color-grafico-5: var(--grafico-5);
+  --color-grafico-6: var(--grafico-6);
+  --color-grafico-ganho: var(--grafico-ganho);
+  --color-grafico-perdido: var(--grafico-perdido);
+  --color-grafico-pendente: var(--grafico-pendente);
+  --color-grafico-andamento: var(--grafico-andamento);
+  --color-grafico-grade: var(--grafico-grade);
+  --color-grafico-eixo: var(--grafico-eixo);
+
+  --color-etapa-1: var(--etapa-1);
+  --color-etapa-2: var(--etapa-2);
+  --color-etapa-3: var(--etapa-3);
+  --color-etapa-4: var(--etapa-4);
+  --color-etapa-5: var(--etapa-5);
+  --color-etapa-6: var(--etapa-6);
+  --color-etapa-7: var(--etapa-7);
+  --color-etapa-8: var(--etapa-8);
+  --color-etapa-9: var(--etapa-9);
+  --color-etapa-10: var(--etapa-10);
+  --color-etapa-11: var(--etapa-11);
+  --color-etapa-12: var(--etapa-12);
+  --color-etapa-13: var(--etapa-13);
+  --color-etapa-14: var(--etapa-14);
+
+  /* Tipografia. Inter variável, como no Agilliza. */
+  --font-sans: var(--fonte-sans), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace;
+
+  /* Escala tipográfica: densidade alta sem apertar o texto. */
+  --text-micro: 0.6875rem;
+  --text-micro--line-height: 1rem;
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.125rem;
+  --text-sm: 0.8125rem;
+  --text-sm--line-height: 1.25rem;
+  --text-base: 0.875rem;
+  --text-base--line-height: 1.375rem;
+  --text-md: 1rem;
+  --text-md--line-height: 1.5rem;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.625rem;
+  --text-xl: 1.375rem;
+  --text-xl--line-height: 1.875rem;
+  --text-2xl: 1.75rem;
+  --text-2xl--line-height: 2.125rem;
+  --text-3xl: 2.25rem;
+  --text-3xl--line-height: 2.5rem;
+  --text-4xl: 3rem;
+  --text-4xl--line-height: 3.25rem;
+
+  /* Raios. Base 0.625rem, herdada do Agilliza. */
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.625rem;
+  --radius-xl: 0.875rem;
+  --radius-2xl: 1rem;
+  --radius-completo: 9999px;
+
+  --shadow-baixa: var(--sombra-baixa);
+  --shadow-media: var(--sombra-media);
+  --shadow-alta: var(--sombra-alta);
+  --shadow-flutuante: var(--sombra-flutuante);
+  --shadow-marca: var(--sombra-marca);
+  --inset-shadow-interna: var(--sombra-interna);
+
+  /* Movimento: nada acima de 320ms, e a curva nunca volta atrás em dado. */
+  --ease-saida: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-entrada: cubic-bezier(0.4, 0, 1, 1);
+  --ease-padrao: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Camadas. Escala explícita evita a guerra de z-index que todo CRM tem. */
+  --z-base: 0;
+  --z-elevado: 10;
+  --z-cabecalho: 20;
+  --z-navegacao: 30;
+  --z-sobreposicao: 40;
+  --z-modal: 50;
+  --z-menu: 60;
+  --z-dica: 70;
+  --z-aviso: 80;
+
+  /* Medidas estruturais */
+  --espacamento-menu: 15.5rem;
+  --espacamento-menu-recolhido: 4.25rem;
+  --espacamento-cabecalho: 3.5rem;
+  --espacamento-nav-inferior: 4rem;
+  --espacamento-alvo-toque: 2.75rem;
+}
+
+/* --------------------------------------------------------------------------
+   BASE
+   -------------------------------------------------------------------------- */
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--cor-borda);
+  }
+
+  html {
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
+    /* Evita o flash cinza ao tocar em botão no celular. */
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+    /* Reserva a barra de rolagem: impede a página de "pular" ao abrir modal. */
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: 0;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Número em tabela e indicador precisa alinhar na vertical. Sem isto a
+     coluna de valores fica tremida e o painel perde credibilidade. */
+  th,
+  td,
+  [data-numerico],
+  time {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 600;
+    letter-spacing: 0;
+    color: var(--cor-texto);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--cor-acao-sutil);
+    color: var(--cor-acao-sutil-texto);
+  }
+
+  /* ----------------------------------------------------------------------
+     FOCO
+     Anel visível em tudo que recebe teclado. `:focus-visible` mostra só para
+     quem navega por teclado, sem poluir o clique de mouse.
+     ---------------------------------------------------------------------- */
+  :focus-visible {
+    outline: 2px solid var(--cor-foco);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Elemento com anel próprio desliga o global para não duplicar. */
+  [data-anel-proprio]:focus-visible {
+    outline: none;
+  }
+
+  ::placeholder {
+    color: var(--cor-texto-desabilitado);
+    opacity: 1;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--cor-borda-forte) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--cor-borda-forte);
+    border-radius: var(--radius-completo);
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--cor-texto-apoio);
+  }
+
+  /* Alvo de toque: 44px é o mínimo confortável para o polegar do corretor
+     usando o sistema em pé, na rua. */
+  @media (pointer: coarse) {
+    button,
+    a[role='button'],
+    [role='tab'],
+    [role='menuitem'],
+    input[type='checkbox'],
+    input[type='radio'] {
+      min-height: var(--espacamento-alvo-toque);
+      min-width: var(--espacamento-alvo-toque);
+    }
+  }
+
+  /* ----------------------------------------------------------------------
+     MOVIMENTO REDUZIDO
+     Não basta encurtar: some com animação e transição, mantendo a interface
+     funcional.
+     ---------------------------------------------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   UTILIDADES PRÓPRIAS
+   -------------------------------------------------------------------------- */
+
+/* Esqueleto de carregamento. Obrigatório pela seção 20 em toda área que
+   carrega. O brilho atravessa na direção da leitura. */
+@utility esqueleto {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--cor-superficie-afundada);
+  border-radius: var(--radius-sm);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in oklab, var(--cor-texto) 6%, transparent) 50%,
+      transparent 100%
+    );
+    animation: esqueleto-brilho 1.6s ease-in-out infinite;
+  }
+}
+
+@keyframes esqueleto-brilho {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   MOVIMENTO NATIVO E MICROINTERAÇÕES
+   -------------------------------------------------------------------------- */
+@keyframes entrada-premium {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) scale(0.985);
+    filter: blur(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes subir-suave {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes pulso-progresso {
+  0% {
+    transform: translateX(-55%) scaleX(0.75);
+  }
+
+  55% {
+    transform: translateX(35%) scaleX(1);
+  }
+
+  100% {
+    transform: translateX(135%) scaleX(0.72);
+  }
+}
+
+@utility motion-entrada {
+  animation: entrada-premium 520ms var(--ease-saida) both;
+}
+
+@utility motion-subir {
+  animation: subir-suave 460ms var(--ease-saida) both;
+}
+
+@utility motion-stagger {
+  & > * {
+    animation: entrada-premium 520ms var(--ease-saida) both;
+    animation-delay: min(calc(var(--ordem, 0) * 54ms), 420ms);
+  }
+
+  & > :nth-child(2) { --ordem: 1; }
+  & > :nth-child(3) { --ordem: 2; }
+  & > :nth-child(4) { --ordem: 3; }
+  & > :nth-child(5) { --ordem: 4; }
+  & > :nth-child(6) { --ordem: 5; }
+  & > :nth-child(7) { --ordem: 6; }
+  & > :nth-child(8) { --ordem: 7; }
+}
+
+@utility revelar-no-scroll {
+  animation: entrada-premium 640ms var(--ease-saida) both;
+  animation-timeline: view();
+  animation-range: entry 0% cover 28%;
+}
+
+@utility parallax-sutil {
+  transform: translate3d(0, calc(var(--scroll-progresso, 0) * -8px), 0);
+  will-change: transform;
+}
+
+@utility toque-premium {
+  transform: translateZ(0);
+  transition:
+    transform 180ms var(--ease-saida),
+    opacity 180ms var(--ease-padrao),
+    background-color 180ms var(--ease-padrao),
+    border-color 180ms var(--ease-padrao),
+    box-shadow 180ms var(--ease-saida);
+  will-change: transform;
+
+  &:active {
+    transform: translate3d(0, 1px, 0) scale(0.982);
+  }
+}
+
+@utility cartao-premium {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid color-mix(in oklab, var(--cor-borda) 78%, transparent);
+  box-shadow: var(--sombra-baixa);
+  transition:
+    transform 220ms var(--ease-saida),
+    border-color 220ms var(--ease-padrao),
+    background-color 220ms var(--ease-padrao),
+    box-shadow 220ms var(--ease-saida);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(135deg, color-mix(in oklab, var(--cor-acao) 7%, transparent), transparent 38%),
+      linear-gradient(180deg, color-mix(in oklab, var(--cor-texto) 4%, transparent), transparent 22%);
+    opacity: 0;
+    transition: opacity 220ms var(--ease-padrao);
+  }
+
+  &:hover {
+    border-color: color-mix(in oklab, var(--cor-acao) 28%, var(--cor-borda));
+    box-shadow: var(--sombra-media);
+    transform: translate3d(0, -2px, 0);
+  }
+
+  &:hover::before {
+    opacity: 1;
+  }
+
+  &:active {
+    transform: translate3d(0, 0, 0) scale(0.992);
+  }
+}
+
+@utility vidro-sticky {
+  background-color: color-mix(in oklab, var(--cor-superficie) 84%, transparent);
+  backdrop-filter: blur(18px) saturate(1.18);
+  -webkit-backdrop-filter: blur(18px) saturate(1.18);
+}
+
+@utility progresso-vivo {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    width: 42%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.32), transparent);
+    animation: pulso-progresso 1.8s var(--ease-saida) infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-entrada,
+  .motion-subir,
+  .motion-stagger > *,
+  .revelar-no-scroll {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .parallax-sutil,
+  .toque-premium,
+  .cartao-premium,
+  .cartao-premium:hover,
+  .cartao-premium:active {
+    transform: none !important;
+  }
+}
+
+/* Gradiente do menu — assinatura visual do Agilliza. */
+@utility gradiente-menu {
+  background-color: var(--cor-nav-fundo);
+  background-image: linear-gradient(180deg, #000f9f 0%, #000a70 60%, #00073f 100%);
+}
+
+.dark .gradiente-menu {
+  background-image: linear-gradient(180deg, #000a6e 0%, #00052e 100%);
+}
+
+/* Painel de marca da autenticação: azul noite com gradientes radiais. */
+@utility painel-marca {
+  position: relative;
+  background-color: var(--paleta-azul-noite);
+  background-image:
+    radial-gradient(120% 120% at 100% 0%, rgb(31 78 143 / 0.55) 0%, transparent 55%),
+    radial-gradient(90% 90% at 0% 100%, rgb(0 15 159 / 0.55) 0%, transparent 60%),
+    linear-gradient(150deg, #00052e 0%, #000a70 45%, #0b1b3a 100%);
+}
+
+/* Textura de pontos sobre o painel de marca. */
+@utility textura-pontos {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgb(255 255 255 / 0.06) 1px, transparent 1px);
+  background-size: 22px 22px;
+  pointer-events: none;
+}
+
+/* Gradiente permitido em indicador de prazo (seção 20). */
+@utility gradiente-prazo {
+  background-image: linear-gradient(
+    90deg,
+    var(--cor-sucesso) 0%,
+    var(--cor-atencao) 55%,
+    var(--cor-perigo) 100%
+  );
+}
+
+/* Apenas para leitor de tela: rótulo que o olho não precisa, mas o cego sim. */
+@utility so-leitor {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+@utility linhas-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@utility linhas-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@utility linhas-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* --------------------------------------------------------------------------
+   MODOS DE DENSIDADE E FOCO (seção 5)
+   Ajustam a régua, não cada componente: os componentes leem estas variáveis.
+   -------------------------------------------------------------------------- */
+[data-densidade='compacta'] {
+  --altura-linha-tabela: 2.25rem;
+  --altura-controle: 2rem;
+  --espaco-cartao: 0.75rem;
+  --espaco-secao: 1rem;
+}
+
+[data-densidade='confortavel'] {
+  --altura-linha-tabela: 3rem;
+  --altura-controle: 2.5rem;
+  --espaco-cartao: 1.25rem;
+  --espaco-secao: 1.75rem;
+}
+
+[data-modo='foco'] [data-esconde-no-foco] {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   IMPRESSÃO
+   Corretor imprime proposta e ficha de cliente para levar à reunião.
+   -------------------------------------------------------------------------- */
+@media print {
+  [data-nao-imprime] {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+    font-size: 11pt;
+  }
+
+  a[href]::after {
+    content: ' (' attr(href) ')';
+    font-size: 9pt;
+    color: #555;
+  }
+}

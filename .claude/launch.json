@@ -1,0 +1,37 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "agilliza",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "port": 3000,
+      "autoPort": true
+    },
+    {
+      "name": "agilliza-admin",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "admin",
+        "run",
+        "dev"
+      ],
+      "port": 3100,
+      "autoPort": true
+    },
+    {
+      "name": "agilliza-producao",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "--env-file=.env.local",
+        "scripts/producao-local.mjs"
+      ],
+      "port": 3200,
+      "autoPort": true
+    }
+  ]
+}

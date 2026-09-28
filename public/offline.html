@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="theme-color" content="#0b109f" />
+    <title>Sem conexão · Agilliza</title>
+
+    <!--
+      Tudo embutido, de propósito: esta página é servida pelo service worker
+      justamente quando a rede falhou. Um <link> para uma folha de estilo
+      externa não carregaria, e o corretor veria texto cru — a página de erro
+      dando erro.
+
+      As cores são as mesmas do sistema, escritas à mão aqui pelo mesmo motivo.
+    -->
+    <style>
+      :root {
+        --azul: #0b109f;
+        --azul-escuro: #00052e;
+        --texto: #f4f5ff;
+        --texto-apoio: #b9c0e8;
+        --vermelho: #f4313f;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100svh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: var(--azul-escuro);
+        color: var(--texto);
+        font-family:
+          system-ui,
+          -apple-system,
+          'Segoe UI',
+          Roboto,
+          sans-serif;
+        line-height: 1.5;
+        text-align: center;
+      }
+
+      main {
+        max-width: 26rem;
+      }
+
+      .simbolo {
+        width: 56px;
+        height: auto;
+        margin: 0 auto 28px;
+        display: block;
+      }
+
+      h1 {
+        margin: 0 0 12px;
+        font-size: 1.5rem;
+        font-weight: 650;
+        letter-spacing: -0.01em;
+      }
+
+      p {
+        margin: 0 0 10px;
+        color: var(--texto-apoio);
+        font-size: 0.975rem;
+      }
+
+      .aviso {
+        margin-top: 28px;
+        padding: 14px 16px;
+        border: 1px solid rgba(185, 192, 232, 0.28);
+        border-radius: 12px;
+        font-size: 0.875rem;
+        text-align: left;
+        color: var(--texto-apoio);
+      }
+
+      .aviso strong {
+        color: var(--texto);
+        font-weight: 600;
+      }
+
+      button {
+        margin-top: 24px;
+        width: 100%;
+        min-height: 48px; /* alvo de toque confortável de pé, com uma mão */
+        padding: 0 24px;
+        border: 0;
+        border-radius: 12px;
+        background: var(--texto);
+        color: var(--azul);
+        font: inherit;
+        font-weight: 650;
+        cursor: pointer;
+      }
+
+      button:active {
+        transform: translateY(1px);
+      }
+
+      button:focus-visible {
+        outline: 3px solid var(--vermelho);
+        outline-offset: 3px;
+      }
+
+      @media (min-width: 480px) {
+        button {
+          width: auto;
+          min-width: 14rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <!-- O símbolo negativo: sobre o azul, a versão colorida sumiria. -->
+      <img class="simbolo" src="/marca/agilliza-simbolo-negativa.png" alt="Agilliza" />
+
+      <h1>Sem conexão</h1>
+
+      <p>O aparelho está sem internet, então não dá para carregar seus dados agora.</p>
+
+      <!--
+        A parte que importa. O corretor precisa saber que o que ele vê não é
+        uma versão velha do sistema — porque a alternativa é ele agir com base
+        numa agenda desatualizada e bater numa porta fechada.
+      -->
+      <div class="aviso">
+        <strong>Nada foi perdido.</strong> Seus clientes, imóveis e compromissos estão salvos no
+        servidor. Preferimos não mostrar uma cópia antiga: uma visita desmarcada ontem apareceria
+        como se ainda valesse.
+      </div>
+
+      <button type="button" onclick="location.reload()">Tentar de novo</button>
+    </main>
+
+    <script>
+      // Recarrega sozinho assim que o sinal voltar: o corretor guardou o
+      // celular no bolso no elevador, e quando tira já está no sistema.
+      addEventListener('online', () => location.reload());
+    </script>
+  </body>
+</html>

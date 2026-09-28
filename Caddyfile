@@ -1,0 +1,183 @@
+# =============================================================================
+# AGILLIZA — proxy reverso
+#
+# Caddy, e não Nginx, por um motivo só: ele obtém e RENOVA o certificado TLS
+# sozinho, sem cron, sem certbot, sem alguém lembrar. Certificado vencido num
+# domingo derruba o portfólio de todos os corretores, e é o tipo de falha que
+# ninguém descobre até o cliente reclamar.
+# =============================================================================
+
+{
+	# Endereço para o Let's Encrypt avisar de problema na renovação.
+	email {$EMAIL_ADMIN:admin@agilliza.com.br}
+
+	servers {
+		# O Caddy termina o TLS; quem está atrás dele é o Next. Sem isto, o
+		# aplicativo enxerga todas as requisições como HTTP e monta links
+		# absolutos errados.
+		trusted_proxies static private_ranges
+	}
+}
+
+# -----------------------------------------------------------------------------
+# O APLICATIVO
+# -----------------------------------------------------------------------------
+{$DOMINIO} {
+	encode zstd gzip
+
+	# Os cabeçalhos de segurança vêm do middleware do Next, que monta a CSP com
+	# nonce por requisição. Aqui só entra o que o proxy sabe e a aplicação não:
+	# que a conexão é HTTPS.
+	header {
+		Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+		# O Caddy anuncia a si mesmo por padrão. Entregar a pilha para quem está
+		# sondando é ajuda de graça.
+		-Server
+	}
+
+	reverse_proxy agilliza:3000 {
+		header_up X-Forwarded-Proto {scheme}
+		header_up X-Real-IP {remote_host}
+
+		# Se o contêiner do aplicativo cair, o Caddy para de encaminhar para ele
+		# em vez de devolver 502 a cada visita.
+		health_uri /api/saude
+		health_interval 30s
+		health_timeout 5s
+	}
+
+	log {
+		output file /data/acesso.log {
+			roll_size 20mb
+			roll_keep 5
+		}
+		# `filter` porque o log de acesso guarda a URL inteira, e uma busca de
+		# cliente vai na query string: `?q=Mariana+Duarte`. Nome de cliente em
+		# log de proxy é dado pessoal fora do lugar.
+		format filter {
+			wrap console
+			fields {
+				request>uri query {
+					replace q REDIGIDO
+				}
+				request>headers>Cookie delete
+				request>headers>Authorization delete
+			}
+		}
+	}
+}
+
+# -----------------------------------------------------------------------------
+# A MÍDIA
+#
+# Domínio SEPARADO, e não uma rota do domínio principal. Duas razões:
+#
+#   1. Segurança. Um arquivo enviado por um corretor é conteúdo de terceiro. Se
+#      ele fosse servido do mesmo domínio do aplicativo, um HTML que passasse
+#      pela conferência de tipo rodaria com acesso aos cookies de sessão. Em
+#      domínio à parte, a mesma política de origem isola.
+#   2. Cache. A foto é imutável — a chave do objeto é sorteada e nunca reusada.
+#      Isso permite um cache de um ano, que nenhuma página do aplicativo pode ter.
+# -----------------------------------------------------------------------------
+{$DOMINIO_MIDIA} {
+	encode zstd gzip
+
+	header {
+		# Um ano, imutável. A chave do objeto é sorteada na origem: foto trocada
+		# é foto com outra chave, então cache velho nunca aparece.
+		Cache-Control "public, max-age=31536000, immutable"
+
+		# `nosniff` é o que impede o navegador de adivinhar que aquele arquivo
+		# "é HTML na verdade". O servidor já confere os primeiros bytes no
+		# envio; isto é a segunda tranca.
+		X-Content-Type-Options "nosniff"
+
+		# Nada aqui deve executar nem abrir dentro de um quadro.
+		Content-Security-Policy "default-src 'none'; img-src 'self'; media-src 'self'; frame-ancestors 'none'; sandbox"
+		-Server
+	}
+
+	# PUT é PERMITIDO aqui, e precisa ser: o navegador envia a foto direto para
+	# este domínio, com URL pré-assinada. É o que mantém o arquivo fora do
+	# processo do Next — sem isso, cada foto de 8 MB atravessaria o Node.
+	#
+	# A autorização não é do Caddy: a URL assinada já traz método, caminho,
+	# tipo de conteúdo e prazo, tudo conferido pelo MinIO. O que o Caddy faz é
+	# recusar o que NUNCA deveria vir do navegador.
+	#
+	# DELETE fica de fora de propósito: apagar foto é operação do servidor, que
+	# fala com o MinIO pela rede interna e nem passa por aqui.
+	@proibido method DELETE PATCH
+	respond @proibido 405
+
+	# O `Host` precisa chegar ao MinIO EXATAMENTE como veio, porque ele entra
+	# na assinatura SigV4. O Caddy preserva por padrão; a linha explícita existe
+	# para que ninguém a "melhore" um dia — reescrever o Host aqui faria todo
+	# envio falhar com 403 e nenhuma pista do motivo.
+	reverse_proxy minio:9000 {
+		header_up Host {host}
+		header_up X-Forwarded-Proto {scheme}
+
+		# Foto de celular chega a 12 MB. O padrão do Caddy é suficiente, mas o
+		# tempo limite de leitura não: num 4G ruim, o envio leva minutos.
+		transport http {
+			read_timeout 300s
+			write_timeout 300s
+		}
+	}
+}
+
+# -----------------------------------------------------------------------------
+# O CONSOLE DA PLATAFORMA
+#
+# Domínio à parte, e não uma rota do sistema do corretor. A separação é o que
+# dá o ganho concreto: um cookie de corretor roubado não alcança nada aqui,
+# porque é outra origem — e isso não é configuração que alguém possa afrouxar
+# por engano, é a política de origem do navegador.
+#
+# `CONSOLE_IPS_PERMITIDOS` fica VAZIO por padrão, e o console responde na
+# internet. Se a operação tiver IP fixo ou VPN, preencher essa variável tira o
+# console do alcance do mundo — que é o desenho ideal para uma aplicação que vê
+# os dados de todos os clientes.
+# -----------------------------------------------------------------------------
+{$DOMINIO_CONSOLE} {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+		# Nenhum buscador deve conhecer este endereço. O cabeçalho da aplicação
+		# repete isto; aqui vale mesmo para resposta de erro do proxy.
+		X-Robots-Tag "noindex, nofollow, noarchive"
+		X-Frame-Options "DENY"
+		# `no-referrer` porque a URL do console carrega id de conta, e vazar isso
+		# para qualquer link externo é vazar cliente.
+		Referrer-Policy "no-referrer"
+		-Server
+	}
+
+	# Restrição por IP, quando configurada. Sem a variável, o bloco não casa com
+	# nada e todo mundo passa — o padrão continua funcionando.
+	@fora_da_rede {
+		not remote_ip {$CONSOLE_IPS_PERMITIDOS:0.0.0.0/0}
+	}
+	respond @fora_da_rede 404
+
+	reverse_proxy console:3100 {
+		header_up X-Forwarded-Proto {scheme}
+		header_up X-Real-IP {remote_host}
+	}
+
+	log {
+		output file /data/console.log {
+			roll_size 20mb
+			roll_keep 10
+		}
+		format filter {
+			wrap console
+			fields {
+				request>headers>Cookie delete
+				request>headers>Authorization delete
+			}
+		}
+	}
+}

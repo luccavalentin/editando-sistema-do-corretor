@@ -1,0 +1,190 @@
+# =============================================================================
+# AGILLIZA — a pilha do VPS
+#
+# Três serviços, e a escolha de cada um tem motivo:
+#
+#   agilliza  o aplicativo Next, em modo standalone
+#   minio     o armazenamento das fotos — a parte que NÃO fica no Supabase
+#   caddy     o proxy reverso, que resolve TLS sozinho
+#
+# O banco de dados NÃO está aqui: ele é o Supabase gerenciado. Foi decisão de
+# produto, e é boa — replicação, backup e ponto-no-tempo de um Postgres são
+# trabalho de equipe dedicada, não de um contêiner num VPS.
+#
+# A MÍDIA, essa sim, fica aqui. Foto de imóvel é o dado que mais cresce e o que
+# menos precisa de banco: um corretor com 300 anúncios e 25 fotos cada já passa
+# de 50 GB, e isso num plano de banco custa caro por um trabalho que o MinIO faz
+# no disco do próprio VPS.
+#
+# COMO SUBIR
+#   cp .env.example .env    e preencha os segredos
+#   docker compose up -d --build
+#
+# O `.env` NÃO vai para o git. Ele tem a chave de serviço do Supabase, que
+# ignora a RLS por completo.
+# =============================================================================
+
+services:
+  agilliza:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Embutidas no JavaScript do navegador em tempo de compilação. Trocar
+        # qualquer uma exige reconstruir a imagem — não basta reiniciar.
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
+        NEXT_PUBLIC_SUPABASE_CHAVE_PUBLICA: ${NEXT_PUBLIC_SUPABASE_CHAVE_PUBLICA}
+        NEXT_PUBLIC_URL_APP: ${NEXT_PUBLIC_URL_APP}
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
+      NEXT_PUBLIC_SUPABASE_CHAVE_PUBLICA: ${NEXT_PUBLIC_SUPABASE_CHAVE_PUBLICA}
+      NEXT_PUBLIC_URL_APP: ${NEXT_PUBLIC_URL_APP}
+
+      # Segredos. Lidos em tempo de execução, nunca embutidos na imagem.
+      SUPABASE_CHAVE_SERVICO: ${SUPABASE_CHAVE_SERVICO}
+      CHAVE_CRIPTOGRAFIA_SEGREDOS: ${CHAVE_CRIPTOGRAFIA_SEGREDOS}
+      SEGREDO_SESSAO_PORTAL: ${SEGREDO_SESSAO_PORTAL}
+
+      # DOIS endereços, e a distinção não é detalhe de rede: a assinatura
+      # SigV4 inclui o `host`, então a URL de envio precisa ser assinada com o
+      # endereço que o NAVEGADOR vai usar de fato. Assinar com `minio:9000`
+      # geraria uma URL que só existe dentro do Docker.
+      #
+      #   MIDIA_ENDPOINT         público — assina o que o navegador executa
+      #   MIDIA_ENDPOINT_INTERNO rede do Docker — o servidor conferindo e apagando
+      MIDIA_ENDPOINT: https://${DOMINIO_MIDIA}
+      MIDIA_ENDPOINT_INTERNO: http://minio:9000
+      MIDIA_URL_PUBLICA: ${MIDIA_URL_PUBLICA:-https://${DOMINIO_MIDIA}/${MIDIA_BUCKET:-agilliza-midia}}
+      MIDIA_BUCKET: ${MIDIA_BUCKET:-agilliza-midia}
+      MIDIA_REGIAO: ${MIDIA_REGIAO:-us-east-1}
+      MIDIA_CHAVE_ACESSO: ${MIDIA_CHAVE_ACESSO}
+      MIDIA_CHAVE_SECRETA: ${MIDIA_CHAVE_SECRETA}
+      MIDIA_FORCAR_PATH_STYLE: 'true'
+
+      HOMEFIN_CLIENTE_ID: ${HOMEFIN_CLIENTE_ID:-}
+      HOMEFIN_CLIENTE_SEGREDO: ${HOMEFIN_CLIENTE_SEGREDO:-}
+      HOMEFIN_ID_PARCEIRO: ${HOMEFIN_ID_PARCEIRO:-167}
+      HOMEFIN_ID_REGIONAL: ${HOMEFIN_ID_REGIONAL:-26}
+      HOMEFIN_ID_USUARIO_PARCEIRO: ${HOMEFIN_ID_USUARIO_PARCEIRO:-159}
+
+      NIVEL_LOG: ${NIVEL_LOG:-info}
+    depends_on:
+      minio:
+        condition: service_healthy
+    networks: [interna]
+    # Sem `ports`: o aplicativo NÃO é exposto direto na internet. Quem fala com
+    # o mundo é o Caddy. Publicar a porta 3000 no host deixaria o Next
+    # alcançável por IP, contornando o TLS e os cabeçalhos do proxy.
+    expose: ['3000']
+    logging:
+      driver: json-file
+      # Sem limite, o log enche o disco do VPS e derruba tudo junto — inclusive
+      # o banco de dados de quem tiver um no mesmo host.
+      options: { max-size: '10m', max-file: '5' }
+
+  # ---------------------------------------------------------------------------
+  # CONSOLE DA PLATAFORMA
+  #
+  # Serviço À PARTE, com imagem própria, domínio próprio e cookie próprio. Quem
+  # entra nele enxerga todas as contas — mantê-lo no mesmo contêiner que o
+  # sistema do corretor colocaria essa permissão a um passo de qualquer falha
+  # lá.
+  #
+  # Ele NÃO recebe a chave de serviço: lê pela RLS, com a identidade do próprio
+  # administrador. Se um dia alguém acrescentar `SUPABASE_CHAVE_SERVICO` aqui,
+  # estará tirando o banco do caminho.
+  # ---------------------------------------------------------------------------
+  console:
+    build:
+      context: ./admin
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
+        NEXT_PUBLIC_SUPABASE_CHAVE_PUBLICA: ${NEXT_PUBLIC_SUPABASE_CHAVE_PUBLICA}
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
+      NEXT_PUBLIC_SUPABASE_CHAVE_PUBLICA: ${NEXT_PUBLIC_SUPABASE_CHAVE_PUBLICA}
+    networks: [interna]
+    expose: ['3100']
+    logging:
+      driver: json-file
+      options: { max-size: '10m', max-file: '5' }
+
+  minio:
+    image: minio/minio:RELEASE.2025-04-22T22-12-26Z
+    restart: unless-stopped
+    command: server /dados --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MIDIA_CHAVE_ACESSO}
+      MINIO_ROOT_PASSWORD: ${MIDIA_CHAVE_SECRETA}
+      # O navegador envia a foto DIRETO para cá, de outro domínio. Sem CORS, o
+      # envio falha com um erro que não menciona CORS.
+      MINIO_API_CORS_ALLOW_ORIGIN: ${NEXT_PUBLIC_URL_APP}
+    volumes:
+      - midia:/dados
+    networks: [interna]
+    expose: ['9000', '9001']
+    healthcheck:
+      test: ['CMD', 'mc', 'ready', 'local']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: json-file
+      options: { max-size: '10m', max-file: '3' }
+
+  # Cria o bucket e deixa SÓ as fotos legíveis publicamente. Roda uma vez e sai.
+  preparar-minio:
+    image: minio/mc:RELEASE.2025-04-16T18-13-26Z
+    depends_on:
+      minio:
+        condition: service_healthy
+    networks: [interna]
+    environment:
+      MIDIA_CHAVE_ACESSO: ${MIDIA_CHAVE_ACESSO}
+      MIDIA_CHAVE_SECRETA: ${MIDIA_CHAVE_SECRETA}
+      MIDIA_BUCKET: ${MIDIA_BUCKET:-agilliza-midia}
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 $$MIDIA_CHAVE_ACESSO $$MIDIA_CHAVE_SECRETA &&
+      mc mb --ignore-existing local/$$MIDIA_BUCKET &&
+      mc anonymous set download local/$$MIDIA_BUCKET/tenants &&
+      echo 'Bucket pronto: tenants/ e publico, privado/ nao e.'
+      "
+    restart: 'no'
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports: ['80:80', '443:443', '443:443/udp']
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      # Os certificados precisam sobreviver ao recriar do contêiner. Sem isto,
+      # cada `docker compose up` pede certificado novo e esbarra no limite de
+      # emissão do Let's Encrypt — e o site fica sem HTTPS por uma semana.
+      - caddy_dados:/data
+      - caddy_config:/config
+    environment:
+      DOMINIO: ${DOMINIO}
+      DOMINIO_MIDIA: ${DOMINIO_MIDIA}
+      DOMINIO_CONSOLE: ${DOMINIO_CONSOLE}
+      CONSOLE_IPS_PERMITIDOS: ${CONSOLE_IPS_PERMITIDOS:-}
+    depends_on: [agilliza, console, minio]
+    networks: [interna]
+    logging:
+      driver: json-file
+      options: { max-size: '10m', max-file: '3' }
+
+networks:
+  interna:
+    driver: bridge
+
+volumes:
+  midia:
+  caddy_dados:
+  caddy_config:

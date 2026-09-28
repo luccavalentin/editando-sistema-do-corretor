@@ -1,8 +1,6 @@
+.next
 node_modules
-dist
-.output
-.vinxi
-pnpm-lock.yaml
+coverage
+playwright-report
+test-results
 package-lock.json
-bun.lock
-routeTree.gen.ts
