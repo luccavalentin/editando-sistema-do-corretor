@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import type { CSSProperties } from 'react';
 
 import { Marca } from '@/components/shell/marca';
 import { FormularioDeEntrada } from './formulario';
@@ -86,7 +87,7 @@ export default async function PaginaEntrar({
                 <div
                   key={item.titulo}
                   className="login-beneficio group rounded-[1.35rem] border border-white/12 bg-white/8 p-4 backdrop-blur-xl"
-                  style={{ '--login-delay': `${indice * 90}ms` } as React.CSSProperties}
+                  style={{ '--login-delay': `${indice * 90}ms` } as CSSProperties}
                 >
                   <div className="mb-5 flex items-center justify-between">
                     <span className="text-[10px] font-bold tracking-[0.18em] text-white/45">
